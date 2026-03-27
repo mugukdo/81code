@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #faf8f4;
+    color: #2c2c2c;
+    line-height: 1.9;
+  }
+
+  .post-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 60px 24px;
+  }
+
+  .series-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #8B6914;
+    border: 1px solid #C9A84C;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 28px;
+  }
+
+  .post-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a1a2e;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+
+  .post-subtitle {
+    font-size: 16px;
+    color: #8B6914;
+    font-style: italic;
+    margin-bottom: 40px;
+    font-family: 'Noto Serif KR', serif;
+  }
+
+  .divider {
+    width: 48px;
+    height: 2px;
+    background: linear-gradient(90deg, #C9A84C, #8B6914);
+    margin-bottom: 40px;
+  }
+
+  .hook-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    color: #3a3a3a;
+    line-height: 2;
+    margin-bottom: 48px;
+    padding-left: 20px;
+    border-left: 3px solid #e8dfc8;
+  }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #8B6914;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    margin-top: 48px;
+  }
+
+  .part-badge {
+    display: inline-block;
+    background: #2A5A2A;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+
+  /* 원문 박스 */
+  .original-box {
+    text-align: center;
+    background: #1a1a2e;
+    border-radius: 12px;
+    padding: 40px 32px;
+    margin: 32px 0;
+  }
+
+  .original-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: #C9A84C;
+    letter-spacing: 12px;
+    display: block;
+    margin-bottom: 14px;
+  }
+
+  .original-reading {
+    font-size: 14px;
+    color: #aaa;
+    letter-spacing: 8px;
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  .original-translation {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16px;
+    color: #e0d8c8;
+    font-style: italic;
+    line-height: 1.9;
+  }
+
+  /* 한자 풀이 테이블 */
+  .hanja-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+    font-size: 14px;
+  }
+
+  .hanja-table th {
+    background: #8B6914;
+    color: #fff;
+    padding: 10px 16px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+
+  .hanja-table th:first-child { text-align: center; width: 80px; }
+  .hanja-table th:nth-child(2) { width: 120px; }
+
+  .hanja-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #e8dfc8;
+    vertical-align: middle;
+    color: #2c2c2c;
+    line-height: 1.7;
+  }
+
+  .hanja-table td:first-child {
+    text-align: center;
+    font-size: 28px;
+    font-family: 'Noto Serif KR', serif;
+    color: #8B6914;
+    font-weight: 700;
+  }
+
+  .hanja-table td:nth-child(2) { font-size: 13px; color: #777; }
+  .hanja-table tr:nth-child(odd) td { background: #fdf8ee; }
+  .hanja-table tr:nth-child(even) td { background: #fff; }
+
+  /* 一始 vs 一終 대비 박스 */
+  .mirror-box {
+    background: #1a1a2e;
+    border-radius: 12px;
+    padding: 32px 28px;
+    margin: 32px 0;
+    text-align: center;
+  }
+
+  .mirror-box .mb-label {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #C9A84C;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .mirror-compare {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .mirror-item {
+    flex: 1;
+    min-width: 200px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 8px;
+    padding: 24px 20px;
+  }
+
+  .mirror-item .mi-chapter {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #aaa;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .mirror-item .mi-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #C9A84C;
+    display: block;
+    margin-bottom: 8px;
+    letter-spacing: 4px;
+  }
+
+  .mirror-item .mi-meaning {
+    font-size: 13px;
+    color: #aaa;
+    line-height: 1.7;
+  }
+
+  .mirror-vs {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 28px;
+    color: #C9A84C;
+    font-weight: 700;
+  }
+
+  .mirror-conclusion {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    color: #e0d8c8;
+    line-height: 1.9;
+    border-top: 1px solid rgba(201,168,76,0.3);
+    padding-top: 16px;
+    font-style: italic;
+  }
+
+  .mirror-conclusion strong { color: #C9A84C; }
+
+  /* 고리 시각화 */
+  .ring-visual {
+    background: #fff;
+    border: 1px solid #e8dfc8;
+    border-radius: 12px;
+    padding: 32px 24px;
+    margin: 32px 0;
+    text-align: center;
+  }
+
+  .ring-visual-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #8B6914;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .ring-chars {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .ring-char {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .ring-char.start { background: #1a1a2e; color: #C9A84C; border: 2px solid #C9A84C; font-size: 18px; }
+  .ring-char.end { background: #1a1a2e; color: #C9A84C; border: 2px solid #C9A84C; font-size: 18px; }
+  .ring-char.normal { background: #fdf8ee; color: #8B6914; border: 1px solid #e8dfc8; }
+  .ring-char.arrow { background: transparent; border: none; color: #C9A84C; font-size: 20px; font-weight: 700; }
+
+  .ring-note {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.8;
+    margin-top: 16px;
+    font-style: italic;
+  }
+
+  .ring-note strong { color: #8B6914; }
+
+  /* 순환 예시들 */
+  .cycle-examples {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 32px 0;
+  }
+
+  .cycle-ex {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fff;
+    border: 1px solid #e8dfc8;
+    border-radius: 8px;
+    padding: 16px 20px;
+  }
+
+  .cycle-ex .ce-icon { font-size: 24px; flex-shrink: 0; }
+
+  .cycle-ex .ce-flow {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .cycle-ex .ce-item {
+    font-size: 13px;
+    color: #333;
+    font-weight: 500;
+  }
+
+  .cycle-ex .ce-arrow {
+    font-size: 14px;
+    color: #C9A84C;
+  }
+
+  .cycle-ex .ce-loop {
+    font-size: 13px;
+    color: #8B6914;
+    font-style: italic;
+    margin-left: 4px;
+  }
+
+  /* 3부 마무리 박스 */
+  .final-box {
+    background: linear-gradient(135deg, #1a1a2e, #2a1a0e);
+    border-radius: 12px;
+    padding: 36px 32px;
+    margin: 32px 0;
+    text-align: center;
+  }
+
+  .final-box .fb-label {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #C9A84C;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .final-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .final-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    padding: 12px 16px;
+    text-align: left;
+  }
+
+  .final-item .fi-badge {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .final-item .fi-badge.p1 { background: #1A3A6A; color: #fff; }
+  .final-item .fi-badge.p2 { background: #8B6914; color: #fff; }
+  .final-item .fi-badge.p3 { background: #2A5A2A; color: #fff; }
+
+  .final-item .fi-text {
+    font-size: 13px;
+    color: #e0d8c8;
+    line-height: 1.6;
+  }
+
+  .final-conclusion {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16px;
+    color: #C9A84C;
+    font-weight: 700;
+    line-height: 1.9;
+    border-top: 1px solid rgba(201,168,76,0.3);
+    padding-top: 20px;
+  }
+
+  /* 대화 */
+  .dialogue-section {
+    background: #fff;
+    border: 1px solid #e8dfc8;
+    border-radius: 12px;
+    padding: 28px 24px;
+    margin: 32px 0;
+  }
+
+  .dialogue-title {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #aaa;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .citizen {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 6px;
+    margin-top: 28px;
+  }
+
+  .citizen-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    background: #3A5A8A;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+    margin-top: 3px;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+
+  .citizen-text {
+    font-size: 15px;
+    color: #2c3a52;
+    line-height: 1.9;
+    background: #f0f4fa;
+    border-radius: 0 12px 12px 12px;
+    padding: 14px 18px;
+    flex: 1;
+  }
+
+  .philosopher {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 6px;
+    margin-top: 6px;
+    padding-left: 20px;
+  }
+
+  .philosopher-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    background: #8B6914;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+    margin-top: 3px;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+
+  .philosopher-text {
+    font-size: 15px;
+    color: #3a2c10;
+    line-height: 1.9;
+    background: #fdf6e3;
+    border-radius: 0 12px 12px 12px;
+    padding: 14px 18px;
+    flex: 1;
+  }
+
+  /* 인사이트 박스 */
+  .insight-box {
+    background: linear-gradient(135deg, #fdf6e3, #faf0d0);
+    border-left: 4px solid #C9A84C;
+    padding: 24px 28px;
+    margin: 40px 0;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .insight-box p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16px;
+    color: #5B3A00;
+    font-weight: 600;
+    line-height: 1.9;
+    font-style: italic;
+  }
+
+  .body-text {
+    font-size: 15.5px;
+    color: #333;
+    line-height: 2;
+    margin-bottom: 20px;
+  }
+
+  /* 열린 질문 */
+  .open-question {
+    text-align: center;
+    padding: 40px 20px;
+    margin: 48px 0 0;
+    border-top: 1px solid #e8dfc8;
+  }
+
+  .open-question p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    color: #5B4A8A;
+    font-style: italic;
+    line-height: 1.9;
+  }
+
+  .open-question .q-sub { font-size: 14px; color: #999; margin-top: 8px; }
+
+  /* 이전/다음 */
+  .prev-episode {
+    background: #f0f4fa;
+    border-radius: 8px;
+    padding: 16px 24px;
+    margin-bottom: 32px;
+    font-size: 14px;
+    color: #3A5A8A;
+  }
+
+  .prev-episode a { color: #3A5A8A; text-decoration: none; font-weight: 600; }
+
+  .next-episode {
+    background: #f5f0e8;
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .next-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #8B6914;
+    text-transform: uppercase;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .next-content { font-size: 14px; color: #333; line-height: 1.7; }
+  .next-content strong { color: #1a1a2e; font-weight: 600; }
+
+  .tags {
+    margin-top: 48px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag {
+    font-size: 12px;
+    color: #8B6914;
+    background: #fdf6e3;
+    border: 1px solid #e8dfc8;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+</style>
+</head>
+<body>
+<div class="post-wrap">
+
+  <!-- 이전 회차 -->
+  <div class="prev-episode">
+    📖 이전 글 → <a href="#">[12회] 사람 안에 이미 천지가 있다(本心本太陽 昻明 人中天地一) — 당신 안의 태양</a>
+  </div>
+
+  <!-- 시리즈 배지 -->
+  <div class="series-badge">시민과 철학자의 천부경 · 13회</div>
+
+  <!-- 3부 배지 -->
+  <div class="part-badge">3부 마지막 · 人의 논리 — 인간 존재의 의미</div>
+
+  <!-- 제목 -->
+  <h1 class="post-title">끝은 다시 시작이다(一終無終一)</h1>
+  <p class="post-subtitle">천부경은 고리다</p>
+  <div class="divider"></div>
+
+  <!-- 도입부 -->
+  <div class="hook-text">
+    <p>천부경의 첫 글자는 一이다. 그리고 마지막 글자도 一이다.</p>
+    <br>
+    <p>一始無始一로 열리고 一終無終一로 닫힌다. 81자를 다 읽고 나면 다시 첫 글자로 돌아온다. 천부경 자체가 끝이 없는 고리다. 우주처럼, 자연처럼, 인간의 삶처럼.</p>
+  </div>
+
+  <!-- 원문 -->
+  <div class="section-title">▶ 원문</div>
+  <div class="original-box">
+    <span class="original-hanja">一終無終一</span>
+    <span class="original-reading">일  ·  종  ·  무  ·  종  ·  일</span>
+    <span class="original-translation">"하나로 끝나지만,<br>그 끝은 끝이 없는 하나다"</span>
+  </div>
+
+  <!-- 한자 풀이 -->
+  <div class="section-title">▶ 한자 풀이</div>
+  <table class="hanja-table">
+    <tr>
+      <th>한자</th>
+      <th>음(音)</th>
+      <th>뜻</th>
+    </tr>
+    <tr>
+      <td>一</td>
+      <td>일</td>
+      <td>하나. 천부경의 마지막 구절도 一로 시작한다. 첫 구절(一始無始一)의 一과 같은 글자. 순환을 암시한다.</td>
+    </tr>
+    <tr>
+      <td>終</td>
+      <td>종</td>
+      <td>끝나다, 마치다. 그러나 이 끝은 단절이 아니다. 다시 시작으로 이어지는 끝이다.</td>
+    </tr>
+    <tr>
+      <td>無</td>
+      <td>무</td>
+      <td>없다. 끝이 없음을 강조한다. 一始無始一의 無와 같은 맥락. 시작도 없고 끝도 없다.</td>
+    </tr>
+    <tr>
+      <td>終</td>
+      <td>종</td>
+      <td>끝. 같은 글자가 반복되어 '끝이 없는 끝'을 표현한다. 一始無始一의 始始와 대응된다.</td>
+    </tr>
+    <tr>
+      <td>一</td>
+      <td>일</td>
+      <td>하나. 천부경의 마지막 글자. 첫 글자 一로 돌아와 천부경 자체가 순환 구조임을 완성한다.</td>
+    </tr>
+  </table>
+
+  <!-- 一始 vs 一終 대비 -->
+  <div class="section-title">▶ 처음과 끝이 거울처럼 마주 보다</div>
+  <div class="mirror-box">
+    <div class="mb-label">천부경의 첫 구절과 마지막 구절</div>
+    <div class="mirror-compare">
+      <div class="mirror-item">
+        <div class="mi-chapter">첫 번째 구절</div>
+        <span class="mi-hanja">一始無始一</span>
+        <div class="mi-meaning">하나에서 시작하지만<br>그 시작은 시작이 없는 하나다</div>
+      </div>
+      <div class="mirror-vs">⟷</div>
+      <div class="mirror-item">
+        <div class="mi-chapter">마지막 구절</div>
+        <span class="mi-hanja">一終無終一</span>
+        <div class="mi-meaning">하나로 끝나지만<br>그 끝은 끝이 없는 하나다</div>
+      </div>
+    </div>
+    <div class="mirror-conclusion">
+      첫 글자도 一, 마지막 글자도 一.<br>
+      <strong>천부경은 시작도 없고 끝도 없는 고리다.</strong>
+    </div>
+  </div>
+
+  <!-- 고리 시각화 -->
+  <div class="section-title">▶ 81자가 만드는 고리</div>
+  <div class="ring-visual">
+    <div class="ring-visual-title">첫 글자에서 마지막 글자로 — 다시 처음으로</div>
+    <div class="ring-chars">
+      <div class="ring-char start">一</div>
+      <div class="ring-char arrow">→</div>
+      <div class="ring-char normal">始</div>
+      <div class="ring-char normal">無</div>
+      <div class="ring-char normal">始</div>
+      <div class="ring-char normal">一</div>
+      <div class="ring-char arrow">···</div>
+      <div class="ring-char normal">無</div>
+      <div class="ring-char normal">終</div>
+      <div class="ring-char end">一</div>
+      <div class="ring-char arrow">↩</div>
+    </div>
+    <div class="ring-note">
+      81자를 다 읽고 나면 마지막 一에서 다시 첫 一로 돌아온다.<br>
+      <strong>천부경 자체가 끝이 없는 고리다.</strong>
+    </div>
+  </div>
+
+  <!-- 순환의 예시들 -->
+  <div class="section-title">▶ 결국 순환이다 — 우주도 자연도 인간도</div>
+  <p class="body-text">一終無終一. 끝은 다시 시작이다. 이것이 천부경이 처음부터 끝까지 말하려 했던 것이 아닐까. 우리 주변 모든 것이 순환한다.</p>
+
+  <div class="cycle-examples">
+    <div class="cycle-ex">
+      <span class="ce-icon">🌊</span>
+      <div class="ce-flow">
+        <span class="ce-item">강</span>
+        <span class="ce-arrow">→</span>
+        <span class="ce-item">바다</span>
+        <span class="ce-arrow">→</span>
+        <span class="ce-item">구름</span>
+        <span class="ce-arrow">→</span>
+        <span class="ce-item">비</span>
+        <span class="ce-arrow">→</span>
+        <span class="ce-item">다시 강</span>
+        <span class="ce-loop">끊임없이</span>
+      </div>
+    </div>
+    <div class="cycle-ex">
+      <span class="ce-icon">🌱</span>
+      <div class="ce-flow">
+        <span class="ce-item">씨앗</span>
+        <span class="ce-arrow">→</span>
+        <span class="ce-item">나무</span>
+        <span class="ce-arrow">→</span>
+        <span class="ce-item">열매</span>
+        <span class="ce-arrow">→</span>
+        <span class="ce-item">다시 씨앗</span>
+        <span class="ce-loop">끊임없이</span>
+      </div>
+    </div>
+    <div class="cycle-ex">
+      <span class="ce-icon">🌸</span>
+      <div class="ce-flow">
+        <span class="ce-item">봄</span>
+        <span class="ce-arrow">→</span>
+        <span class="ce-item">여름</span>
+        <span class="ce-arrow">→</span>
+        <span class="ce-item">가을</span>
+        <span class="ce-arrow">→</span>
+        <span class="ce-item">겨울</span>
+        <span class="ce-arrow">→</span>
+        <span class="ce-item">다시 봄</span>
+        <span class="ce-loop">끊임없이</span>
+      </div>
+    </div>
+    <div class="cycle-ex">
+      <span class="ce-icon">👶</span>
+      <div class="ce-flow">
+        <span class="ce-item">태어나고</span>
+        <span class="ce-arrow">→</span>
+        <span class="ce-item">살다가</span>
+        <span class="ce-arrow">→</span>
+        <span class="ce-item">죽고</span>
+        <span class="ce-arrow">→</span>
+        <span class="ce-item">다시 이어진다</span>
+        <span class="ce-loop">끊임없이</span>
+      </div>
+    </div>
+    <div class="cycle-ex">
+      <span class="ce-icon">🌌</span>
+      <div class="ce-flow">
+        <span class="ce-item">별이 태어나고</span>
+        <span class="ce-arrow">→</span>
+        <span class="ce-item">타오르고</span>
+        <span class="ce-arrow">→</span>
+        <span class="ce-item">사라지고</span>
+        <span class="ce-arrow">→</span>
+        <span class="ce-item">새 별이 된다</span>
+        <span class="ce-loop">끊임없이</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3부 전체 마무리 -->
+  <div class="section-title">▶ 3부를 마치며 — 그리고 천부경 81자를</div>
+  <div class="final-box">
+    <div class="fb-label">천부경 3부 — 우주론 · 운동론 · 인간론</div>
+    <div class="final-summary">
+      <div class="final-item">
+        <span class="fi-badge p1">1부 · 天</span>
+        <span class="fi-text">우주는 어떻게 시작됐는가. 하나에서 셋으로, 하늘·땅·사람의 순서로. (一始無始一 ~ 天二三 地二三 人二三)</span>
+      </div>
+      <div class="final-item">
+        <span class="fi-badge p2">2부 · 地</span>
+        <span class="fi-text">우주는 어떻게 작동하는가. 만남이 세상을 낳고, 시간과 공간이 고리를 이루며 만물이 오간다. (大三合六 ~ 萬往萬來)</span>
+      </div>
+      <div class="final-item">
+        <span class="fi-badge p3">3부 · 人</span>
+        <span class="fi-text">인간이란 무엇인가. 변해도 본질은 남고, 사람 안에 천지가 있고, 끝은 다시 시작이다. (用變不動本 ~ 一終無終一)</span>
+      </div>
+    </div>
+    <div class="final-conclusion">
+      우주의 철학과 자연의 철학, 인간의 철학이 하나 되어 있다.<br>
+      결국 순환이다. 반복된다.<br>
+      그게 우주든 자연이든, 인간이든, 인간사 사는 원리든.<br><br>
+      一終無終一. 끝은 다시 시작이다.
+    </div>
+  </div>
+
+  <!-- 대화 -->
+  <div class="section-title">▶ 시민과 철학자의 대화</div>
+
+  <div class="dialogue-section">
+    <div class="dialogue-title">一終無終一 — 끝은 다시 시작이다</div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">드디어 마지막 구절이군요. 一終無終一... 一始無始一로 시작해서 一終無終一로 끝나는군요.</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">눈치챘군요. 첫 글자와 마지막 글자가 모두 一 — 하나예요. 천부경 자체가 끝이 없는 고리예요. 81자를 다 읽고 나면 다시 첫 글자로 돌아와요. 우주처럼, 자연처럼, 인간의 삶처럼.</div>
+    </div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">결국 순환이네요. 우주도 자연도 인간도 모두 순환하고 반복된다... 우주의 철학과 자연의 철학, 인간의 철학이 하나 되어 있다는 생각이 들어요.</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">그게 천부경이 처음부터 끝까지 말하려 했던 것이 아닐까요. 수천 년 전 우리 조상들이 하늘·땅·인간사를 보고 이 원리를 터득해 81자로 담아낸 거예요.</div>
+    </div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">수천 년 전에 이 이치를 깨달았다니... 세계 최고의 경전이라는 말이 어색하지 않네요. 그런데 이런 것들이 왜 학교에서 안 가르쳐주는 걸까요? 초등학교부터 대학교까지 교과과정에 넣어 사유를 할 수 있게 해줬으면 하는데.</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">그 질문이 이 시리즈를 시작한 이유예요. 플라톤을 배우고 아리스토텔레스를 배우면서, 정작 우리 조상이 81자로 압축해놓은 우주의 이치는 배우지 못했죠. 천부경을 통해 스스로 사유하는 법을 가르쳤다면, 얼마나 많은 사람이 더 인간다운 삶을 살 수 있었을까요. 그 질문은 — 아직 끝나지 않았어요.</div>
+    </div>
+  </div>
+
+  <!-- 인사이트 -->
+  <div class="insight-box">
+    <p>一終無終一. 끝은 다시 시작이다.<br>
+    81자를 다 읽고 나면 다시 첫 글자로 돌아온다.<br>
+    천부경 자체가 순환이다.</p>
+  </div>
+
+  <!-- 열린 질문 -->
+  <div class="open-question">
+    <p>이 시리즈를 덮고 나서도 그 질문은 계속된다.</p>
+    <p class="q-sub">당신의 一終無終一은 무엇인가.<br>다음 회 — 에필로그로 이어진다.</p>
+  </div>
+
+  <!-- 다음 회차 -->
+  <div class="next-episode">
+    <div class="next-label">다음 회</div>
+    <div class="next-content">
+      <strong>[14회] 나는 천부경을 읽다가 철학자가 되었다 — 에필로그</strong><br>
+      81자를 함께 걸어왔다. 그 여정이 남긴 것은 무엇인가.
+    </div>
+  </div>
+
+  <!-- 태그 -->
+  <div class="tags">
+    <span class="tag">#천부경</span>
+    <span class="tag">#일종무종일</span>
+    <span class="tag">#一終無終一</span>
+    <span class="tag">#천부경해설</span>
+    <span class="tag">#한국철학</span>
+    <span class="tag">#동양철학</span>
+    <span class="tag">#순환</span>
+    <span class="tag">#인문학</span>
+    <span class="tag">#철학에세이</span>
+    <span class="tag">#천지인</span>
+  </div>
+
+</div>
+</body>
+</html>

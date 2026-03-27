@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #faf8f4;
+    color: #2c2c2c;
+    line-height: 1.9;
+  }
+
+  .post-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 60px 24px;
+  }
+
+  .series-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #8B6914;
+    border: 1px solid #C9A84C;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 28px;
+  }
+
+  .post-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a1a2e;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+
+  .post-subtitle {
+    font-size: 16px;
+    color: #8B6914;
+    font-style: italic;
+    margin-bottom: 40px;
+    font-family: 'Noto Serif KR', serif;
+  }
+
+  .divider {
+    width: 48px;
+    height: 2px;
+    background: linear-gradient(90deg, #C9A84C, #8B6914);
+    margin-bottom: 40px;
+  }
+
+  .hook-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    color: #3a3a3a;
+    line-height: 2;
+    margin-bottom: 48px;
+    padding-left: 20px;
+    border-left: 3px solid #e8dfc8;
+  }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #8B6914;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    margin-top: 48px;
+  }
+
+  .part-badge {
+    display: inline-block;
+    background: #1A3A6A;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+
+  /* 원문 박스 */
+  .original-box {
+    text-align: center;
+    background: #1a1a2e;
+    border-radius: 12px;
+    padding: 40px 32px;
+    margin: 32px 0;
+  }
+
+  .original-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 34px;
+    font-weight: 700;
+    color: #C9A84C;
+    letter-spacing: 6px;
+    display: block;
+    margin-bottom: 14px;
+  }
+
+  .original-reading {
+    font-size: 14px;
+    color: #aaa;
+    letter-spacing: 4px;
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  .original-translation {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    color: #e0d8c8;
+    font-style: italic;
+    line-height: 1.9;
+  }
+
+  /* 한자 풀이 테이블 */
+  .hanja-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+    font-size: 14px;
+  }
+
+  .hanja-table th {
+    background: #8B6914;
+    color: #fff;
+    padding: 10px 16px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+
+  .hanja-table th:first-child { text-align: center; width: 80px; }
+  .hanja-table th:nth-child(2) { width: 120px; }
+
+  .hanja-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #e8dfc8;
+    vertical-align: middle;
+    color: #2c2c2c;
+    line-height: 1.7;
+  }
+
+  .hanja-table td:first-child {
+    text-align: center;
+    font-size: 28px;
+    font-family: 'Noto Serif KR', serif;
+    color: #8B6914;
+    font-weight: 700;
+  }
+
+  .hanja-table td:nth-child(2) { font-size: 13px; color: #777; }
+  .hanja-table tr:nth-child(odd) td { background: #fdf8ee; }
+  .hanja-table tr:nth-child(even) td { background: #fff; }
+
+  /* 우주 생성 타임라인 */
+  .cosmos-timeline {
+    margin: 32px 0;
+    position: relative;
+  }
+
+  .cosmos-item {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 4px;
+    align-items: stretch;
+  }
+
+  .cosmos-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80px;
+    flex-shrink: 0;
+  }
+
+  .cosmos-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+
+  .cosmos-dot.cheon { background: #1A3A6A; box-shadow: 0 0 8px #3A6AAA; }
+  .cosmos-dot.ji { background: #8B6914; box-shadow: 0 0 8px #C9A84C; }
+  .cosmos-dot.in { background: #2A6A2A; box-shadow: 0 0 8px #4AAA4A; }
+
+  .cosmos-line {
+    width: 2px;
+    flex: 1;
+    background: #e8dfc8;
+    margin: 4px auto 0;
+  }
+
+  .cosmos-right {
+    flex: 1;
+    padding-bottom: 32px;
+  }
+
+  .cosmos-year {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .cosmos-year.cheon { color: #1A3A6A; }
+  .cosmos-year.ji { color: #8B6914; }
+  .cosmos-year.in { color: #2A6A2A; }
+
+  .cosmos-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .cosmos-hanja.cheon { color: #1A3A6A; }
+  .cosmos-hanja.ji { color: #8B6914; }
+  .cosmos-hanja.in { color: #2A6A2A; }
+
+  .cosmos-desc {
+    font-size: 14px;
+    color: #444;
+    line-height: 1.8;
+    background: #fff;
+    border: 1px solid #e8dfc8;
+    border-radius: 8px;
+    padding: 14px 18px;
+  }
+
+  /* 소름 박스 */
+  .soroom-box {
+    background: linear-gradient(135deg, #1a1a2e, #2a2a4e);
+    border-radius: 12px;
+    padding: 32px;
+    margin: 32px 0;
+    text-align: center;
+  }
+
+  .soroom-box .s-top {
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: #aaa;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .soroom-compare {
+    display: flex;
+    gap: 0;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .soroom-item {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 8px;
+    padding: 20px 24px;
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .soroom-item .si-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #C9A84C;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .soroom-item .si-content {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    color: #e0d8c8;
+    line-height: 1.8;
+  }
+
+  .soroom-vs {
+    font-size: 20px;
+    color: #C9A84C;
+    font-weight: 700;
+  }
+
+  /* 대화 */
+  .dialogue-section {
+    background: #fff;
+    border: 1px solid #e8dfc8;
+    border-radius: 12px;
+    padding: 28px 24px;
+    margin: 32px 0;
+  }
+
+  .dialogue-title {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #aaa;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .citizen {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 6px;
+    margin-top: 28px;
+  }
+
+  .citizen-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    background: #3A5A8A;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+    margin-top: 3px;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+
+  .citizen-text {
+    font-size: 15px;
+    color: #2c3a52;
+    line-height: 1.9;
+    background: #f0f4fa;
+    border-radius: 0 12px 12px 12px;
+    padding: 14px 18px;
+    flex: 1;
+  }
+
+  .philosopher {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 6px;
+    margin-top: 6px;
+    padding-left: 20px;
+  }
+
+  .philosopher-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    background: #8B6914;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+    margin-top: 3px;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+
+  .philosopher-text {
+    font-size: 15px;
+    color: #3a2c10;
+    line-height: 1.9;
+    background: #fdf6e3;
+    border-radius: 0 12px 12px 12px;
+    padding: 14px 18px;
+    flex: 1;
+  }
+
+  /* 인사이트 박스 */
+  .insight-box {
+    background: linear-gradient(135deg, #fdf6e3, #faf0d0);
+    border-left: 4px solid #C9A84C;
+    padding: 24px 28px;
+    margin: 40px 0;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .insight-box p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16px;
+    color: #5B3A00;
+    font-weight: 600;
+    line-height: 1.9;
+    font-style: italic;
+  }
+
+  .body-text {
+    font-size: 15.5px;
+    color: #333;
+    line-height: 2;
+    margin-bottom: 20px;
+  }
+
+  /* 행성 생성 과정 */
+  .planet-box {
+    background: #fff;
+    border: 1px solid #e8dfc8;
+    border-radius: 12px;
+    padding: 28px;
+    margin: 32px 0;
+  }
+
+  .planet-box-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #8B6914;
+    letter-spacing: 1.5px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  .planet-step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0e8d4;
+  }
+
+  .planet-step:last-child { border-bottom: none; }
+
+  .planet-num {
+    width: 28px;
+    height: 28px;
+    background: #1a1a2e;
+    color: #C9A84C;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .planet-content {
+    flex: 1;
+  }
+
+  .planet-content strong {
+    font-size: 14px;
+    color: #1a1a2e;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .planet-content p {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.7;
+  }
+
+  /* 열린 질문 */
+  .open-question {
+    text-align: center;
+    padding: 40px 20px;
+    margin: 48px 0 0;
+    border-top: 1px solid #e8dfc8;
+  }
+
+  .open-question p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    color: #5B4A8A;
+    font-style: italic;
+    line-height: 1.9;
+  }
+
+  .open-question .q-sub { font-size: 14px; color: #999; margin-top: 8px; }
+
+  /* 이전/다음 */
+  .prev-episode {
+    background: #f0f4fa;
+    border-radius: 8px;
+    padding: 16px 24px;
+    margin-bottom: 32px;
+    font-size: 14px;
+    color: #3A5A8A;
+  }
+
+  .prev-episode a { color: #3A5A8A; text-decoration: none; font-weight: 600; }
+
+  .next-episode {
+    background: #f5f0e8;
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .next-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #8B6914;
+    text-transform: uppercase;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .next-content { font-size: 14px; color: #333; line-height: 1.7; }
+  .next-content strong { color: #1a1a2e; font-weight: 600; }
+
+  .tags {
+    margin-top: 48px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag {
+    font-size: 12px;
+    color: #8B6914;
+    background: #fdf6e3;
+    border: 1px solid #e8dfc8;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+</style>
+</head>
+<body>
+<div class="post-wrap">
+
+  <!-- 이전 회차 -->
+  <div class="prev-episode">
+    📖 이전 글 → <a href="#">[4회] 나뉘어도 근본은 사라지지 않는다(析三極無盡本) — 석유와 플라스틱의 비밀</a>
+  </div>
+
+  <!-- 시리즈 배지 -->
+  <div class="series-badge">시민과 철학자의 천부경 · 5회</div>
+
+  <!-- 1부 배지 -->
+  <div class="part-badge">1부 · 天의 논리 — 우주의 시작과 생성 원리</div>
+
+  <!-- 제목 -->
+  <h1 class="post-title">우주가 순서를 알고 있었다(天一一 地一二 人一三)</h1>
+  <p class="post-subtitle">138억 년의 이치</p>
+  <div class="divider"></div>
+
+  <!-- 도입부 -->
+  <div class="hook-text">
+    <p>138억 년 전 우주가 탄생했다. 46억 년 전 지구가 만들어졌다. 30만 년 전 인간이 출현했다.</p>
+    <br>
+    <p>현대 천문학과 진화생물학이 수백 년의 연구 끝에 도달한 이 순서를 — 천부경은 단 아홉 글자로 적어놓았다. 天一一 地一二 人一三. 어떻게 알았을까.</p>
+  </div>
+
+  <!-- 원문 -->
+  <div class="section-title">▶ 원문</div>
+  <div class="original-box">
+    <span class="original-hanja">天一一  地一二  人一三</span>
+    <span class="original-reading">천일일  ·  지일이  ·  인일삼</span>
+    <span class="original-translation">"하늘은 하나에서 첫째요, 땅은 하나에서 둘째요,<br>사람은 하나에서 셋째다"</span>
+  </div>
+
+  <!-- 한자 풀이 -->
+  <div class="section-title">▶ 한자 풀이</div>
+  <table class="hanja-table">
+    <tr>
+      <th>한자</th>
+      <th>음(音)</th>
+      <th>뜻</th>
+    </tr>
+    <tr>
+      <td>天</td>
+      <td>천</td>
+      <td>하늘. 우주 공간, 천체, 자연의 가장 높은 영역. 모든 것에 앞서 존재한다.</td>
+    </tr>
+    <tr>
+      <td>一</td>
+      <td>일</td>
+      <td>하나에서. 하늘도 같은 근원 하나(一)에서 나왔음을 뜻한다. 천·지·인 셋 모두에 一이 반복되는 것은 셋이 모두 같은 근원임을 강조하기 위함이다.</td>
+    </tr>
+    <tr>
+      <td>一</td>
+      <td>일</td>
+      <td>첫째. 생성 순서상 하늘이 가장 먼저임을 나타낸다.</td>
+    </tr>
+    <tr>
+      <td>地</td>
+      <td>지</td>
+      <td>땅. 지구, 대지, 물질적 기반. 하늘 다음으로 생겨난 존재.</td>
+    </tr>
+    <tr>
+      <td>一</td>
+      <td>일</td>
+      <td>하나에서. 땅도 같은 근원 하나(一)에서 나왔음을 반복 강조한다.</td>
+    </tr>
+    <tr>
+      <td>二</td>
+      <td>이</td>
+      <td>둘째. 하늘 다음으로 땅이 생겨났음을 나타낸다.</td>
+    </tr>
+    <tr>
+      <td>人</td>
+      <td>인</td>
+      <td>사람. 인간, 지능을 가진 생명체. 하늘과 땅이 갖춰진 후 마지막으로 출현.</td>
+    </tr>
+    <tr>
+      <td>一</td>
+      <td>일</td>
+      <td>하나에서. 사람도 같은 근원 하나(一)에서 나왔음을 반복 강조한다. 천·지·인 셋 모두 一을 공유한다.</td>
+    </tr>
+    <tr>
+      <td>三</td>
+      <td>삼</td>
+      <td>셋째. 우주 생성 순서의 마지막에 인간이 위치함을 나타낸다.</td>
+    </tr>
+  </table>
+
+  <!-- 소름 비교 박스 -->
+  <div class="section-title">▶ 현대 과학 vs 천부경</div>
+  <div class="soroom-box">
+    <div class="s-top">수백 년 연구의 결론 vs 수천 년 전의 아홉 글자</div>
+    <div class="soroom-compare">
+      <div class="soroom-item">
+        <div class="si-label">현대 과학의 결론</div>
+        <div class="si-content">
+          138억 년 전 — 빅뱅, 우주 탄생<br>
+          46억 년 전 — 지구 형성<br>
+          30만 년 전 — 현생인류 출현
+        </div>
+      </div>
+      <div class="soroom-vs">=</div>
+      <div class="soroom-item">
+        <div class="si-label">천부경의 아홉 글자</div>
+        <div class="si-content">
+          天一一 — 하늘이 첫째<br>
+          地一二 — 땅이 둘째<br>
+          人一三 — 사람이 셋째
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 우주 생성 타임라인 -->
+  <div class="section-title">▶ 우주 생성의 순서</div>
+  <p class="body-text">천부경이 말한 순서 그대로 — 하늘이 먼저, 땅이 다음, 사람이 마지막이다.</p>
+
+  <div class="cosmos-timeline">
+    <div class="cosmos-item">
+      <div class="cosmos-left">
+        <div class="cosmos-dot cheon"></div>
+        <div class="cosmos-line"></div>
+      </div>
+      <div class="cosmos-right">
+        <div class="cosmos-year cheon">138억 년 전</div>
+        <div class="cosmos-hanja cheon">天一一 — 하늘이 첫째</div>
+        <div class="cosmos-desc">빅뱅으로 우주(하늘)가 탄생했다. 우주 공간에 먼지와 가스, 크고 작은 물질들이 서로의 중력에 이끌려 모이고 뭉치고 충돌하면서 별과 행성이 만들어지기 시작했다.</div>
+      </div>
+    </div>
+    <div class="cosmos-item">
+      <div class="cosmos-left">
+        <div class="cosmos-dot ji"></div>
+        <div class="cosmos-line"></div>
+      </div>
+      <div class="cosmos-right">
+        <div class="cosmos-year ji">46억 년 전</div>
+        <div class="cosmos-hanja ji">地一二 — 땅이 둘째</div>
+        <div class="cosmos-desc">지구(땅)가 형성되었다. 지구는 대기를 품는 데 성공한 행성이었다. 대기가 생기니 지반이 안정되고, 다양한 물질들이 균형을 찾아가기 시작했다.</div>
+      </div>
+    </div>
+    <div class="cosmos-item">
+      <div class="cosmos-left">
+        <div class="cosmos-dot in"></div>
+      </div>
+      <div class="cosmos-right">
+        <div class="cosmos-year in">약 30만 년 전</div>
+        <div class="cosmos-hanja in">人一三 — 사람이 셋째</div>
+        <div class="cosmos-desc">현생인류(사람)가 출현했다. 박테리아에서 시작해 세균이 생겨나고, 마침내 지능을 가진 동물 — 인간이 나타났다. 하늘과 땅이 모두 갖춰진 후 마지막으로.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 행성 생성 과정 -->
+  <div class="section-title">▶ 지구는 어떻게 생명을 품었는가</div>
+  <div class="planet-box">
+    <div class="planet-box-title">시저 님의 설명 — 地一二가 일어난 과정</div>
+    <div class="planet-step">
+      <div class="planet-num">1</div>
+      <div class="planet-content">
+        <strong>우주 먼지와 물질이 중력으로 모인다</strong>
+        <p>크고 작은 물질들이 서로 끌어당기고 뭉쳐지면서 점점 커지고 융합이 일어난다.</p>
+      </div>
+    </div>
+    <div class="planet-step">
+      <div class="planet-num">2</div>
+      <div class="planet-content">
+        <strong>행성이 만들어진다</strong>
+        <p>어떤 행성은 대기를 품고, 어떤 행성은 그러지 못한다. 지구는 대기를 품는 데 성공했다.</p>
+      </div>
+    </div>
+    <div class="planet-step">
+      <div class="planet-num">3</div>
+      <div class="planet-content">
+        <strong>대기가 생기니 지반이 안정된다</strong>
+        <p>행성이 보호받고, 다양한 물질들이 균형을 찾아가기 시작한다.</p>
+      </div>
+    </div>
+    <div class="planet-step">
+      <div class="planet-num">4</div>
+      <div class="planet-content">
+        <strong>박테리아 → 세균 → 인간</strong>
+        <p>균형 속에서 생명이 생겨나고, 마침내 지능을 가진 인간이 출현한다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 대화 -->
+  <div class="section-title">▶ 시민과 철학자의 대화</div>
+
+  <div class="dialogue-section">
+    <div class="dialogue-title">天一一 地一二 人一三 — 우주가 순서를 알고 있었다</div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">天一一 地一二 人一三... 하늘이 먼저, 땅이 다음, 사람이 마지막. 이건 생성의 순서를 말하는 건가요?</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">맞아요. 단순한 순위가 아니라 생성의 순서예요. 그런데 이 순서가 현대 과학과 정확히 일치해요. 138억 년 전 우주(하늘)가 먼저 탄생했고, 46억 년 전 지구(땅)가 만들어졌고, 약 30만 년 전 현생인류(사람)가 출현했어요.</div>
+    </div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">소름 돋는데요? 그 시대 사람들이 어떻게 이 순서를 알았을까요?</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">행성이 만들어지는 과정을 생각해보면 어떨까요. 우주 공간에 먼지들이 모이고, 물질들이 중력으로 끌어당기고 뭉쳐지면서 행성이 만들어지죠. 어떤 행성은 대기를 품고, 어떤 행성은 그러지 못해요.</div>
+    </div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">지구는 대기를 품었고... 그래서 지반이 안정되고, 박테리아가 생겨나고, 결국 인간이 나타난 거네요.</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">현대 천문학과 진화생물학이 수백 년의 연구 끝에 도달한 이 순서를, 천부경은 단 아홉 글자로 적어놓았어요. 어떻게 알았냐고 묻는다면 — 어쩌면 질문이 반대인 것이 아닐까요. 현대 과학이 데이터로 추적해서 도달한 결론을, 그들은 자연을 오래 바라보는 감각으로 먼저 꿰뚫었던 것으로 보여요.</div>
+    </div>
+  </div>
+
+  <!-- 인사이트 -->
+  <div class="insight-box">
+    <p>天一一 地一二 人一三.<br>
+    기술은 뒤처졌을지 몰라도,<br>
+    통찰은 앞서 있었던 것이 아닐까.</p>
+  </div>
+
+  <!-- 마무리 -->
+  <p class="body-text">어떻게 알았냐고 묻는 것은 어쩌면 질문의 방향이 반대인 것이 아닐까. 현대 과학은 망원경과 데이터로 138억 년을 거슬러 올라가 이 순서에 도달했다. 그 시대 사람들은 문명의 소음 없이 매일 하늘을 보고, 땅을 보고, 사람을 보며 — 그 감각만으로 먼저 닿았다. 기술은 뒤처졌을지 몰라도, 통찰은 앞서 있었던 것으로 보인다.</p>
+
+  <!-- 열린 질문 -->
+  <div class="open-question">
+    <p>그렇다면 우주가 인간을 만들어낸 것인가,<br>인간이 우주를 발견한 것인가.</p>
+    <p class="q-sub">다음 회에서는 一積十鉅 無匱化三 — 하나의 씨앗이 어떻게 세상을 만드는지를 본다.</p>
+  </div>
+
+  <!-- 다음 회차 -->
+  <div class="next-episode">
+    <div class="next-label">다음 회</div>
+    <div class="next-content">
+      <strong>[6회] 하나의 씨앗이 세상을 만든다(一積十鉅 無匱化三) — 봄날의 발견</strong><br>
+      봄에 씨앗 하나를 심으면 무슨 일이 일어나는가. 가장 단순한 장면이 가장 깊은 철학을 담고 있다.
+    </div>
+  </div>
+
+  <!-- 태그 -->
+  <div class="tags">
+    <span class="tag">#천부경</span>
+    <span class="tag">#천일일지일이인일삼</span>
+    <span class="tag">#天一一地一二人一三</span>
+    <span class="tag">#천부경해설</span>
+    <span class="tag">#한국철학</span>
+    <span class="tag">#동양철학</span>
+    <span class="tag">#천지인</span>
+    <span class="tag">#우주생성</span>
+    <span class="tag">#빅뱅</span>
+    <span class="tag">#인문학</span>
+  </div>
+
+</div>
+</body>
+</html>

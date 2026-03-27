@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #faf8f4;
+    color: #2c2c2c;
+    line-height: 1.9;
+  }
+
+  .post-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 60px 24px;
+  }
+
+  /* 시리즈 배지 */
+  .series-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #8B6914;
+    border: 1px solid #C9A84C;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 28px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  /* 메인 제목 */
+  .post-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a1a2e;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+
+  .post-subtitle {
+    font-size: 16px;
+    color: #8B6914;
+    font-style: italic;
+    margin-bottom: 40px;
+    font-family: 'Noto Serif KR', serif;
+  }
+
+  /* 구분선 */
+  .divider {
+    width: 48px;
+    height: 2px;
+    background: linear-gradient(90deg, #C9A84C, #8B6914);
+    margin-bottom: 40px;
+  }
+
+  /* 후킹 도입부 */
+  .hook-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    color: #3a3a3a;
+    line-height: 2;
+    margin-bottom: 48px;
+    padding-left: 20px;
+    border-left: 3px solid #e8dfc8;
+  }
+
+  /* 섹션 제목 */
+  .section-title {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #8B6914;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    margin-top: 48px;
+  }
+
+  /* 한자 풀이 테이블 */
+  .hanja-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+    font-size: 14px;
+  }
+
+  .hanja-table th {
+    background: #8B6914;
+    color: #fff;
+    padding: 10px 16px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+
+  .hanja-table th:first-child { text-align: center; width: 80px; }
+  .hanja-table th:nth-child(2) { width: 140px; }
+
+  .hanja-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #e8dfc8;
+    vertical-align: middle;
+    color: #2c2c2c;
+    line-height: 1.7;
+  }
+
+  .hanja-table td:first-child {
+    text-align: center;
+    font-size: 28px;
+    font-family: 'Noto Serif KR', serif;
+    color: #8B6914;
+    font-weight: 700;
+  }
+
+  .hanja-table td:nth-child(2) {
+    font-size: 13px;
+    color: #777;
+  }
+
+  .hanja-table tr:nth-child(odd) td { background: #fdf8ee; }
+  .hanja-table tr:nth-child(even) td { background: #fff; }
+
+  /* 인사이트 박스 */
+  .insight-box {
+    background: linear-gradient(135deg, #fdf6e3, #faf0d0);
+    border-left: 4px solid #C9A84C;
+    padding: 24px 28px;
+    margin: 40px 0;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .insight-box p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16px;
+    color: #5B3A00;
+    font-weight: 600;
+    line-height: 1.9;
+    font-style: italic;
+  }
+
+  /* 본문 단락 */
+  .body-text {
+    font-size: 15.5px;
+    color: #333;
+    line-height: 2;
+    margin-bottom: 20px;
+  }
+
+  /* 핵심 내용 박스 */
+  .content-box {
+    background: #fff;
+    border: 1px solid #e8dfc8;
+    border-radius: 8px;
+    padding: 28px 32px;
+    margin: 32px 0;
+  }
+
+  .content-box-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #8B6914;
+    letter-spacing: 1.5px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  .content-box p {
+    font-size: 15px;
+    color: #333;
+    line-height: 2;
+    margin-bottom: 12px;
+  }
+
+  .content-box p:last-child { margin-bottom: 0; }
+
+  /* 구조 설명 */
+  .structure-box {
+    background: #1a1a2e;
+    border-radius: 10px;
+    padding: 32px;
+    margin: 32px 0;
+  }
+
+  .structure-box .s-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 20px;
+    color: #C9A84C;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+
+  .structure-box .s-sub {
+    font-size: 13px;
+    color: #aaa;
+    margin-bottom: 16px;
+  }
+
+  .structure-box .s-body {
+    font-size: 14px;
+    color: #e0d8c8;
+    line-height: 1.9;
+    margin-bottom: 6px;
+  }
+
+  .structure-box .s-q {
+    font-size: 13px;
+    color: #C9A84C;
+    margin-top: 10px;
+    font-style: italic;
+  }
+
+  /* 다음 회차 예고 */
+  .next-episode {
+    background: #f5f0e8;
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin-top: 56px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .next-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #8B6914;
+    text-transform: uppercase;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .next-content {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.7;
+  }
+
+  .next-content strong {
+    color: #1a1a2e;
+    font-weight: 600;
+  }
+
+  /* 열린 질문 */
+  .open-question {
+    text-align: center;
+    padding: 40px 20px;
+    margin: 48px 0 0;
+    border-top: 1px solid #e8dfc8;
+  }
+
+  .open-question p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    color: #5B4A8A;
+    font-style: italic;
+    line-height: 1.9;
+  }
+
+  .open-question .q-sub {
+    font-size: 14px;
+    color: #999;
+    margin-top: 8px;
+  }
+
+  /* 태그 */
+  .tags {
+    margin-top: 48px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag {
+    font-size: 12px;
+    color: #8B6914;
+    background: #fdf6e3;
+    border: 1px solid #e8dfc8;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+
+  .hanja-big {
+    text-align: center;
+    padding: 40px 0 20px;
+  }
+
+  .hanja-big .main-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 64px;
+    color: #C9A84C;
+    font-weight: 700;
+    letter-spacing: 16px;
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .hanja-big .reading {
+    font-size: 14px;
+    color: #999;
+    letter-spacing: 6px;
+  }
+</style>
+</head>
+<body>
+<div class="post-wrap">
+
+  <!-- 시리즈 배지 -->
+  <div class="series-badge">시민과 철학자의 천부경 · 1회</div>
+
+  <!-- 제목 -->
+  <h1 class="post-title">천부경(天符經)이란 무엇인가</h1>
+  <p class="post-subtitle">이름 안에 이미 답이 있다</p>
+  <div class="divider"></div>
+
+  <!-- 도입부 -->
+  <div class="hook-text">
+    <p>천부경, 천부경 하면서 정작 그 이름이 무슨 뜻인지 아는 사람이 얼마나 될까.</p>
+    <br>
+    <p>天符經. 세 글자다. 그런데 이 세 글자 안에 이미 이 책 전체의 답이 들어있다. 어렵게 모실 필요가 없다. 지금부터 함께 읽어보자.</p>
+  </div>
+
+  <!-- 한자 크게 -->
+  <div class="hanja-big">
+    <span class="main-hanja">天符經</span>
+    <span class="reading">천  ·  부  ·  경</span>
+  </div>
+
+  <!-- 한자 풀이 -->
+  <div class="section-title">▶ 한자 풀이</div>
+  <table class="hanja-table">
+    <tr>
+      <th>한자</th>
+      <th>음(音)</th>
+      <th>뜻</th>
+    </tr>
+    <tr>
+      <td>天</td>
+      <td>천 (하늘 천)</td>
+      <td>하늘, 하느님, 우주 공간, 근원적 존재. 모든 것의 위에 있는 절대적 원리를 뜻한다.</td>
+    </tr>
+    <tr>
+      <td>符</td>
+      <td>부 (부합할 부)</td>
+      <td>부합하다, 맞추다, 도(道). 하늘의 이치가 인간에게 꼭 들어맞는다는 의미를 담고 있다.</td>
+    </tr>
+    <tr>
+      <td>經</td>
+      <td>경 (경전 경)</td>
+      <td>경전, 가르침, 다스리다. 오랜 시간 검증되어 전해 내려오는 진리의 기록.</td>
+    </tr>
+  </table>
+
+  <!-- 인사이트 -->
+  <div class="insight-box">
+    <p>天符經 — 하늘의 법칙(도)에 부합하는 경전.<br>
+    하늘의 이치가 인간에게 꼭 들어맞는다는 가르침이다.</p>
+  </div>
+
+  <!-- 핵심 내용 -->
+  <div class="section-title">▶ 천부경이란</div>
+
+  <div class="content-box">
+    <div class="content-box-title">기본 정보</div>
+    <p>총 <strong>81자(字)</strong>로 구성된 한국 최고(最古)의 경전. 1에서 10까지의 숫자를 사용해 우주의 구조와 운행 원리를 설명한다.</p>
+    <p>신라의 문인 <strong>최치원(857~?)</strong>이 묘향산 석벽의 고비(古碑)를 보고 옮겨 적었다는 데서 문헌 기록이 시작된다. 단군 시대부터 전해 내려온 것으로 알려져 있으며, 대종교의 기본 경전 중 하나다.</p>
+  </div>
+
+  <div class="content-box">
+    <div class="content-box-title">핵심 원리</div>
+    <p>'<strong>일시무시일(一始無始一)</strong> — 하나는 시작이 없는 하나에서 시작된다'로 열린다.</p>
+    <p>본래 하나인 근원에서 하늘·땅·사람(천지인, 三才)이 나왔으나 근본은 다함이 없다. 만물이 다시 하나로 돌아가는 수리적 원리를 통해 우주 만물의 근원과 순환 법칙을 가르친다.</p>
+  </div>
+
+  <div class="content-box">
+    <div class="content-box-title">왜 81자인가</div>
+    <p><strong>9 × 9 = 81</strong>. 동양 수 사상에서 9는 완전수다. 완전수가 스스로를 곱해 만들어진 81 — 우주의 이치를 담기 위해 가장 완전한 수의 그릇을 선택했다.</p>
+    <p>내용만이 아니라 <strong>형식 자체가 이미 철학</strong>이다.</p>
+  </div>
+
+  <!-- 구조 미리보기 -->
+  <div class="section-title">▶ 천부경의 3부 구조</div>
+  <p class="body-text">천부경 81자는 무작위로 나열된 글자가 아니다. 우주론 → 운동론 → 인간론, 세 개의 흐름으로 짜여 있다.</p>
+
+  <div class="structure-box">
+    <div class="s-title">1부 · 天의 논리</div>
+    <div class="s-sub">우주의 시작과 생성 원리</div>
+    <div class="s-body">一始無始一 ~ 無匱化三</div>
+    <div class="s-q">핵심 질문: 우주는 어디서 왔는가? 하늘·땅·사람은 어떤 순서로 생겨났는가?</div>
+  </div>
+
+  <div class="structure-box">
+    <div class="s-title">2부 · 地의 논리</div>
+    <div class="s-sub">천·지·인이 작동하는 방식</div>
+    <div class="s-body">天二三 地二三 人二三 ~ 一妙衍 萬往萬來</div>
+    <div class="s-q">핵심 질문: 우주는 어떤 법칙으로 움직이는가? 만남은 무엇을 낳는가?</div>
+  </div>
+
+  <div class="structure-box">
+    <div class="s-title">3부 · 人의 논리</div>
+    <div class="s-sub">인간 존재의 의미</div>
+    <div class="s-body">用變不動本 ~ 一終無終一</div>
+    <div class="s-q">핵심 질문: 인간이란 무엇인가? 내 안에 우주가 있다는 말은 무슨 뜻인가?</div>
+  </div>
+
+  <!-- 마무리 인사이트 -->
+  <div class="insight-box">
+    <p>이름 안에 이미 답이 있다.<br>
+    天(우주) + 符(부합) + 經(가르침)<br>
+    — 우주의 법칙이 인간에게 꼭 들어맞는다는 가르침.</p>
+  </div>
+
+  <!-- 열린 질문 -->
+  <div class="open-question">
+    <p>당신은 천부경이라는 이름을 처음 들었을 때<br>어떤 느낌이었는가.</p>
+    <p class="q-sub">어렵고 난해하게 느껴졌다면 — 다음 회를 읽고 나서 다시 생각해보라.</p>
+  </div>
+
+  <!-- 다음 회차 예고 -->
+  <div class="next-episode">
+    <div class="next-label">다음 회</div>
+    <div class="next-content">
+      <strong>2회 — 천부경, 경전이 아닌 관찰의 기록</strong><br>
+      어렵게 모시는 태도 자체가 가장 큰 오독이 아닐까. 기원전 1만 년, 그 시대로 돌아가 천부경을 다시 읽는다.
+    </div>
+  </div>
+
+  <!-- 태그 -->
+  <div class="tags">
+    <span class="tag">#천부경</span>
+    <span class="tag">#천부경해설</span>
+    <span class="tag">#한국철학</span>
+    <span class="tag">#동양철학</span>
+    <span class="tag">#천지인</span>
+    <span class="tag">#천부경뜻</span>
+    <span class="tag">#단군</span>
+    <span class="tag">#한국고전</span>
+    <span class="tag">#인문학</span>
+    <span class="tag">#철학에세이</span>
+  </div>
+
+</div>
+</body>
+</html>

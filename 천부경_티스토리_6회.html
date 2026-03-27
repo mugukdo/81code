@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #faf8f4;
+    color: #2c2c2c;
+    line-height: 1.9;
+  }
+
+  .post-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 60px 24px;
+  }
+
+  .series-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #8B6914;
+    border: 1px solid #C9A84C;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 28px;
+  }
+
+  .post-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a1a2e;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+
+  .post-subtitle {
+    font-size: 16px;
+    color: #8B6914;
+    font-style: italic;
+    margin-bottom: 40px;
+    font-family: 'Noto Serif KR', serif;
+  }
+
+  .divider {
+    width: 48px;
+    height: 2px;
+    background: linear-gradient(90deg, #C9A84C, #8B6914);
+    margin-bottom: 40px;
+  }
+
+  .hook-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    color: #3a3a3a;
+    line-height: 2;
+    margin-bottom: 48px;
+    padding-left: 20px;
+    border-left: 3px solid #e8dfc8;
+  }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #8B6914;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    margin-top: 48px;
+  }
+
+  .part-badge {
+    display: inline-block;
+    background: #1A3A6A;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+
+  /* 원문 박스 */
+  .original-box {
+    text-align: center;
+    background: #1a1a2e;
+    border-radius: 12px;
+    padding: 40px 32px;
+    margin: 32px 0;
+  }
+
+  .original-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #C9A84C;
+    letter-spacing: 8px;
+    display: block;
+    margin-bottom: 14px;
+  }
+
+  .original-reading {
+    font-size: 14px;
+    color: #aaa;
+    letter-spacing: 5px;
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  .original-translation {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    color: #e0d8c8;
+    font-style: italic;
+    line-height: 1.9;
+  }
+
+  /* 한자 풀이 테이블 */
+  .hanja-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+    font-size: 14px;
+  }
+
+  .hanja-table th {
+    background: #8B6914;
+    color: #fff;
+    padding: 10px 16px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+
+  .hanja-table th:first-child { text-align: center; width: 80px; }
+  .hanja-table th:nth-child(2) { width: 120px; }
+
+  .hanja-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #e8dfc8;
+    vertical-align: middle;
+    color: #2c2c2c;
+    line-height: 1.7;
+  }
+
+  .hanja-table td:first-child {
+    text-align: center;
+    font-size: 28px;
+    font-family: 'Noto Serif KR', serif;
+    color: #8B6914;
+    font-weight: 700;
+  }
+
+  .hanja-table td:nth-child(2) { font-size: 13px; color: #777; }
+  .hanja-table tr:nth-child(odd) td { background: #fdf8ee; }
+  .hanja-table tr:nth-child(even) td { background: #fff; }
+
+  /* 씨앗 성장 시각화 */
+  .seed-journey {
+    margin: 32px 0;
+    background: #fff;
+    border: 1px solid #e8dfc8;
+    border-radius: 12px;
+    padding: 32px 24px;
+  }
+
+  .seed-journey-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #8B6914;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .seed-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+    row-gap: 16px;
+  }
+
+  .seed-step {
+    text-align: center;
+    padding: 0 12px;
+  }
+
+  .seed-step .ss-icon {
+    font-size: 32px;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .seed-step .ss-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #8B6914;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .seed-step .ss-label {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.5;
+  }
+
+  .seed-arrow {
+    font-size: 20px;
+    color: #C9A84C;
+    font-weight: 700;
+    padding: 0 4px;
+    margin-bottom: 28px;
+  }
+
+  .seed-note {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #f0e8d4;
+    font-size: 14px;
+    color: #888;
+    font-style: italic;
+    line-height: 1.7;
+  }
+
+  .seed-note strong { color: #8B6914; }
+
+  /* 구절 분석 박스 */
+  .phrase-box {
+    display: flex;
+    gap: 16px;
+    margin: 32px 0;
+    flex-wrap: wrap;
+  }
+
+  .phrase-item {
+    flex: 1;
+    min-width: 200px;
+    border-radius: 10px;
+    padding: 24px 20px;
+    text-align: center;
+  }
+
+  .phrase-item.first { background: #e8f0fa; border: 1px solid #b8cce8; }
+  .phrase-item.second { background: #e8f4e8; border: 1px solid #b8d8b8; }
+
+  .phrase-item .pi-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 20px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .phrase-item.first .pi-hanja { color: #1A3A6A; }
+  .phrase-item.second .pi-hanja { color: #2A5A2A; }
+
+  .phrase-item .pi-reading {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+
+  .phrase-item .pi-meaning {
+    font-size: 14px;
+    color: #444;
+    line-height: 1.7;
+    font-weight: 600;
+  }
+
+  .phrase-item .pi-desc {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
+    margin-top: 8px;
+  }
+
+  /* 천지인으로 돌아가는 열매 */
+  .fruit-box {
+    background: #fff;
+    border: 1px solid #e8dfc8;
+    border-radius: 12px;
+    padding: 28px;
+    margin: 32px 0;
+  }
+
+  .fruit-box-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #8B6914;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .fruit-items {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .fruit-item {
+    flex: 1;
+    min-width: 160px;
+    text-align: center;
+    padding: 20px 16px;
+    border-radius: 8px;
+  }
+
+  .fruit-item.cheon { background: #e8f0fa; border: 1px solid #b8cce8; }
+  .fruit-item.ji { background: #fdf6e3; border: 1px solid #e8dfc8; }
+  .fruit-item.in { background: #e8f4e8; border: 1px solid #b8d8b8; }
+
+  .fruit-item .fi-icon { font-size: 28px; display: block; margin-bottom: 8px; }
+
+  .fruit-item .fi-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 24px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .fruit-item.cheon .fi-hanja { color: #1A3A6A; }
+  .fruit-item.ji .fi-hanja { color: #8B6914; }
+  .fruit-item.in .fi-hanja { color: #2A5A2A; }
+
+  .fruit-item .fi-desc {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.6;
+  }
+
+  /* 대화 */
+  .dialogue-section {
+    background: #fff;
+    border: 1px solid #e8dfc8;
+    border-radius: 12px;
+    padding: 28px 24px;
+    margin: 32px 0;
+  }
+
+  .dialogue-title {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #aaa;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .citizen {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 6px;
+    margin-top: 28px;
+  }
+
+  .citizen-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    background: #3A5A8A;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+    margin-top: 3px;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+
+  .citizen-text {
+    font-size: 15px;
+    color: #2c3a52;
+    line-height: 1.9;
+    background: #f0f4fa;
+    border-radius: 0 12px 12px 12px;
+    padding: 14px 18px;
+    flex: 1;
+  }
+
+  .philosopher {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 6px;
+    margin-top: 6px;
+    padding-left: 20px;
+  }
+
+  .philosopher-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    background: #8B6914;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+    margin-top: 3px;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+
+  .philosopher-text {
+    font-size: 15px;
+    color: #3a2c10;
+    line-height: 1.9;
+    background: #fdf6e3;
+    border-radius: 0 12px 12px 12px;
+    padding: 14px 18px;
+    flex: 1;
+  }
+
+  /* 인사이트 박스 */
+  .insight-box {
+    background: linear-gradient(135deg, #fdf6e3, #faf0d0);
+    border-left: 4px solid #C9A84C;
+    padding: 24px 28px;
+    margin: 40px 0;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .insight-box p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16px;
+    color: #5B3A00;
+    font-weight: 600;
+    line-height: 1.9;
+    font-style: italic;
+  }
+
+  .body-text {
+    font-size: 15.5px;
+    color: #333;
+    line-height: 2;
+    margin-bottom: 20px;
+  }
+
+  /* 복리 박스 */
+  .compounding-box {
+    background: #1a1a2e;
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin: 32px 0;
+  }
+
+  .compounding-box .cb-title {
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: #C9A84C;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+
+  .compounding-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #2e2e48;
+  }
+
+  .compounding-row:last-child { border-bottom: none; }
+
+  .compounding-row .cr-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .compounding-row .cr-text {
+    font-size: 14px;
+    color: #e0d8c8;
+    line-height: 1.7;
+    flex: 1;
+  }
+
+  .compounding-row .cr-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 14px;
+    color: #C9A84C;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  /* 열린 질문 */
+  .open-question {
+    text-align: center;
+    padding: 40px 20px;
+    margin: 48px 0 0;
+    border-top: 1px solid #e8dfc8;
+  }
+
+  .open-question p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    color: #5B4A8A;
+    font-style: italic;
+    line-height: 1.9;
+  }
+
+  .open-question .q-sub { font-size: 14px; color: #999; margin-top: 8px; }
+
+  /* 이전/다음 */
+  .prev-episode {
+    background: #f0f4fa;
+    border-radius: 8px;
+    padding: 16px 24px;
+    margin-bottom: 32px;
+    font-size: 14px;
+    color: #3A5A8A;
+  }
+
+  .prev-episode a { color: #3A5A8A; text-decoration: none; font-weight: 600; }
+
+  .next-episode {
+    background: #f5f0e8;
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .next-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #8B6914;
+    text-transform: uppercase;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .next-content { font-size: 14px; color: #333; line-height: 1.7; }
+  .next-content strong { color: #1a1a2e; font-weight: 600; }
+
+  .tags {
+    margin-top: 48px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag {
+    font-size: 12px;
+    color: #8B6914;
+    background: #fdf6e3;
+    border: 1px solid #e8dfc8;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+</style>
+</head>
+<body>
+<div class="post-wrap">
+
+  <!-- 이전 회차 -->
+  <div class="prev-episode">
+    📖 이전 글 → <a href="#">[5회] 우주가 순서를 알고 있었다(天一一 地一二 人一三) — 138억 년의 이치</a>
+  </div>
+
+  <!-- 시리즈 배지 -->
+  <div class="series-badge">시민과 철학자의 천부경 · 6회</div>
+
+  <!-- 1부 배지 -->
+  <div class="part-badge">1부 · 天의 논리 — 우주의 시작과 생성 원리</div>
+
+  <!-- 제목 -->
+  <h1 class="post-title">하나의 씨앗이 세상을 만든다(一積十鉅 無匱化三)</h1>
+  <p class="post-subtitle">봄날의 발견</p>
+  <div class="divider"></div>
+
+  <!-- 도입부 -->
+  <div class="hook-text">
+    <p>봄에 씨앗 하나를 땅에 묻는다. 여름이 지나면 줄기가 오르고 가지가 뻗는다. 가을이 되면 열매가 열린다. 하나였던 것이 열이 되고 백이 된다.</p>
+    <br>
+    <p>천부경은 이 단순한 장면을 여덟 글자로 담았다. 一積十鉅 無匱化三. 거대한 진리는 먼 곳에 있지 않았다. 손에 쥔 씨앗 하나 안에 이미 있었다.</p>
+  </div>
+
+  <!-- 원문 -->
+  <div class="section-title">▶ 원문</div>
+  <div class="original-box">
+    <span class="original-hanja">一積十鉅  無匱化三</span>
+    <span class="original-reading">일적십거  ·  무궤화삼</span>
+    <span class="original-translation">"하나가 쌓여 열로 커지고,<br>다함 없이 셋으로 변화한다"</span>
+  </div>
+
+  <!-- 한자 풀이 -->
+  <div class="section-title">▶ 한자 풀이</div>
+  <table class="hanja-table">
+    <tr>
+      <th>한자</th>
+      <th>음(音)</th>
+      <th>뜻</th>
+    </tr>
+    <tr>
+      <td>一</td>
+      <td>일</td>
+      <td>하나. 씨앗 하나, 세포 하나, 시작 하나. 모든 것의 출발점.</td>
+    </tr>
+    <tr>
+      <td>積</td>
+      <td>적</td>
+      <td>쌓이다, 누적되다. 하나하나가 모여 점점 커짐을 뜻한다.</td>
+    </tr>
+    <tr>
+      <td>十</td>
+      <td>십</td>
+      <td>열. 완성과 충만을 상징하는 수. 1에서 10까지가 한 순환이다.</td>
+    </tr>
+    <tr>
+      <td>鉅</td>
+      <td>거</td>
+      <td>크다, 거대하다. 쌓이고 쌓여 거대해진 상태.</td>
+    </tr>
+    <tr>
+      <td>無</td>
+      <td>무</td>
+      <td>없다. 다함이 없음, 끊임없음을 강조한다.</td>
+    </tr>
+    <tr>
+      <td>匱</td>
+      <td>궤</td>
+      <td>다하다, 부족하다. 無匱 — 절대 부족함이 없다. 끊이지 않는다.</td>
+    </tr>
+    <tr>
+      <td>化</td>
+      <td>화</td>
+      <td>변화하다, 되다. 전혀 다른 형태로 바뀜. 질적 변환을 의미한다.</td>
+    </tr>
+    <tr>
+      <td>三</td>
+      <td>삼</td>
+      <td>셋. 천·지·인 세 방향으로 끊임없이 변화한다. 변화가 순환한다는 뜻.</td>
+    </tr>
+  </table>
+
+  <!-- 구절 두 토막 분석 -->
+  <div class="section-title">▶ 두 토막으로 읽기</div>
+  <div class="phrase-box">
+    <div class="phrase-item first">
+      <span class="pi-hanja">一積十鉅</span>
+      <div class="pi-reading">일 적 십 거</div>
+      <div class="pi-meaning">하나가 쌓여 열로 커진다</div>
+      <div class="pi-desc">씨앗 하나 → 수백 개의 열매<br>세포 하나 → 수십조 개의 세포<br>1원 → 복리로 불어나는 자산</div>
+    </div>
+    <div class="phrase-item second">
+      <span class="pi-hanja">無匱化三</span>
+      <div class="pi-reading">무 궤 화 삼</div>
+      <div class="pi-meaning">다함 없이 셋으로 변화한다</div>
+      <div class="pi-desc">그 열매가 다시<br>하늘(天)·땅(地)·사람(人)으로<br>끊임없이 순환한다</div>
+    </div>
+  </div>
+
+  <!-- 씨앗 여정 시각화 -->
+  <div class="section-title">▶ 씨앗 하나의 여정</div>
+  <div class="seed-journey">
+    <div class="seed-journey-title">一積十鉅 — 하나가 쌓여 열로 커지는 과정</div>
+    <div class="seed-steps">
+      <div class="seed-step">
+        <span class="ss-icon">🌱</span>
+        <span class="ss-hanja">一</span>
+        <div class="ss-label">씨앗 하나<br>봄</div>
+      </div>
+      <div class="seed-arrow">→</div>
+      <div class="seed-step">
+        <span class="ss-icon">🌿</span>
+        <span class="ss-hanja">積</span>
+        <div class="ss-label">줄기가 오르고<br>여름</div>
+      </div>
+      <div class="seed-arrow">→</div>
+      <div class="seed-step">
+        <span class="ss-icon">🍎</span>
+        <span class="ss-hanja">十鉅</span>
+        <div class="ss-label">열매가 열린다<br>가을</div>
+      </div>
+      <div class="seed-arrow">→</div>
+      <div class="seed-step">
+        <span class="ss-icon">🔄</span>
+        <span class="ss-hanja">無匱化三</span>
+        <div class="ss-label">다시 순환<br>천·지·인으로</div>
+      </div>
+    </div>
+    <div class="seed-note">
+      하나였던 것이 열이 되고 백이 된다.<br>
+      그리고 그 열매는 다시 <strong>하늘·땅·사람</strong>으로 돌아간다.
+    </div>
+  </div>
+
+  <!-- 열매가 천지인으로 돌아가는 것 -->
+  <div class="section-title">▶ 열매는 왜 셋(三)으로 돌아가는가</div>
+  <p class="body-text">無匱化三 — 다함 없이 셋으로 변화한다. 그 '셋'이 바로 천·지·인이다. 열매 하나가 어떻게 하늘·땅·사람으로 돌아가는지 생각해보라.</p>
+
+  <div class="fruit-box">
+    <div class="fruit-box-title">열매가 천·지·인으로 순환하는 이치</div>
+    <div class="fruit-items">
+      <div class="fruit-item cheon">
+        <span class="fi-icon">☀️</span>
+        <span class="fi-hanja">天</span>
+        <div class="fi-desc">하늘이 내린 햇빛과 비가 열매를 키웠다. 열매는 하늘의 선물이다.</div>
+      </div>
+      <div class="fruit-item ji">
+        <span class="fi-icon">🌍</span>
+        <span class="fi-hanja">地</span>
+        <div class="fi-desc">땅의 양분을 먹고 자랐다. 씨앗이 다시 땅으로 돌아가 새 생명이 된다.</div>
+      </div>
+      <div class="fruit-item in">
+        <span class="fi-icon">🙏</span>
+        <span class="fi-hanja">人</span>
+        <div class="fi-desc">사람의 양식이 된다. 사람의 손으로 심고 거두어 다시 삶이 이어진다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 대화 -->
+  <div class="section-title">▶ 시민과 철학자의 대화</div>
+
+  <div class="dialogue-section">
+    <div class="dialogue-title">一積十鉅 無匱化三 — 하나의 씨앗이 세상을 만든다</div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">一積十鉅 無匱化三... 하나가 쌓여 열이 되고, 다함 없이 셋으로 변화한다. 이건 어떻게 이해하면 될까요?</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">봄에 씨앗 하나를 땅에 묻어요. 여름이 지나면 줄기가 오르고 가지가 뻗죠. 가을이 되면 열매가 열려요. 하나였던 것이 열이 되고 백이 돼요. 그게 一積十鉅예요.</div>
+    </div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">그런데 無匱化三 — 다함 없이 셋으로 변화한다는 건요?</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">그 열매가 다시 셋으로 나뉘는 거예요. 하늘이 내린 햇빛과 비가 키운 것이니 하늘이요, 땅의 양분을 먹고 자란 것이니 땅이요, 사람의 양식이 되는 것이니 사람이죠. 천·지·인 셋으로 끊임없이 변화하는 거예요.</div>
+    </div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">그러네요... 열매는 하늘이 주는 자연의 선물이고, 씨앗이 땅에서 자라 열매를 맺으니 사람의 양식이 된다는. 一積十鉅無匱化三... 외우지 않아도 외워지네요.</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">몸이 이미 알고 있는 이치니까요. 이 구절을 처음 적은 사람은 거창한 우주론을 쓰려 했던 게 아닐지 몰라요. 매 계절 씨앗을 심고 열매를 거두며, 그 안에서 하늘과 땅과 사람이 하나로 이어지는 이치를 몸으로 알았던 사람이 아닐까요.</div>
+    </div>
+  </div>
+
+  <!-- 인사이트 -->
+  <div class="insight-box">
+    <p>외우지 않아도 외워지는 구절이 있다.<br>
+    몸이 이미 알고 있는 이치이기 때문이다.<br>
+    一積十鉅 無匱化三.</p>
+  </div>
+
+  <!-- 복리와 세포 분열 -->
+  <div class="section-title">▶ 현대의 언어로 읽으면</div>
+  <div class="compounding-box">
+    <div class="cb-title">一積十鉅 — 하나가 쌓여 열로 커지는 것들</div>
+    <div class="compounding-row">
+      <span class="cr-icon">💰</span>
+      <span class="cr-text">1원이 쌓이고 쌓여 거대한 자산이 되는 복리(複利)의 원리</span>
+      <span class="cr-hanja">一積十鉅</span>
+    </div>
+    <div class="compounding-row">
+      <span class="cr-icon">🧬</span>
+      <span class="cr-text">세포 하나가 분열을 거듭해 수십조 개의 세포로 이루어진 인간이 되는 것</span>
+      <span class="cr-hanja">一積十鉅</span>
+    </div>
+    <div class="compounding-row">
+      <span class="cr-icon">🌱</span>
+      <span class="cr-text">씨앗 하나가 나무가 되고 수백 개의 열매를 맺는 것</span>
+      <span class="cr-hanja">一積十鉅</span>
+    </div>
+    <div class="compounding-row">
+      <span class="cr-icon">💧</span>
+      <span class="cr-text">작은 물방울 하나가 모여 강이 되고 바다가 되는 것</span>
+      <span class="cr-hanja">一積十鉅</span>
+    </div>
+  </div>
+
+  <!-- 마무리 인사이트 -->
+  <div class="insight-box">
+    <p>거대한 진리는 먼 곳에 있지 않았다.<br>
+    손에 쥔 씨앗 하나 안에 이미 있었다.</p>
+  </div>
+
+  <!-- 열린 질문 -->
+  <div class="open-question">
+    <p>당신 삶에서 하나가 쌓여<br>열이 된 것이 있는가.</p>
+    <p class="q-sub">다음 회에서는 天二三 地二三 人二三 — 우주가 하나의 법칙으로 움직인다는 이야기. 아인슈타인도 못 푼 것을 천부경은 알고 있었다.</p>
+  </div>
+
+  <!-- 다음 회차 -->
+  <div class="next-episode">
+    <div class="next-label">다음 회</div>
+    <div class="next-content">
+      <strong>[7회] 우주는 하나의 법칙으로 움직인다(天二三 地二三 人二三) — 아인슈타인도 못 푼 것</strong><br>
+      하늘도 둘과 셋, 땅도 둘과 셋, 사람도 둘과 셋. 이 놀라운 발견이 의미하는 것은 무엇인가.
+    </div>
+  </div>
+
+  <!-- 태그 -->
+  <div class="tags">
+    <span class="tag">#천부경</span>
+    <span class="tag">#일적십거무궤화삼</span>
+    <span class="tag">#一積十鉅無匱化三</span>
+    <span class="tag">#천부경해설</span>
+    <span class="tag">#한국철학</span>
+    <span class="tag">#동양철학</span>
+    <span class="tag">#천지인</span>
+    <span class="tag">#씨앗철학</span>
+    <span class="tag">#인문학</span>
+    <span class="tag">#철학에세이</span>
+  </div>
+
+</div>
+</body>
+</html>

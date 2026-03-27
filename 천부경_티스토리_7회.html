@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #faf8f4;
+    color: #2c2c2c;
+    line-height: 1.9;
+  }
+
+  .post-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 60px 24px;
+  }
+
+  .series-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #8B6914;
+    border: 1px solid #C9A84C;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 28px;
+  }
+
+  .post-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: #1a1a2e;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+
+  .post-subtitle {
+    font-size: 16px;
+    color: #8B6914;
+    font-style: italic;
+    margin-bottom: 40px;
+    font-family: 'Noto Serif KR', serif;
+  }
+
+  .divider {
+    width: 48px;
+    height: 2px;
+    background: linear-gradient(90deg, #C9A84C, #8B6914);
+    margin-bottom: 40px;
+  }
+
+  .hook-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    color: #3a3a3a;
+    line-height: 2;
+    margin-bottom: 48px;
+    padding-left: 20px;
+    border-left: 3px solid #e8dfc8;
+  }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #8B6914;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    margin-top: 48px;
+  }
+
+  .part-badge {
+    display: inline-block;
+    background: #1A3A6A;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+
+  /* 원문 박스 */
+  .original-box {
+    text-align: center;
+    background: #1a1a2e;
+    border-radius: 12px;
+    padding: 40px 32px;
+    margin: 32px 0;
+  }
+
+  .original-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: #C9A84C;
+    letter-spacing: 4px;
+    display: block;
+    margin-bottom: 14px;
+    line-height: 1.8;
+  }
+
+  .original-reading {
+    font-size: 13px;
+    color: #aaa;
+    letter-spacing: 3px;
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  .original-translation {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    color: #e0d8c8;
+    font-style: italic;
+    line-height: 1.9;
+  }
+
+  /* 한자 풀이 테이블 */
+  .hanja-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+    font-size: 14px;
+  }
+
+  .hanja-table th {
+    background: #8B6914;
+    color: #fff;
+    padding: 10px 16px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+
+  .hanja-table th:first-child { text-align: center; width: 80px; }
+  .hanja-table th:nth-child(2) { width: 120px; }
+
+  .hanja-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #e8dfc8;
+    vertical-align: middle;
+    color: #2c2c2c;
+    line-height: 1.7;
+  }
+
+  .hanja-table td:first-child {
+    text-align: center;
+    font-size: 28px;
+    font-family: 'Noto Serif KR', serif;
+    color: #8B6914;
+    font-weight: 700;
+  }
+
+  .hanja-table td:nth-child(2) { font-size: 13px; color: #777; }
+  .hanja-table tr:nth-child(odd) td { background: #fdf8ee; }
+  .hanja-table tr:nth-child(even) td { background: #fff; }
+
+  /* 둘과 셋 발견 그리드 */
+  .discovery-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 32px 0;
+  }
+
+  .discovery-row {
+    display: flex;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .discovery-subject {
+    width: 80px;
+    flex-shrink: 0;
+    background: #1a1a2e;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 8px;
+    text-align: center;
+  }
+
+  .discovery-subject .ds-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 28px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .discovery-subject.cheon .ds-hanja { color: #6A9ACA; }
+  .discovery-subject.ji .ds-hanja { color: #C9A84C; }
+  .discovery-subject.in .ds-hanja { color: #6ACA6A; }
+
+  .discovery-subject .ds-name {
+    font-size: 11px;
+    color: #aaa;
+    letter-spacing: 1px;
+  }
+
+  .discovery-cards {
+    flex: 1;
+    display: flex;
+    gap: 10px;
+  }
+
+  .discovery-card {
+    flex: 1;
+    border-radius: 8px;
+    padding: 16px 14px;
+    text-align: center;
+  }
+
+  .discovery-card.two {
+    background: #e8f0fa;
+    border: 1px solid #b8cce8;
+  }
+
+  .discovery-card.three {
+    background: #fdf6e3;
+    border: 1px solid #e8dfc8;
+  }
+
+  .discovery-card .dc-num {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 22px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .discovery-card.two .dc-num { color: #1A3A6A; }
+  .discovery-card.three .dc-num { color: #8B6914; }
+
+  .discovery-card .dc-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #444;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .discovery-card .dc-example {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.5;
+  }
+
+  /* 소름 포인트 박스 */
+  .soroom-box {
+    background: linear-gradient(135deg, #1a1a2e, #2a2a4e);
+    border-radius: 12px;
+    padding: 32px;
+    margin: 32px 0;
+    text-align: center;
+  }
+
+  .soroom-box .sb-label {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #C9A84C;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .soroom-box .sb-main {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    color: #e0d8c8;
+    line-height: 2;
+    margin-bottom: 20px;
+  }
+
+  .soroom-box .sb-main strong { color: #C9A84C; }
+
+  .soroom-box .sb-sub {
+    font-size: 13px;
+    color: #888;
+    line-height: 1.8;
+    border-top: 1px solid #2e2e48;
+    padding-top: 16px;
+  }
+
+  /* 대통일이론 박스 */
+  .einstein-box {
+    background: #fff;
+    border: 1px solid #e8dfc8;
+    border-radius: 12px;
+    padding: 28px;
+    margin: 32px 0;
+  }
+
+  .einstein-box-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #8B6914;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .einstein-compare {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .einstein-item {
+    flex: 1;
+    min-width: 200px;
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  .einstein-item.science {
+    background: #f0f4fa;
+    border: 1px solid #b8cce8;
+  }
+
+  .einstein-item.cheonbu {
+    background: #fdf6e3;
+    border: 1px solid #e8dfc8;
+  }
+
+  .einstein-item .ei-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .einstein-item.science .ei-label { color: #1A3A6A; }
+  .einstein-item.cheonbu .ei-label { color: #8B6914; }
+
+  .einstein-item .ei-content {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.8;
+  }
+
+  .einstein-item .ei-result {
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .einstein-item.science .ei-result { color: #1A3A6A; }
+  .einstein-item.cheonbu .ei-result { color: #8B6914; }
+
+  /* 대화 */
+  .dialogue-section {
+    background: #fff;
+    border: 1px solid #e8dfc8;
+    border-radius: 12px;
+    padding: 28px 24px;
+    margin: 32px 0;
+  }
+
+  .dialogue-title {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #aaa;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .citizen {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 6px;
+    margin-top: 28px;
+  }
+
+  .citizen-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    background: #3A5A8A;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+    margin-top: 3px;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+
+  .citizen-text {
+    font-size: 15px;
+    color: #2c3a52;
+    line-height: 1.9;
+    background: #f0f4fa;
+    border-radius: 0 12px 12px 12px;
+    padding: 14px 18px;
+    flex: 1;
+  }
+
+  .philosopher {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 6px;
+    margin-top: 6px;
+    padding-left: 20px;
+  }
+
+  .philosopher-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    background: #8B6914;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+    margin-top: 3px;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+
+  .philosopher-text {
+    font-size: 15px;
+    color: #3a2c10;
+    line-height: 1.9;
+    background: #fdf6e3;
+    border-radius: 0 12px 12px 12px;
+    padding: 14px 18px;
+    flex: 1;
+  }
+
+  /* 인사이트 박스 */
+  .insight-box {
+    background: linear-gradient(135deg, #fdf6e3, #faf0d0);
+    border-left: 4px solid #C9A84C;
+    padding: 24px 28px;
+    margin: 40px 0;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .insight-box p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16px;
+    color: #5B3A00;
+    font-weight: 600;
+    line-height: 1.9;
+    font-style: italic;
+  }
+
+  .body-text {
+    font-size: 15.5px;
+    color: #333;
+    line-height: 2;
+    margin-bottom: 20px;
+  }
+
+  /* 열린 질문 */
+  .open-question {
+    text-align: center;
+    padding: 40px 20px;
+    margin: 48px 0 0;
+    border-top: 1px solid #e8dfc8;
+  }
+
+  .open-question p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    color: #5B4A8A;
+    font-style: italic;
+    line-height: 1.9;
+  }
+
+  .open-question .q-sub { font-size: 14px; color: #999; margin-top: 8px; }
+
+  /* 이전/다음 */
+  .prev-episode {
+    background: #f0f4fa;
+    border-radius: 8px;
+    padding: 16px 24px;
+    margin-bottom: 32px;
+    font-size: 14px;
+    color: #3A5A8A;
+  }
+
+  .prev-episode a { color: #3A5A8A; text-decoration: none; font-weight: 600; }
+
+  .next-episode {
+    background: #f5f0e8;
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .next-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #8B6914;
+    text-transform: uppercase;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .next-content { font-size: 14px; color: #333; line-height: 1.7; }
+  .next-content strong { color: #1a1a2e; font-weight: 600; }
+
+  .tags {
+    margin-top: 48px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag {
+    font-size: 12px;
+    color: #8B6914;
+    background: #fdf6e3;
+    border: 1px solid #e8dfc8;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+</style>
+</head>
+<body>
+<div class="post-wrap">
+
+  <!-- 이전 회차 -->
+  <div class="prev-episode">
+    📖 이전 글 → <a href="#">[6회] 하나의 씨앗이 세상을 만든다(一積十鉅 無匱化三) — 봄날의 발견</a>
+  </div>
+
+  <!-- 시리즈 배지 -->
+  <div class="series-badge">시민과 철학자의 천부경 · 7회</div>
+
+  <!-- 1부 배지 — 이번이 1부 마지막 -->
+  <div class="part-badge">1부 마지막 · 天의 논리 — 우주의 시작과 생성 원리</div>
+
+  <!-- 제목 -->
+  <h1 class="post-title">우주는 하나의 법칙으로 움직인다(天二三 地二三 人二三)</h1>
+  <p class="post-subtitle">아인슈타인도 못 푼 것</p>
+  <div class="divider"></div>
+
+  <!-- 도입부 -->
+  <div class="hook-text">
+    <p>하늘을 보라. 낮이 있고 밤이 있다. 둘이다. 아침이 있고 낮이 있고 저녁이 있다. 셋이다.</p>
+    <br>
+    <p>땅을 보라. 산이 있고 바다가 있다. 둘이다. 씨앗을 심고 자라고 수확한다. 셋이다.</p>
+    <br>
+    <p>사람을 보라. 남자가 있고 여자가 있다. 둘이다. 태어나고 살다가 죽는다. 셋이다.</p>
+    <br>
+    <p>아인슈타인이 평생을 바쳐도 완성하지 못한 대통일이론 — 천부경은 이미 알고 있었다.</p>
+  </div>
+
+  <!-- 원문 -->
+  <div class="section-title">▶ 원문</div>
+  <div class="original-box">
+    <span class="original-hanja">天二三  地二三  人二三</span>
+    <span class="original-reading">천이삼  ·  지이삼  ·  인이삼</span>
+    <span class="original-translation">"하늘도 둘과 셋이요,<br>땅도 둘과 셋이요, 사람도 둘과 셋이다"</span>
+  </div>
+
+  <!-- 한자 풀이 -->
+  <div class="section-title">▶ 한자 풀이</div>
+  <table class="hanja-table">
+    <tr>
+      <th>한자</th>
+      <th>음(音)</th>
+      <th>뜻</th>
+    </tr>
+    <tr>
+      <td>天</td>
+      <td>천</td>
+      <td>하늘. 우주, 자연의 가장 높은 영역. 낮·밤(둘), 아침·낮·저녁(셋)으로 작동한다.</td>
+    </tr>
+    <tr>
+      <td>二</td>
+      <td>이</td>
+      <td>둘. 낮과 밤처럼 대립하면서 균형을 이루는 두 원리. 하늘의 二.</td>
+    </tr>
+    <tr>
+      <td>三</td>
+      <td>삼</td>
+      <td>셋. 아침·낮·저녁처럼 세 단계의 운동과 변화. 하늘의 三.</td>
+    </tr>
+    <tr>
+      <td>地</td>
+      <td>지</td>
+      <td>땅. 대지, 물질, 생명이 뿌리내리는 기반. 산·바다(둘), 씨앗·성장·수확(셋)으로 작동한다.</td>
+    </tr>
+    <tr>
+      <td>二</td>
+      <td>이</td>
+      <td>둘. 산과 바다처럼 땅도 둘의 구조로 작동한다. 땅의 二. 하늘의 二와 같은 원리.</td>
+    </tr>
+    <tr>
+      <td>三</td>
+      <td>삼</td>
+      <td>셋. 씨앗·성장·수확처럼 땅도 셋의 구조로 순환한다. 땅의 三. 하늘의 三과 같은 원리.</td>
+    </tr>
+    <tr>
+      <td>人</td>
+      <td>인</td>
+      <td>사람. 인간. 남자·여자(둘), 태어나고·살다가·죽는다(셋)으로 작동한다. 하늘·땅과 완전히 동일한 구조. 이것이 이 구절의 핵심이다.</td>
+    </tr>
+    <tr>
+      <td>二</td>
+      <td>이</td>
+      <td>둘. 남자와 여자처럼 사람도 둘의 구조로 작동한다. 사람의 二. 천·지와 같은 원리.</td>
+    </tr>
+    <tr>
+      <td>三</td>
+      <td>삼</td>
+      <td>셋. 태어나고·살다가·죽는 것처럼 사람도 셋의 구조로 순환한다. 사람의 三. 하늘·땅과 같은 원리. 우주는 하나의 법칙으로 움직인다.</td>
+    </tr>
+  </table>
+
+  <!-- 발견 그리드 -->
+  <div class="section-title">▶ 하늘·땅·사람 모두 둘과 셋이다</div>
+  <p class="body-text">소리 내어 찾아보자. 하늘에서 둘과 셋을, 땅에서 둘과 셋을, 사람에서 둘과 셋을.</p>
+
+  <div class="discovery-grid">
+    <!-- 하늘 -->
+    <div class="discovery-row">
+      <div class="discovery-subject cheon">
+        <span class="ds-hanja">天</span>
+        <span class="ds-name">하늘</span>
+      </div>
+      <div class="discovery-cards">
+        <div class="discovery-card two">
+          <span class="dc-num">二</span>
+          <span class="dc-label">둘</span>
+          <div class="dc-example">낮과 밤<br>음(陰)과 양(陽)</div>
+        </div>
+        <div class="discovery-card three">
+          <span class="dc-num">三</span>
+          <span class="dc-label">셋</span>
+          <div class="dc-example">아침·낮·저녁<br>봄·여름·가을(겨울)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 땅 -->
+    <div class="discovery-row">
+      <div class="discovery-subject ji">
+        <span class="ds-hanja">地</span>
+        <span class="ds-name">땅</span>
+      </div>
+      <div class="discovery-cards">
+        <div class="discovery-card two">
+          <span class="dc-num">二</span>
+          <span class="dc-label">둘</span>
+          <div class="dc-example">산과 바다<br>육지와 바다</div>
+        </div>
+        <div class="discovery-card three">
+          <span class="dc-num">三</span>
+          <span class="dc-label">셋</span>
+          <div class="dc-example">씨앗·성장·수확<br>흙·물·불</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 사람 -->
+    <div class="discovery-row">
+      <div class="discovery-subject in">
+        <span class="ds-hanja">人</span>
+        <span class="ds-name">사람</span>
+      </div>
+      <div class="discovery-cards">
+        <div class="discovery-card two">
+          <span class="dc-num">二</span>
+          <span class="dc-label">둘</span>
+          <div class="dc-example">남자와 여자<br>이성과 감성</div>
+        </div>
+        <div class="discovery-card three">
+          <span class="dc-num">三</span>
+          <span class="dc-label">셋</span>
+          <div class="dc-example">태어나고·살다가·죽는다<br>과거·현재·미래</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 소름 포인트 -->
+  <div class="soroom-box">
+    <div class="sb-label">이것이 놀라운 이유</div>
+    <div class="sb-main">
+      하늘과 땅과 사람은 <strong>겉으로는 전혀 다른 존재</strong>처럼 보인다.<br>
+      그런데 셋 모두 <strong>똑같은 구조(둘과 셋)</strong>로 작동한다.<br>
+      우주가 <strong>하나의 법칙</strong>으로 움직인다는 선언이다.
+    </div>
+    <div class="sb-sub">
+      天二三 地二三 人二三 — 이 아홉 글자가 말하는 것은<br>
+      단순한 숫자 나열이 아니다. 우주의 통일된 원리다.
+    </div>
+  </div>
+
+  <!-- 아인슈타인 박스 -->
+  <div class="section-title">▶ 아인슈타인도 못 푼 것</div>
+  <div class="einstein-box">
+    <div class="einstein-box-title">대통일이론(Grand Unified Theory) vs 천부경</div>
+    <div class="einstein-compare">
+      <div class="einstein-item science">
+        <div class="ei-label">현대 물리학</div>
+        <div class="ei-content">
+          우주를 지배하는 단 하나의 통일된 법칙을 찾고 있다. 중력·전자기력·핵력을 하나로 묶는 대통일이론은 아인슈타인이 평생을 바쳤음에도 아직 완성되지 않았다.
+        </div>
+        <div class="ei-result">❌ 아직 미완성</div>
+      </div>
+      <div class="einstein-item cheonbu">
+        <div class="ei-label">천부경</div>
+        <div class="ei-content">
+          방정식도 없이, 망원경도 없이. 하늘과 땅과 사람을 오래 바라보는 것만으로 — 셋이 똑같은 구조(二三)로 작동한다는 이치에 닿았다.
+        </div>
+        <div class="ei-result">✓ 天二三 地二三 人二三</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 대화 -->
+  <div class="section-title">▶ 시민과 철학자의 대화</div>
+
+  <div class="dialogue-section">
+    <div class="dialogue-title">天二三 地二三 人二三 — 우주는 하나의 법칙으로 움직인다</div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">天二三 地二三 人二三... 하늘도 땅도 사람도 다 둘과 셋이라고요? 이게 무슨 뜻인지 잘 모르겠어요.</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">하늘을 먼저 볼게요. 낮이 있고 밤이 있죠. 둘이에요. 그리고 아침이 있고 낮이 있고 저녁이 있어요. 셋이죠.</div>
+    </div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">오, 그렇네요. 낮과 밤이 둘, 아침·낮·저녁이 셋.</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">땅도 볼게요. 산이 있고 바다가 있어요. 둘이죠. 그리고 농업이 중심이었던 그 시대엔 씨앗을 심고, 자라고, 수확하는 세 단계가 있었어요. 셋이에요.</div>
+    </div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">사람도요? 남자와 여자가 둘이고... 태어나서 살다가 죽는 게 셋!</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">놀라운 발견이죠? 하늘과 땅과 사람이 — 겉으로는 전혀 다른 존재처럼 보이지만 — 똑같은 구조로 작동해요. 우주가 하나의 법칙으로 움직인다는 선언이에요.</div>
+    </div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">소름 돋았어요. 현대 물리학에서 아인슈타인도 대통일이론을 못 풀었다고 하는데, 우리 조상들이 이미 꿰뚫었다는 게 자랑스럽고 뿌듯해요.</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">그렇죠. 방정식도 없이, 망원경도 없이, 하늘과 땅과 사람을 오래 바라보는 것만으로 그 이치에 닿았던 거예요. 천부경을 쓴 사람은 신이 아니었어요. 예언자도 아니었어요. 위대한 관찰자였어요.</div>
+    </div>
+  </div>
+
+  <!-- 인사이트 -->
+  <div class="insight-box">
+    <p>천부경을 쓴 사람은 신이 아니었다.<br>
+    예언자도 아니었다.<br>
+    위대한 관찰자였다.</p>
+  </div>
+
+  <!-- 1부 마무리 -->
+  <div class="section-title">▶ 1부를 마치며 — 天의 논리</div>
+  <p class="body-text">이번 회까지 천부경 1부 · 天의 논리가 끝났다. 우주가 어떻게 시작됐는지(一始無始一), 하나에서 셋으로 나뉘어도 근본은 사라지지 않는다는 것(析三極無盡本), 하늘·땅·사람이 어떤 순서로 생겨났는지(天一一 地一二 人一三), 하나가 쌓여 세상을 만드는 원리(一積十鉅 無匱化三), 그리고 하늘·땅·사람이 하나의 법칙으로 움직인다는 것(天二三 地二三 人二三).</p>
+  <p class="body-text">다음 회부터는 2부 · 地의 논리로 넘어간다. 천·지·인이 만나 무엇을 만들어내는지, 시간과 공간이 어떻게 고리를 이루는지를 본다.</p>
+
+  <!-- 열린 질문 -->
+  <div class="open-question">
+    <p>하늘도, 땅도, 사람도 같은 구조로 움직인다면 —<br>
+    당신의 삶에서 그 구조를 발견할 수 있는가.</p>
+    <p class="q-sub">다음 회부터 2부 · 地의 논리가 시작된다. 천·지·인이 만나는 순간 무슨 일이 일어나는가.</p>
+  </div>
+
+  <!-- 다음 회차 -->
+  <div class="next-episode">
+    <div class="next-label">다음 회</div>
+    <div class="next-content">
+      <strong>[8회] 천부경은 왜 81자인가(9×9=81) — 수학은 신의 언어</strong><br>
+      9×9=81. 우연이 아니다. 내용만이 아니라 형식 자체가 이미 철학인 이유.
+    </div>
+  </div>
+
+  <!-- 태그 -->
+  <div class="tags">
+    <span class="tag">#천부경</span>
+    <span class="tag">#천이삼지이삼인이삼</span>
+    <span class="tag">#天二三地二三人二三</span>
+    <span class="tag">#천부경해설</span>
+    <span class="tag">#한국철학</span>
+    <span class="tag">#동양철학</span>
+    <span class="tag">#대통일이론</span>
+    <span class="tag">#아인슈타인</span>
+    <span class="tag">#인문학</span>
+    <span class="tag">#철학에세이</span>
+  </div>
+
+</div>
+</body>
+</html>

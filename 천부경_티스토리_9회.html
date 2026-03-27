@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #faf8f4;
+    color: #2c2c2c;
+    line-height: 1.9;
+  }
+
+  .post-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 60px 24px;
+  }
+
+  .series-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #8B6914;
+    border: 1px solid #C9A84C;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 28px;
+  }
+
+  .post-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a1a2e;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+
+  .post-subtitle {
+    font-size: 16px;
+    color: #8B6914;
+    font-style: italic;
+    margin-bottom: 40px;
+    font-family: 'Noto Serif KR', serif;
+  }
+
+  .divider {
+    width: 48px;
+    height: 2px;
+    background: linear-gradient(90deg, #C9A84C, #8B6914);
+    margin-bottom: 40px;
+  }
+
+  .hook-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    color: #3a3a3a;
+    line-height: 2;
+    margin-bottom: 48px;
+    padding-left: 20px;
+    border-left: 3px solid #e8dfc8;
+  }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #8B6914;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    margin-top: 48px;
+  }
+
+  .part-badge {
+    display: inline-block;
+    background: #8B6914;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+
+  /* 원문 박스 */
+  .original-box {
+    text-align: center;
+    background: #1a1a2e;
+    border-radius: 12px;
+    padding: 40px 32px;
+    margin: 32px 0;
+  }
+
+  .original-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #C9A84C;
+    letter-spacing: 8px;
+    display: block;
+    margin-bottom: 14px;
+  }
+
+  .original-reading {
+    font-size: 14px;
+    color: #aaa;
+    letter-spacing: 5px;
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  .original-translation {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    color: #e0d8c8;
+    font-style: italic;
+    line-height: 1.9;
+  }
+
+  /* 한자 풀이 테이블 */
+  .hanja-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+    font-size: 14px;
+  }
+
+  .hanja-table th {
+    background: #8B6914;
+    color: #fff;
+    padding: 10px 16px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+
+  .hanja-table th:first-child { text-align: center; width: 80px; }
+  .hanja-table th:nth-child(2) { width: 120px; }
+
+  .hanja-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #e8dfc8;
+    vertical-align: middle;
+    color: #2c2c2c;
+    line-height: 1.7;
+  }
+
+  .hanja-table td:first-child {
+    text-align: center;
+    font-size: 28px;
+    font-family: 'Noto Serif KR', serif;
+    color: #8B6914;
+    font-weight: 700;
+  }
+
+  .hanja-table td:nth-child(2) { font-size: 13px; color: #777; }
+  .hanja-table tr:nth-child(odd) td { background: #fdf8ee; }
+  .hanja-table tr:nth-child(even) td { background: #fff; }
+
+  /* 구절 두 토막 */
+  .phrase-box {
+    display: flex;
+    gap: 16px;
+    margin: 32px 0;
+    flex-wrap: wrap;
+  }
+
+  .phrase-item {
+    flex: 1;
+    min-width: 200px;
+    border-radius: 10px;
+    padding: 24px 20px;
+    text-align: center;
+  }
+
+  .phrase-item.first { background: #e8f0fa; border: 1px solid #b8cce8; }
+  .phrase-item.second { background: #fdf6e3; border: 1px solid #e8dfc8; }
+
+  .phrase-item .pi-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 20px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .phrase-item.first .pi-hanja { color: #1A3A6A; }
+  .phrase-item.second .pi-hanja { color: #8B6914; }
+
+  .phrase-item .pi-reading { font-size: 12px; color: #888; margin-bottom: 10px; letter-spacing: 1px; }
+  .phrase-item .pi-meaning { font-size: 14px; color: #444; line-height: 1.7; font-weight: 600; }
+  .phrase-item .pi-desc { font-size: 13px; color: #666; line-height: 1.6; margin-top: 8px; }
+
+  /* 만남 시각화 */
+  .meeting-box {
+    background: #fff;
+    border: 1px solid #e8dfc8;
+    border-radius: 12px;
+    padding: 32px 24px;
+    margin: 32px 0;
+    text-align: center;
+  }
+
+  .meeting-box-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #8B6914;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .meeting-before {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .meeting-alone {
+    background: #f5f0e8;
+    border: 1px solid #e8dfc8;
+    border-radius: 8px;
+    padding: 16px 20px;
+    text-align: center;
+    min-width: 100px;
+  }
+
+  .meeting-alone .ma-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #aaa;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .meeting-alone .ma-desc { font-size: 12px; color: #999; }
+
+  .meeting-divider {
+    font-size: 13px;
+    color: #999;
+    margin: 12px 0;
+    font-style: italic;
+  }
+
+  .meeting-result {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .meeting-together {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .meeting-together .mt-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #C9A84C;
+    background: #1a1a2e;
+    width: 52px;
+    height: 52px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .meeting-arrow {
+    font-size: 24px;
+    color: #C9A84C;
+    font-weight: 700;
+  }
+
+  .meeting-outcome {
+    background: #1a1a2e;
+    border-radius: 8px;
+    padding: 16px 24px;
+    text-align: center;
+  }
+
+  .meeting-outcome .mo-num {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #C9A84C;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .meeting-outcome .mo-desc {
+    font-size: 12px;
+    color: #aaa;
+  }
+
+  /* 6 완성의 수 */
+  .six-box {
+    background: #fff;
+    border: 1px solid #e8dfc8;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin: 32px 0;
+  }
+
+  .six-box-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #8B6914;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .six-compare {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .six-item {
+    flex: 1;
+    min-width: 180px;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .six-item.yang { background: #fdf6e3; border: 1px solid #e8dfc8; }
+  .six-item.water { background: #e8f4fa; border: 1px solid #b8d8e8; }
+
+  .six-item .si-num {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 40px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .six-item.yang .si-num { color: #8B6914; }
+  .six-item.water .si-num { color: #1A5A8A; }
+
+  .six-item .si-title { font-size: 14px; font-weight: 600; color: #333; margin-bottom: 6px; }
+  .six-item .si-desc { font-size: 13px; color: #666; line-height: 1.6; }
+
+  /* 육각수 시각화 */
+  .hexagon-box {
+    background: #1a1a2e;
+    border-radius: 12px;
+    padding: 32px;
+    margin: 32px 0;
+    text-align: center;
+  }
+
+  .hexagon-box .hb-label {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #C9A84C;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .hexagon-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .h2o-molecule {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.4);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16px;
+    color: #C9A84C;
+    font-weight: 700;
+  }
+
+  .h2o-plus {
+    font-size: 20px;
+    color: #C9A84C;
+  }
+
+  .h2o-result {
+    background: rgba(201,168,76,0.3);
+    border: 2px solid #C9A84C;
+    border-radius: 8px;
+    padding: 16px 24px;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 18px;
+    color: #C9A84C;
+    font-weight: 700;
+  }
+
+  .hexagon-desc {
+    font-size: 14px;
+    color: #aaa;
+    line-height: 1.8;
+    margin-top: 12px;
+  }
+
+  .hexagon-desc strong { color: #C9A84C; }
+
+  /* 7 8 9 설명 */
+  .seven89-box {
+    background: #fff;
+    border: 1px solid #e8dfc8;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin: 32px 0;
+  }
+
+  .seven89-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #8B6914;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .seven89-desc {
+    font-size: 15px;
+    color: #333;
+    line-height: 2;
+    margin-bottom: 16px;
+  }
+
+  .seven89-examples {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+
+  .seven89-ex {
+    flex: 1;
+    min-width: 140px;
+    background: #fdf8ee;
+    border: 1px solid #e8dfc8;
+    border-radius: 8px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+
+  .seven89-ex .ex-icon { font-size: 24px; display: block; margin-bottom: 6px; }
+  .seven89-ex .ex-text { font-size: 13px; color: #555; line-height: 1.6; }
+
+  /* 대화 */
+  .dialogue-section {
+    background: #fff;
+    border: 1px solid #e8dfc8;
+    border-radius: 12px;
+    padding: 28px 24px;
+    margin: 32px 0;
+  }
+
+  .dialogue-title {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #aaa;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .citizen {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 6px;
+    margin-top: 28px;
+  }
+
+  .citizen-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    background: #3A5A8A;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+    margin-top: 3px;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+
+  .citizen-text {
+    font-size: 15px;
+    color: #2c3a52;
+    line-height: 1.9;
+    background: #f0f4fa;
+    border-radius: 0 12px 12px 12px;
+    padding: 14px 18px;
+    flex: 1;
+  }
+
+  .philosopher {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 6px;
+    margin-top: 6px;
+    padding-left: 20px;
+  }
+
+  .philosopher-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    background: #8B6914;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+    margin-top: 3px;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+
+  .philosopher-text {
+    font-size: 15px;
+    color: #3a2c10;
+    line-height: 1.9;
+    background: #fdf6e3;
+    border-radius: 0 12px 12px 12px;
+    padding: 14px 18px;
+    flex: 1;
+  }
+
+  /* 인사이트 박스 */
+  .insight-box {
+    background: linear-gradient(135deg, #fdf6e3, #faf0d0);
+    border-left: 4px solid #C9A84C;
+    padding: 24px 28px;
+    margin: 40px 0;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .insight-box p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16px;
+    color: #5B3A00;
+    font-weight: 600;
+    line-height: 1.9;
+    font-style: italic;
+  }
+
+  .body-text {
+    font-size: 15.5px;
+    color: #333;
+    line-height: 2;
+    margin-bottom: 20px;
+  }
+
+  /* 열린 질문 */
+  .open-question {
+    text-align: center;
+    padding: 40px 20px;
+    margin: 48px 0 0;
+    border-top: 1px solid #e8dfc8;
+  }
+
+  .open-question p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    color: #5B4A8A;
+    font-style: italic;
+    line-height: 1.9;
+  }
+
+  .open-question .q-sub { font-size: 14px; color: #999; margin-top: 8px; }
+
+  /* 이전/다음 */
+  .prev-episode {
+    background: #f0f4fa;
+    border-radius: 8px;
+    padding: 16px 24px;
+    margin-bottom: 32px;
+    font-size: 14px;
+    color: #3A5A8A;
+  }
+
+  .prev-episode a { color: #3A5A8A; text-decoration: none; font-weight: 600; }
+
+  .next-episode {
+    background: #f5f0e8;
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .next-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #8B6914;
+    text-transform: uppercase;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .next-content { font-size: 14px; color: #333; line-height: 1.7; }
+  .next-content strong { color: #1a1a2e; font-weight: 600; }
+
+  .tags {
+    margin-top: 48px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag {
+    font-size: 12px;
+    color: #8B6914;
+    background: #fdf6e3;
+    border: 1px solid #e8dfc8;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+</style>
+</head>
+<body>
+<div class="post-wrap">
+
+  <!-- 이전 회차 -->
+  <div class="prev-episode">
+    📖 이전 글 → <a href="#">[8회] 천부경은 왜 81자인가(9×9=81) — 수학은 신의 언어</a>
+  </div>
+
+  <!-- 시리즈 배지 -->
+  <div class="series-badge">시민과 철학자의 천부경 · 9회</div>
+
+  <!-- 2부 배지 -->
+  <div class="part-badge">2부 시작 · 地의 논리 — 천·지·인이 작동하는 방식</div>
+
+  <!-- 제목 -->
+  <h1 class="post-title">만남이 세상을 낳는다(大三合六 生七八九)</h1>
+  <p class="post-subtitle">육각수의 비밀</p>
+  <div class="divider"></div>
+
+  <!-- 도입부 -->
+  <div class="hook-text">
+    <p>하늘과 땅과 사람이 따로 있을 때는 아무 일도 일어나지 않는다.</p>
+    <br>
+    <p>셋이 만나는 순간 — 비로소 세상이 시작된다. 그리고 그 만남이 이루는 수가 6이다. 천부경을 쓴 사람들이 알았을 리 없는 육각수 — 그런데 자연은 6이라는 숫자에서 천부경과 만난다.</p>
+  </div>
+
+  <!-- 원문 -->
+  <div class="section-title">▶ 원문</div>
+  <div class="original-box">
+    <span class="original-hanja">大三合六  生七八九</span>
+    <span class="original-reading">대삼합육  ·  생칠팔구</span>
+    <span class="original-translation">"큰 셋이 합쳐 여섯이 되고,<br>일곱·여덟·아홉을 낳는다"</span>
+  </div>
+
+  <!-- 한자 풀이 -->
+  <div class="section-title">▶ 한자 풀이</div>
+  <table class="hanja-table">
+    <tr>
+      <th>한자</th>
+      <th>음(音)</th>
+      <th>뜻</th>
+    </tr>
+    <tr>
+      <td>大</td>
+      <td>대</td>
+      <td>크다. 천·지·인 세 존재의 위대함을 강조한다. 단순한 셋이 아니라 우주의 세 축임을 나타낸다.</td>
+    </tr>
+    <tr>
+      <td>三</td>
+      <td>삼</td>
+      <td>셋. 천(天)·지(地)·인(人). 앞서 등장한 세 극(三極)과 같은 맥락이다.</td>
+    </tr>
+    <tr>
+      <td>合</td>
+      <td>합</td>
+      <td>합치다, 만나다. 셋이 하나로 만나는 사건. 단순한 더하기가 아니라 질적 변환이 일어나는 만남이다.</td>
+    </tr>
+    <tr>
+      <td>六</td>
+      <td>육</td>
+      <td>여섯. 동양 수 사상에서 음양이 균형을 이룬 완성의 수. 양수 1·3·5와 음수 2·4·6이 만나는 자리.</td>
+    </tr>
+    <tr>
+      <td>生</td>
+      <td>생</td>
+      <td>낳다, 생겨나다. 합쳐짐으로써 전혀 새로운 것이 탄생함을 뜻한다.</td>
+    </tr>
+    <tr>
+      <td>七</td>
+      <td>칠</td>
+      <td>일곱. 만남 이후 펼쳐지는 변화의 시작. 6이라는 완성을 넘어서는 첫 발걸음.</td>
+    </tr>
+    <tr>
+      <td>八</td>
+      <td>팔</td>
+      <td>여덟. 변화가 무르익는 단계. 사방팔방으로 뻗어 나가는 분화의 상태.</td>
+    </tr>
+    <tr>
+      <td>九</td>
+      <td>구</td>
+      <td>아홉. 완전수. 만남 이후 끊임없이 펼쳐지는 모든 변화가 정점에 도달한 상태.</td>
+    </tr>
+  </table>
+
+  <!-- 구절 두 토막 -->
+  <div class="section-title">▶ 두 토막으로 읽기</div>
+  <div class="phrase-box">
+    <div class="phrase-item first">
+      <span class="pi-hanja">大三合六</span>
+      <div class="pi-reading">대 삼 합 육</div>
+      <div class="pi-meaning">큰 셋이 합쳐 여섯이 된다</div>
+      <div class="pi-desc">천·지·인 셋이 만나<br>완성의 수 6을 이룬다.<br>만남 그 자체가 완성이다.</div>
+    </div>
+    <div class="phrase-item second">
+      <span class="pi-hanja">生七八九</span>
+      <div class="pi-reading">생 칠 팔 구</div>
+      <div class="pi-meaning">일곱·여덟·아홉을 낳는다</div>
+      <div class="pi-desc">만남 이후 세상에<br>끊임없이 펼쳐지는<br>모든 변화의 총체.</div>
+    </div>
+  </div>
+
+  <!-- 만남 시각화 -->
+  <div class="section-title">▶ 따로 있을 때 vs 만날 때</div>
+  <div class="meeting-box">
+    <div class="meeting-box-title">大三合六 — 만남의 순간</div>
+
+    <div class="meeting-before">
+      <div class="meeting-alone">
+        <span class="ma-hanja">天</span>
+        <div class="ma-desc">하늘만<br>있을 때</div>
+      </div>
+      <div class="meeting-alone">
+        <span class="ma-hanja">地</span>
+        <div class="ma-desc">땅만<br>있을 때</div>
+      </div>
+      <div class="meeting-alone">
+        <span class="ma-hanja">人</span>
+        <div class="ma-desc">사람만<br>있을 때</div>
+      </div>
+    </div>
+
+    <div class="meeting-divider">셋이 따로 있을 때는 아무 일도 일어나지 않는다</div>
+
+    <div class="meeting-result">
+      <div class="meeting-together">
+        <div class="meeting-together mt-hanja">天</div>
+        <div class="meeting-together mt-hanja">地</div>
+        <div class="meeting-together mt-hanja">人</div>
+      </div>
+      <div class="meeting-arrow">→</div>
+      <div class="meeting-outcome">
+        <span class="mo-num">六</span>
+        <div class="mo-desc">완성 · 만남 · 탄생</div>
+      </div>
+      <div class="meeting-arrow">→</div>
+      <div class="meeting-outcome">
+        <span class="mo-num" style="font-size:22px;">七八九</span>
+        <div class="mo-desc">무한한 변화</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6이 완성의 수인 이유 -->
+  <div class="section-title">▶ 왜 6이 완성의 수인가</div>
+  <div class="six-box">
+    <div class="six-box-title">동양 수 사상과 자연 — 6이라는 숫자에서 만난다</div>
+    <div class="six-compare">
+      <div class="six-item yang">
+        <span class="si-num">6</span>
+        <div class="si-title">동양 수 사상</div>
+        <div class="si-desc">양수 1·3·5와 음수 2·4·6.<br>음과 양이 균형을 이루며<br>완성되는 마지막 자리가 6이다.</div>
+      </div>
+      <div class="six-item water">
+        <span class="si-num">❄️</span>
+        <div class="si-title">자연의 선택</div>
+        <div class="si-desc">눈송이는 예외 없이 육각형.<br>물 분자 H₂O 6개가 모여<br>가장 안정된 구조 — 육각수.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 육각수 시각화 -->
+  <div class="section-title">▶ 천부경이 몰랐던 것 — 그러나 6에서 만나다</div>
+  <div class="hexagon-box">
+    <div class="hb-label">육각수(六角水) — 자연이 선택한 완성의 형태</div>
+    <div class="hexagon-visual">
+      <div class="h2o-molecule">H₂O</div>
+      <div class="h2o-plus">+</div>
+      <div class="h2o-molecule">H₂O</div>
+      <div class="h2o-plus">+</div>
+      <div class="h2o-molecule">H₂O</div>
+      <div class="h2o-plus">+</div>
+      <div class="h2o-molecule">H₂O</div>
+      <div class="h2o-plus">+</div>
+      <div class="h2o-molecule">H₂O</div>
+      <div class="h2o-plus">+</div>
+      <div class="h2o-molecule">H₂O</div>
+      <div class="h2o-plus">=</div>
+      <div class="h2o-result">육각형 ❄️</div>
+    </div>
+    <div class="hexagon-desc">
+      물 분자 6개가 모이면 육각형 고리 구조를 이룬다.<br>
+      자연에서 <strong>가장 안정적이고 균형 잡힌 물의 구조</strong>.<br>
+      겨울 눈송이가 항상 육각형인 것도 같은 이유다.<br><br>
+      천부경을 쓴 사람들이 육각수를 알았을 리 없다.<br>
+      그런데 천부경의 이치와 현대 과학이 — <strong>6이라는 숫자에서 만난다.</strong>
+    </div>
+  </div>
+
+  <!-- 7 8 9 설명 -->
+  <div class="section-title">▶ 生七八九 — 만남 이후의 모든 것</div>
+  <div class="seven89-box">
+    <div class="seven89-title">7·8·9는 특정 사건이 아니다</div>
+    <div class="seven89-desc">7, 8, 9는 각각 특정한 사건을 1대1로 가리키는 것이 아니다. 셋이 만난 이후 세상에 끊임없이 펼쳐지는 <strong>모든 변화의 총체</strong>다.</div>
+    <div class="seven89-examples">
+      <div class="seven89-ex">
+        <span class="ex-icon">🌱</span>
+        <div class="ex-text">씨앗·땅·햇빛이 만나야 싹이 트고 열매가 맺힌다</div>
+      </div>
+      <div class="seven89-ex">
+        <span class="ex-icon">👫</span>
+        <div class="ex-text">남자·여자·사랑이 만나야 새 생명이 태어난다</div>
+      </div>
+      <div class="seven89-ex">
+        <span class="ex-icon">🌊</span>
+        <div class="ex-text">하늘의 비·땅의 흙·사람의 손이 만나야 세상이 펼쳐진다</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 대화 -->
+  <div class="section-title">▶ 시민과 철학자의 대화</div>
+
+  <div class="dialogue-section">
+    <div class="dialogue-title">大三合六 生七八九 — 만남이 세상을 낳는다</div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">大三合六 生七八九... 이번 문장이 제일 어려운 것 같아요. 숫자 해석이 아직 이해가 잘 안 돼요.</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">핵심만 먼저 말하면 — 하늘과 땅과 사람이 따로 있을 때는 아무 일도 일어나지 않아요. 셋이 만나는 순간 비로소 세상이 시작돼요. 그게 大三合六이에요.</div>
+    </div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">6이 완성의 수라고 하셨는데, 자연에서도 그런 게 있나요?</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">물 분자 H₂O가 여섯 개 모여 육각형 고리 구조를 이룰 때 — 그것이 육각수예요. 자연에서 가장 안정적이고 균형 잡힌 물의 구조죠. 겨울 눈송이가 항상 육각형인 것도 같은 이유예요.</div>
+    </div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">6이 완성된 수라고 하니... 육각수가 생각나네요. 천부경을 쓴 사람들이 육각수를 알았을 리 없는데 6이라는 숫자에서 만나는군요. 이게 우연일까요?</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">그리고 7, 8, 9는 특정 사건을 1대1로 대응시키는 게 아니에요. 셋이 만난 이후 세상에 끊임없이 펼쳐지는 모든 변화의 총체예요. 하늘의 비와 땅의 흙과 사람의 손이 만나야 싹이 트고 열매가 맺히고 생명이 순환하듯 — 만남 이후에야 7이 오고 8이 오고 9가 오는 거예요.</div>
+    </div>
+  </div>
+
+  <!-- 인사이트 -->
+  <div class="insight-box">
+    <p>천부경이 관찰한 우주의 이치와<br>
+    현대 과학이 발견한 자연의 구조가<br>
+    — 6이라는 숫자에서 만난다.<br>
+    자연의 언어가 원래 하나였던 것이 아닐까.</p>
+  </div>
+
+  <!-- 열린 질문 -->
+  <div class="open-question">
+    <p>당신 삶에서 혼자였을 때는 아무 일도 일어나지 않았지만,<br>누군가를 만난 후 비로소 시작된 것이 있는가.</p>
+    <p class="q-sub">다음 회에서는 運三四成環五七 — 시간과 공간이 고리를 이루는 이야기.</p>
+  </div>
+
+  <!-- 다음 회차 -->
+  <div class="next-episode">
+    <div class="next-label">다음 회</div>
+    <div class="next-content">
+      <strong>[10회] 시간과 공간이 고리를 이룬다(運三四成環五七) — 끊어지지 않는 순환</strong><br>
+      봄이 오고 여름이 가고 가을이 오고 겨울이 지나 다시 봄이 온다. 천부경은 이 순환을 일곱 글자로 담았다.
+    </div>
+  </div>
+
+  <!-- 태그 -->
+  <div class="tags">
+    <span class="tag">#천부경</span>
+    <span class="tag">#대삼합육생칠팔구</span>
+    <span class="tag">#大三合六生七八九</span>
+    <span class="tag">#육각수</span>
+    <span class="tag">#천부경해설</span>
+    <span class="tag">#한국철학</span>
+    <span class="tag">#동양철학</span>
+    <span class="tag">#천지인</span>
+    <span class="tag">#인문학</span>
+    <span class="tag">#철학에세이</span>
+  </div>
+
+</div>
+</body>
+</html>

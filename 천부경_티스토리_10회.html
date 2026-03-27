@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #faf8f4;
+    color: #2c2c2c;
+    line-height: 1.9;
+  }
+
+  .post-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 60px 24px;
+  }
+
+  .series-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #8B6914;
+    border: 1px solid #C9A84C;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 28px;
+  }
+
+  .post-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a1a2e;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+
+  .post-subtitle {
+    font-size: 16px;
+    color: #8B6914;
+    font-style: italic;
+    margin-bottom: 40px;
+    font-family: 'Noto Serif KR', serif;
+  }
+
+  .divider {
+    width: 48px;
+    height: 2px;
+    background: linear-gradient(90deg, #C9A84C, #8B6914);
+    margin-bottom: 40px;
+  }
+
+  .hook-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    color: #3a3a3a;
+    line-height: 2;
+    margin-bottom: 48px;
+    padding-left: 20px;
+    border-left: 3px solid #e8dfc8;
+  }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #8B6914;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    margin-top: 48px;
+  }
+
+  .part-badge {
+    display: inline-block;
+    background: #8B6914;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+
+  /* 원문 박스 */
+  .original-box {
+    text-align: center;
+    background: #1a1a2e;
+    border-radius: 12px;
+    padding: 40px 32px;
+    margin: 32px 0;
+  }
+
+  .original-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #C9A84C;
+    letter-spacing: 8px;
+    display: block;
+    margin-bottom: 14px;
+  }
+
+  .original-reading {
+    font-size: 14px;
+    color: #aaa;
+    letter-spacing: 5px;
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  .original-translation {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    color: #e0d8c8;
+    font-style: italic;
+    line-height: 1.9;
+  }
+
+  /* 한자 풀이 테이블 */
+  .hanja-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+    font-size: 14px;
+  }
+
+  .hanja-table th {
+    background: #8B6914;
+    color: #fff;
+    padding: 10px 16px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+
+  .hanja-table th:first-child { text-align: center; width: 80px; }
+  .hanja-table th:nth-child(2) { width: 120px; }
+
+  .hanja-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #e8dfc8;
+    vertical-align: middle;
+    color: #2c2c2c;
+    line-height: 1.7;
+  }
+
+  .hanja-table td:first-child {
+    text-align: center;
+    font-size: 28px;
+    font-family: 'Noto Serif KR', serif;
+    color: #8B6914;
+    font-weight: 700;
+  }
+
+  .hanja-table td:nth-child(2) { font-size: 13px; color: #777; }
+  .hanja-table tr:nth-child(odd) td { background: #fdf8ee; }
+  .hanja-table tr:nth-child(even) td { background: #fff; }
+
+  /* 시공간 분석 박스 */
+  .spacetime-box {
+    display: flex;
+    gap: 16px;
+    margin: 32px 0;
+    flex-wrap: wrap;
+  }
+
+  .spacetime-item {
+    flex: 1;
+    min-width: 200px;
+    border-radius: 10px;
+    padding: 24px 20px;
+    text-align: center;
+  }
+
+  .spacetime-item.time {
+    background: #e8f0fa;
+    border: 1px solid #b8cce8;
+  }
+
+  .spacetime-item.space {
+    background: #fdf6e3;
+    border: 1px solid #e8dfc8;
+  }
+
+  .spacetime-item .st-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 32px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .spacetime-item.time .st-hanja { color: #1A3A6A; }
+  .spacetime-item.space .st-hanja { color: #8B6914; }
+
+  .spacetime-item .st-num {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 22px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .spacetime-item.time .st-num { color: #1A3A6A; }
+  .spacetime-item.space .st-num { color: #8B6914; }
+
+  .spacetime-item .st-desc {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.7;
+  }
+
+  /* 5와 7 설명 */
+  .five-seven-box {
+    display: flex;
+    gap: 16px;
+    margin: 32px 0;
+    flex-wrap: wrap;
+  }
+
+  .five-seven-item {
+    flex: 1;
+    min-width: 200px;
+    border-radius: 10px;
+    padding: 24px 20px;
+    text-align: center;
+  }
+
+  .five-seven-item.five {
+    background: #e8f4e8;
+    border: 1px solid #b8d8b8;
+  }
+
+  .five-seven-item.seven {
+    background: #f0e8fa;
+    border: 1px solid #c8b8e8;
+  }
+
+  .five-seven-item .fs-num {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 48px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .five-seven-item.five .fs-num { color: #2A5A2A; }
+  .five-seven-item.seven .fs-num { color: #5B3A8A; }
+
+  .five-seven-item .fs-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+  }
+
+  .five-seven-item .fs-desc {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.7;
+  }
+
+  /* 순환 시각화 */
+  .cycle-visual {
+    background: #1a1a2e;
+    border-radius: 12px;
+    padding: 32px 24px;
+    margin: 32px 0;
+    text-align: center;
+  }
+
+  .cycle-visual .cv-label {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #C9A84C;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .cycle-seasons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .season-item {
+    text-align: center;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 8px;
+    padding: 16px 14px;
+    min-width: 80px;
+  }
+
+  .season-item .si-icon { font-size: 24px; display: block; margin-bottom: 6px; }
+  .season-item .si-name { font-size: 13px; color: #C9A84C; font-weight: 600; }
+  .season-item .si-sub { font-size: 11px; color: #888; margin-top: 2px; }
+
+  .season-arrow {
+    font-size: 18px;
+    color: #C9A84C;
+    font-weight: 700;
+  }
+
+  .cycle-ring {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 28px;
+    color: #C9A84C;
+    font-weight: 700;
+    margin-top: 16px;
+  }
+
+  .cycle-desc {
+    font-size: 13px;
+    color: #888;
+    margin-top: 8px;
+    line-height: 1.7;
+  }
+
+  /* 농사 타임라인 */
+  .farm-box {
+    background: #fff;
+    border: 1px solid #e8dfc8;
+    border-radius: 12px;
+    padding: 28px;
+    margin: 32px 0;
+  }
+
+  .farm-box-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #8B6914;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .farm-steps {
+    display: flex;
+    gap: 0;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .farm-step {
+    flex: 1;
+    min-width: 100px;
+    text-align: center;
+    padding: 0 8px;
+  }
+
+  .farm-step .fs-season {
+    font-size: 24px;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .farm-step .fs-time {
+    font-size: 12px;
+    font-weight: 600;
+    color: #8B6914;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .farm-step .fs-action {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.5;
+  }
+
+  .farm-arrow {
+    font-size: 20px;
+    color: #C9A84C;
+    margin-top: 28px;
+    flex-shrink: 0;
+  }
+
+  .farm-note {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #f0e8d4;
+    font-size: 14px;
+    color: #888;
+    font-style: italic;
+  }
+
+  .farm-note strong { color: #8B6914; }
+
+  /* 대화 */
+  .dialogue-section {
+    background: #fff;
+    border: 1px solid #e8dfc8;
+    border-radius: 12px;
+    padding: 28px 24px;
+    margin: 32px 0;
+  }
+
+  .dialogue-title {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #aaa;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .citizen {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 6px;
+    margin-top: 28px;
+  }
+
+  .citizen-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    background: #3A5A8A;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+    margin-top: 3px;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+
+  .citizen-text {
+    font-size: 15px;
+    color: #2c3a52;
+    line-height: 1.9;
+    background: #f0f4fa;
+    border-radius: 0 12px 12px 12px;
+    padding: 14px 18px;
+    flex: 1;
+  }
+
+  .philosopher {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 6px;
+    margin-top: 6px;
+    padding-left: 20px;
+  }
+
+  .philosopher-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    background: #8B6914;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+    margin-top: 3px;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+
+  .philosopher-text {
+    font-size: 15px;
+    color: #3a2c10;
+    line-height: 1.9;
+    background: #fdf6e3;
+    border-radius: 0 12px 12px 12px;
+    padding: 14px 18px;
+    flex: 1;
+  }
+
+  /* 인사이트 박스 */
+  .insight-box {
+    background: linear-gradient(135deg, #fdf6e3, #faf0d0);
+    border-left: 4px solid #C9A84C;
+    padding: 24px 28px;
+    margin: 40px 0;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .insight-box p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16px;
+    color: #5B3A00;
+    font-weight: 600;
+    line-height: 1.9;
+    font-style: italic;
+  }
+
+  .body-text {
+    font-size: 15.5px;
+    color: #333;
+    line-height: 2;
+    margin-bottom: 20px;
+  }
+
+  /* 열린 질문 */
+  .open-question {
+    text-align: center;
+    padding: 40px 20px;
+    margin: 48px 0 0;
+    border-top: 1px solid #e8dfc8;
+  }
+
+  .open-question p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    color: #5B4A8A;
+    font-style: italic;
+    line-height: 1.9;
+  }
+
+  .open-question .q-sub { font-size: 14px; color: #999; margin-top: 8px; }
+
+  /* 이전/다음 */
+  .prev-episode {
+    background: #f0f4fa;
+    border-radius: 8px;
+    padding: 16px 24px;
+    margin-bottom: 32px;
+    font-size: 14px;
+    color: #3A5A8A;
+  }
+
+  .prev-episode a { color: #3A5A8A; text-decoration: none; font-weight: 600; }
+
+  .next-episode {
+    background: #f5f0e8;
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .next-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #8B6914;
+    text-transform: uppercase;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .next-content { font-size: 14px; color: #333; line-height: 1.7; }
+  .next-content strong { color: #1a1a2e; font-weight: 600; }
+
+  .tags {
+    margin-top: 48px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag {
+    font-size: 12px;
+    color: #8B6914;
+    background: #fdf6e3;
+    border: 1px solid #e8dfc8;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+</style>
+</head>
+<body>
+<div class="post-wrap">
+
+  <!-- 이전 회차 -->
+  <div class="prev-episode">
+    📖 이전 글 → <a href="#">[9회] 만남이 세상을 낳는다(大三合六 生七八九) — 육각수의 비밀</a>
+  </div>
+
+  <!-- 시리즈 배지 -->
+  <div class="series-badge">시민과 철학자의 천부경 · 10회</div>
+
+  <!-- 2부 배지 -->
+  <div class="part-badge">2부 · 地의 논리 — 천·지·인이 작동하는 방식</div>
+
+  <!-- 제목 -->
+  <h1 class="post-title">시간과 공간이 고리를 이룬다(運三四成環五七)</h1>
+  <p class="post-subtitle">끊어지지 않는 순환</p>
+  <div class="divider"></div>
+
+  <!-- 도입부 -->
+  <div class="hook-text">
+    <p>봄이 오고 여름이 가고 가을이 오고 겨울이 지나 다시 봄이 온다.</p>
+    <br>
+    <p>그 시대 사람들에게 이 순환은 관념이 아니었다. 씨앗을 심고 수확하고 다시 씨앗을 심는 — 매년 반복되는 삶의 리듬이었다. 천부경은 시간과 공간이 맞물려 만들어내는 이 순환을 일곱 글자로 담았다. 運三四成環五七.</p>
+  </div>
+
+  <!-- 원문 -->
+  <div class="section-title">▶ 원문</div>
+  <div class="original-box">
+    <span class="original-hanja">運三四成環五七</span>
+    <span class="original-reading">운  ·  삼  ·  사  ·  성  ·  환  ·  오  ·  칠</span>
+    <span class="original-translation">"셋과 넷이 운행하여<br>다섯과 일곱의 고리를 이룬다"</span>
+  </div>
+
+  <!-- 한자 풀이 -->
+  <div class="section-title">▶ 한자 풀이</div>
+  <table class="hanja-table">
+    <tr>
+      <th>한자</th>
+      <th>음(音)</th>
+      <th>뜻</th>
+    </tr>
+    <tr>
+      <td>運</td>
+      <td>운</td>
+      <td>운행하다, 움직이다. 일정한 법칙으로 돌아가는 우주의 운동. 멈추지 않고 계속 흐르는 것.</td>
+    </tr>
+    <tr>
+      <td>三</td>
+      <td>삼</td>
+      <td>셋. 천·지·인의 운행 리듬, 즉 시간의 흐름(과거·현재·미래)을 상징한다.</td>
+    </tr>
+    <tr>
+      <td>四</td>
+      <td>사</td>
+      <td>넷. 동·서·남·북 사방, 즉 공간의 방향을 상징한다. 시간(三)에 공간(四)이 더해진다.</td>
+    </tr>
+    <tr>
+      <td>成</td>
+      <td>성</td>
+      <td>이루다, 완성하다. 시간과 공간이 맞물려 비로소 완성되는 것.</td>
+    </tr>
+    <tr>
+      <td>環</td>
+      <td>환</td>
+      <td>고리, 순환. 끊어지지 않고 돌아오는 원의 운동. 이 구절의 핵심 글자다.</td>
+    </tr>
+    <tr>
+      <td>五</td>
+      <td>오</td>
+      <td>다섯. 동서남북에 중앙을 더한 것 — 중심이 있는 평면의 완성된 세계.</td>
+    </tr>
+    <tr>
+      <td>七</td>
+      <td>칠</td>
+      <td>일곱. 위아래까지 더한 것 — 입체로 펼쳐지는 우주 전체의 운행. 五가 평면이라면 七은 입체다.</td>
+    </tr>
+  </table>
+
+  <!-- 시간과 공간 -->
+  <div class="section-title">▶ 三은 시간, 四는 공간</div>
+  <p class="body-text">運三四 — 셋과 넷이 운행한다. 여기서 셋(三)은 시간이고, 넷(四)은 공간이다. 시간과 공간이 맞물려 돌아가는 것 — 그것이 우주의 운행이다.</p>
+
+  <div class="spacetime-box">
+    <div class="spacetime-item time">
+      <span class="st-hanja">三</span>
+      <span class="st-num">시간</span>
+      <div class="st-desc">
+        천·지·인이 운행하는 리듬.<br>
+        과거 · 현재 · 미래.<br>
+        시작 · 중간 · 끝.<br>
+        봄 · 여름 · 가을(·겨울).
+      </div>
+    </div>
+    <div class="spacetime-item space">
+      <span class="st-hanja">四</span>
+      <span class="st-num">공간</span>
+      <div class="st-desc">
+        동 · 서 · 남 · 북.<br>
+        사방이 펼쳐지는 방향.<br>
+        세상의 기본 구조.<br>
+        공간이 시간에 더해진다.
+      </div>
+    </div>
+  </div>
+
+  <!-- 핵심 원리 — 팽이 비유 -->
+  <div class="section-title">▶ 運三四가 成環五七을 만드는 원리</div>
+  <p class="body-text">이 구절이 천부경에서 가장 설명하기 까다로운 부분이다. 그러나 팽이 하나면 충분하다.</p>
+
+  <div style="background:#1a1a2e; border-radius:12px; padding:32px 28px; margin:32px 0;">
+    <div style="font-size:12px; letter-spacing:2px; color:#C9A84C; text-transform:uppercase; margin-bottom:20px; text-align:center;">팽이로 이해하는 運三四成環五七</div>
+    <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; align-items:center;">
+      <div style="flex:1; min-width:150px; background:rgba(255,255,255,0.05); border:1px solid rgba(201,168,76,0.3); border-radius:8px; padding:20px; text-align:center;">
+        <div style="font-size:32px; margin-bottom:8px;">🌀</div>
+        <div style="font-family:'Noto Serif KR',serif; font-size:20px; font-weight:700; color:#6A9ACA; margin-bottom:6px;">三 — 자전</div>
+        <div style="font-size:13px; color:#aaa; line-height:1.7;">팽이가 제자리에서 돈다.<br>시간이 흐른다.<br>아침·낮·저녁이 반복된다.</div>
+      </div>
+      <div style="font-size:28px; color:#C9A84C; font-weight:700;">+</div>
+      <div style="flex:1; min-width:150px; background:rgba(255,255,255,0.05); border:1px solid rgba(201,168,76,0.3); border-radius:8px; padding:20px; text-align:center;">
+        <div style="font-size:32px; margin-bottom:8px;">➡️</div>
+        <div style="font-family:'Noto Serif KR',serif; font-size:20px; font-weight:700; color:#C9A84C; margin-bottom:6px;">四 — 공전</div>
+        <div style="font-size:13px; color:#aaa; line-height:1.7;">팽이가 앞으로 나아간다.<br>공간을 이동한다.<br>동서남북을 가로지른다.</div>
+      </div>
+      <div style="font-size:28px; color:#C9A84C; font-weight:700;">=</div>
+      <div style="flex:1; min-width:150px; background:rgba(201,168,76,0.15); border:2px solid #C9A84C; border-radius:8px; padding:20px; text-align:center;">
+        <div style="font-size:32px; margin-bottom:8px;">🌍</div>
+        <div style="font-family:'Noto Serif KR',serif; font-size:20px; font-weight:700; color:#C9A84C; margin-bottom:6px;">成環五七</div>
+        <div style="font-size:13px; color:#e0d8c8; line-height:1.7;">평면의 원(五)을 그리고<br>입체의 구(七)처럼<br>우주를 순환한다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 지구로 설명 -->
+  <div class="farm-box">
+    <div class="farm-box-title">지구가 보여주는 運三四成環五七</div>
+    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px;">
+      <div style="flex:1; min-width:130px; background:#e8f0fa; border:1px solid #b8cce8; border-radius:8px; padding:14px; text-align:center;">
+        <div style="font-size:22px; margin-bottom:6px;">🌍</div>
+        <div style="font-size:13px; font-weight:600; color:#1A3A6A; margin-bottom:4px;">자전 (三)</div>
+        <div style="font-size:12px; color:#555; line-height:1.6;">하루 24시간<br>제자리에서 돈다.<br>아침·낮·저녁이 생긴다.</div>
+      </div>
+      <div style="flex:1; min-width:130px; background:#fdf6e3; border:1px solid #e8dfc8; border-radius:8px; padding:14px; text-align:center;">
+        <div style="font-size:22px; margin-bottom:6px;">☀️</div>
+        <div style="font-size:13px; font-weight:600; color:#8B6914; margin-bottom:4px;">공전 (四)</div>
+        <div style="font-size:12px; color:#555; line-height:1.6;">1년 동안 태양 주위를 돈다.<br>동서남북 사방을<br>이동한다.</div>
+      </div>
+      <div style="flex:1; min-width:130px; background:#e8f4e8; border:1px solid #b8d8b8; border-radius:8px; padding:14px; text-align:center;">
+        <div style="font-size:22px; margin-bottom:6px;">🌸</div>
+        <div style="font-size:13px; font-weight:600; color:#2A5A2A; margin-bottom:4px;">계절 순환 (五)</div>
+        <div style="font-size:12px; color:#555; line-height:1.6;">봄·여름·가을·겨울이 생긴다.<br>평면의 고리가<br>완성된다.</div>
+      </div>
+      <div style="flex:1; min-width:130px; background:#f0e8fa; border:1px solid #c8b8e8; border-radius:8px; padding:14px; text-align:center;">
+        <div style="font-size:22px; margin-bottom:6px;">🌌</div>
+        <div style="font-size:13px; font-weight:600; color:#5B3A8A; margin-bottom:4px;">우주 궤도 (七)</div>
+        <div style="font-size:12px; color:#555; line-height:1.6;">우주에서 보면 나선형.<br>입체의 구처럼<br>순환한다.</div>
+      </div>
+    </div>
+    <div class="farm-note">
+      자전(三)과 공전(四)이 맞물리면 —<br>
+      <strong>계절이라는 평면의 고리(五)와 우주 궤도라는 입체의 구(七)가 만들어진다.</strong>
+    </div>
+  </div>
+
+  <!-- 5와 7 -->
+  <div class="section-title">▶ 五는 평면, 七은 입체의 구(球)</div>
+  <div class="five-seven-box">
+    <div class="five-seven-item five">
+      <span class="fs-num">五</span>
+      <div class="fs-title">평면의 고리</div>
+      <div class="fs-desc">
+        동서남북(4) + 중앙(1) = 5.<br>
+        봄·여름·가을·겨울처럼<br>땅 위에서 펼쳐지는<br>평면의 순환.
+      </div>
+    </div>
+    <div class="five-seven-item seven">
+      <span class="fs-num">七</span>
+      <div class="fs-title">입체의 구(球)</div>
+      <div class="fs-desc">
+        동서남북(4) + 중앙(1) + 위아래(2) = 7.<br>
+        우주 공간에서 보면 나선형.<br>평면을 넘어 입체로<br>순환하는 우주 전체.
+      </div>
+    </div>
+  </div>
+
+  <!-- 사계절 순환 시각화 -->
+  <div class="section-title">▶ 고리(環) — 끊어지지 않는 순환</div>
+  <div class="cycle-visual">
+    <div class="cv-label">成環五七 — 평면의 계절 고리</div>
+    <div class="cycle-seasons">
+      <div class="season-item">
+        <span class="si-icon">🌸</span>
+        <div class="si-name">봄</div>
+        <div class="si-sub">씨앗을 심는다</div>
+      </div>
+      <div class="season-arrow">→</div>
+      <div class="season-item">
+        <span class="si-icon">☀️</span>
+        <div class="si-name">여름</div>
+        <div class="si-sub">자라고 뻗는다</div>
+      </div>
+      <div class="season-arrow">→</div>
+      <div class="season-item">
+        <span class="si-icon">🍂</span>
+        <div class="si-name">가을</div>
+        <div class="si-sub">수확한다</div>
+      </div>
+      <div class="season-arrow">→</div>
+      <div class="season-item">
+        <span class="si-icon">❄️</span>
+        <div class="si-name">겨울</div>
+        <div class="si-sub">쉬고 준비한다</div>
+      </div>
+      <div class="season-arrow">→</div>
+      <div class="season-item">
+        <span class="si-icon">🌸</span>
+        <div class="si-name">다시 봄</div>
+        <div class="si-sub">다시 시작</div>
+      </div>
+    </div>
+    <div class="cycle-ring">環 — 고리</div>
+    <div class="cycle-desc">
+      끊어지지 않는다. 멈추지 않는다. 돌아온다.<br>
+      이것이 運三四成環五七이다.
+    </div>
+  </div>
+
+  <!-- 대화 -->
+  <div class="section-title">▶ 시민과 철학자의 대화</div>
+
+  <div class="dialogue-section">
+    <div class="dialogue-title">運三四成環五七 — 시간과 공간이 고리를 이룬다</div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">運三四成環五七... 셋과 넷이 운행하여 다섯과 일곱의 고리를 이룬다. 대충 이해는 되는데 왜 하필 5와 7인지 걸리네요.</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">날카로운 질문이에요. 3은 시간이에요. 천·지·인이 운행하는 리듬이죠. 4는 공간이에요. 동·서·남·북 사방이 펼쳐지는 방향이고요. 5는 동서남북에 중앙을 더한 것 — 중심이 있는 평면의 세계예요.</div>
+    </div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">5가 평면이라면, 7은요?</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">7은 위아래까지 더한 것이에요. 입체로 펼쳐지는 우주 전체의 운행이죠. 그래서 6이 아니라 5와 7인 거예요. 6은 앞 구절에서 이미 완성의 수로 썼고, 여기서는 평면을 넘어 입체 우주가 순환한다는 이치를 담은 거예요.</div>
+    </div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">봄이 오고 여름이 가고 가을이 오고 겨울이 지나 다시 봄이 오는 것처럼... 끊어지지 않는 고리네요.</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">그 시대 사람들에게 이 순환은 관념이 아니었어요. 씨앗을 심고 수확하고 다시 씨앗을 심는 — 매년 반복되는 삶의 리듬이었죠. 그들은 그 리듬 속에서 우주의 운행 원리를 읽었던 거예요.</div>
+    </div>
+  </div>
+
+  <!-- 인사이트 -->
+  <div class="insight-box">
+    <p>시간과 공간이 고리를 이루며 우주는 영원히 순환한다.<br>
+    끝이 없기에 시작도 없고,<br>
+    시작이 없기에 끝도 없다.</p>
+  </div>
+
+  <!-- 열린 질문 -->
+  <div class="open-question">
+    <p>당신 삶에서 끊어지지 않고<br>고리처럼 돌아오는 것이 있는가.</p>
+    <p class="q-sub">다음 회에서는 一妙衍 萬往萬來 用變不動本 — 변해도 변하지 않는 것. 엄마 눈에 비친 아이의 이야기.</p>
+  </div>
+
+  <!-- 다음 회차 -->
+  <div class="next-episode">
+    <div class="next-label">다음 회</div>
+    <div class="next-content">
+      <strong>[11회] 변해도 변하지 않는 것(一妙衍 萬往萬來 用變不動本) — 엄마 눈에 비친 아이</strong><br>
+      아기일 때 엄마가 본 그 아이의 모습 — 중년이 되어도 그 기질은 사라지지 않는다. 用變不動本이다.
+    </div>
+  </div>
+
+  <!-- 태그 -->
+  <div class="tags">
+    <span class="tag">#천부경</span>
+    <span class="tag">#운삼사성환오칠</span>
+    <span class="tag">#運三四成環五七</span>
+    <span class="tag">#천부경해설</span>
+    <span class="tag">#한국철학</span>
+    <span class="tag">#동양철학</span>
+    <span class="tag">#순환</span>
+    <span class="tag">#시간과공간</span>
+    <span class="tag">#인문학</span>
+    <span class="tag">#철학에세이</span>
+  </div>
+
+</div>
+</body>
+</html>
