@@ -174,13 +174,13 @@ section { position: relative; z-index: 1; }
   background: var(--accent); transform: translateX(-101%);
   transition: transform .3s ease; z-index: -1;
 }
-.hero-btn:hover { color: var(--paper); }
+.hero-btn:hover { color: var(--dark); }
 .hero-btn:hover::after { transform: translateX(0); }
 .hero-btn.solid {
-  background: var(--accent); color: var(--paper);
+  background: var(--accent); color: var(--dark);
 }
 .hero-btn.solid::after { background: var(--blue-deep); }
-.hero-btn.solid:hover { color: var(--paper); }
+.hero-btn.solid:hover { color: var(--dark); }
 .scroll-cue {
   position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
   text-align: center; opacity: 0; animation: fadeIn 1s ease 2s forwards;
@@ -519,12 +519,12 @@ footer a:hover { color: var(--accent-l); }
       <p class="decl-ko">81자. 그 안에 우주가 있다.</p>
       <p class="decl-en">Eighty-one characters. Within them, the entire cosmos.</p>
     </div>
-    <div class="ch-divider" style="background:rgba(45,110,168,.2);"></div>
+    <div class="ch-divider" style="background:rgba(62,207,178,.18);"></div>
     <div class="fade">
       <p class="decl-ko">천부경을 어렵게 모시지 마라.<br>그 시대 사람들의 눈으로 읽어라.</p>
       <p class="decl-en">Do not approach Cheonbugyeong with reverent distance.<br>Read it through the eyes of those who lived in that age.</p>
     </div>
-    <div class="ch-divider" style="background:rgba(45,110,168,.2);"></div>
+    <div class="ch-divider" style="background:rgba(62,207,178,.18);"></div>
     <div class="fade">
       <p class="decl-ko">하나에서 시작해 하나로 돌아오는 그 이치가<br>지금 이 순간 당신 안에 살아 있다.</p>
       <p class="decl-en">The principle that begins from One and returns to One<br>is alive within you, right now, in this very moment.</p>
@@ -537,7 +537,7 @@ footer a:hover { color: var(--accent-l); }
   <div class="inner">
     <div class="section-tag fade">천부경 전문 · The Complete Text</div>
     <div class="fade">
-      <p style="font-size:1.05rem;color:rgba(13,26,46,.7);line-height:2;font-family:'Noto Serif KR',serif;">
+      <p style="font-size:1.05rem;color:var(--ink-dim);line-height:2;font-family:'Noto Serif KR',serif;">
         신라 문인 최치원(857~?)이 묘향산 석벽의 고비(古碑)를 보고 옮겨 적었다. 한국 최고(最古)의 경전. 총 81자(9×9)로 우주의 구조와 운행 원리를 담았다.
       </p>
     </div>
@@ -551,7 +551,7 @@ footer a:hover { color: var(--accent-l); }
         本心本太陽 昻明 <span class="gold">人中天地一</span><br>
         一終無終一
       </div>
-      <p class="full-text-note">청람색 구절 — 이 시리즈의 핵심 구절</p>
+      <p class="full-text-note">밝은 구절 — 이 시리즈의 핵심 구절</p>
     </div>
 
     <div class="structure-row">
@@ -582,7 +582,7 @@ footer a:hover { color: var(--accent-l); }
   <div class="inner-wide">
     <div class="inner" style="padding:0;">
       <div class="section-tag fade">전체 회차 · All Episodes</div>
-      <p class="fade" style="font-size:1rem;color:rgba(13,26,46,.6);line-height:2;font-family:'Noto Serif KR',serif;margin-bottom:.5rem;">
+      <p class="fade" style="font-size:1rem;color:var(--ink-dim);line-height:2;font-family:'Noto Serif KR',serif;margin-bottom:.5rem;">
         매일 한 회씩. 쉬운 말로, 깊은 이야기로.
       </p>
     </div>
@@ -701,7 +701,7 @@ footer a:hover { color: var(--accent-l); }
 <section id="verses">
   <div class="inner">
     <div class="section-tag fade">핵심 구절 · Key Verses</div>
-    <p class="fade" style="background:rgba(45,110,168,.2);"font-size:1rem;color:rgba(13,26,46,.6);line-height:2;font-family:'Noto Serif KR',serif;">
+    <p class="fade" style="font-size:1rem;color:var(--ink-dim);line-height:2;font-family:'Noto Serif KR',serif;">
       81자 중에서도 특히 깊이 새겨야 할 여섯 구절.
     </p>
 
@@ -770,7 +770,7 @@ footer a:hover { color: var(--accent-l); }
   <div class="inner">
     <div class="section-tag fade">천부경의 철학 · Philosophy</div>
     <div class="fade" style="margin-bottom:2rem;">
-      <p style="font-size:clamp(1.2rem,2.6vw,1.5rem);font-weight:700;line-height:1.8;color:var(--paper);">
+      <p style="font-size:clamp(1.2rem,2.6vw,1.5rem);font-weight:700;line-height:1.8;color:var(--ink);">
         천부경은 신학이 아니다.<br>자연을 관찰한 사람들의 철학이다.
       </p>
     </div>
@@ -799,14 +799,14 @@ footer a:hover { color: var(--accent-l); }
     </div>
 
     <div style="margin-top:3rem;" class="fade">
-      <div style="background:rgba(45,110,168,.08);border-left:3px solid var(--accent);padding:2rem 2.5rem;border-radius:0 8px 8px 0;">
+      <div style="background:rgba(62,207,178,.06);border-left:3px solid var(--accent);padding:2rem 2.5rem;border-radius:0 8px 8px 0;">
         <p style="font-family:'Noto Serif KR',serif;font-size:1.05rem;color:var(--accent-l);font-weight:600;line-height:1.9;font-style:italic;">
           "천부경을 이해하는 가장 쉬운 방법이 있다.<br>
           지금의 잣대로 해석하려 하지 마라.<br>
           그 시대로 돌아가 그 환경을 이해하고 질문을 던져라.<br>
           그러면 산수 풀듯 풀릴 것이다."
         </p>
-        <p style="font-size:.75rem;color:rgba(240,244,248,.3);margin-top:1rem;font-family:'Noto Sans KR',sans-serif;letter-spacing:.1em;">— 시민과 철학자의 천부경 2회</p>
+        <p style="font-size:.75rem;color:var(--ink-mute);margin-top:1rem;font-family:'Noto Sans KR',sans-serif;letter-spacing:.1em;">— 시민과 철학자의 천부경 2회</p>
       </div>
     </div>
   </div>
@@ -816,7 +816,7 @@ footer a:hover { color: var(--accent-l); }
 <section id="dialogue">
   <div class="inner">
     <div class="section-tag fade">대화 미리보기 · Dialogue Preview</div>
-    <p class="fade" style="font-size:1rem;color:rgba(13,26,46,.6);line-height:2;font-family:'Noto Serif KR',serif;margin-bottom:.5rem;">
+    <p class="fade" style="font-size:1rem;color:var(--ink-dim);line-height:2;font-family:'Noto Serif KR',serif;margin-bottom:.5rem;">
       이 시리즈는 '시민'과 '철학자'의 대화로 이루어진다.<br>어렵지 않다. 한 사람이 묻고 한 사람이 답하는 방식으로 함께 읽는다.
     </p>
 
