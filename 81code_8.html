@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap');
+
+  :root {
+    --azure:      #7EB8F7;
+    --azure-l:    #B8D9FF;
+    --azure-dim:  #4A85D4;
+    --dark:       #07091A;
+    --dark2:      #0B0E24;
+    --dark3:      #0F1330;
+    --card-bg:    #111428;
+    --ink:        #EEF2FF;
+    --ink-dim:    rgba(238,242,255,.65);
+    --ink-mute:   rgba(238,242,255,.38);
+    --accent:     #7EB8F7;
+    --accent-l:   #B8D9FF;
+    --accent-pale:#0F1330;
+    --border:     rgba(126,184,247,.15);
+    --border-dim: rgba(126,184,247,.08);
+    --gold:       #7EB8F7;  /* 기존 금색 → 청람으로 매핑 */
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
+    background: var(--dark);
+    color: var(--ink);
+    line-height: 1.9;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 40%, rgba(107,163,232,.07) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 70%, rgba(107,163,232,.04) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 2.5rem;
+    background: rgba(8,14,28,.92);
+    border-bottom: 1px solid rgba(107,163,232,.12);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    transition: box-shadow .3s;
+  }
+  nav.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,.5); }
+  .nav-logo { font-size: .9rem; font-weight: 700; letter-spacing: .15em; color: var(--accent); text-decoration: none; font-family: 'Nanum Myeongjo', serif; }
+  .nav-links { display: flex; gap: 0; list-style: none; }
+  .nav-links a {
+    display: block; padding: .4rem .75rem;
+    font-size: .72rem; letter-spacing: .08em;
+    color: var(--ink); text-decoration: none;
+    opacity: .4; transition: opacity .2s, color .2s;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .nav-links a:hover { opacity: 1; color: var(--accent); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+  .hamburger span { display: block; width: 22px; height: 1px; background: var(--accent); transition: all .3s; }
+  .mobile-nav {
+    display: none; position: fixed; top: 57px; left: 0; right: 0;
+    background: rgba(8,14,28,.97); backdrop-filter: blur(16px);
+    z-index: 199; padding: .8rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .mobile-nav.open { display: block; }
+  .mobile-nav a {
+    display: block; padding: .7rem 2rem;
+    font-size: .85rem; color: var(--ink); text-decoration: none; opacity: .65;
+    border-bottom: 1px solid var(--border-dim);
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .mobile-nav a:hover { opacity: 1; color: var(--accent); }
+
+  /* ── 포스트 래퍼 ── */
+  .post-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 100px 28px 80px;
+    position: relative; z-index: 1;
+  }
+
+  /* ── 공통 요소 ── */
+  .series-badge {
+    display: inline-block;
+    font-size: 11px; font-weight: 500; letter-spacing: 2px;
+    color: var(--accent); border: 1px solid var(--border);
+    padding: 4px 14px; border-radius: 2px; margin-bottom: 28px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .post-title {
+    font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
+    font-size: 30px; font-weight: 800; color: var(--ink);
+    line-height: 1.4; margin-bottom: 12px; letter-spacing: -.5px;
+  }
+  .post-subtitle {
+    font-size: 15px; color: var(--azure-dim); font-style: italic;
+    margin-bottom: 40px; font-family: 'Noto Serif KR', serif;
+  }
+  .divider {
+    width: 48px; height: 1px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    margin-bottom: 40px;
+  }
+  .hook-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16.5px; color: var(--ink-dim);
+    line-height: 2; margin-bottom: 48px;
+    padding-left: 20px;
+    border-left: 2px solid rgba(126,184,247,.25);
+  }
+  .section-title {
+    font-size: 11px; font-weight: 500; letter-spacing: 3px;
+    color: var(--accent); text-transform: uppercase;
+    margin-bottom: 20px; margin-top: 48px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .body-text {
+    font-size: 15px; color: var(--ink-dim);
+    line-height: 2; margin-bottom: 20px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  /* ── 대화 ── */
+  .dialogue-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 28px 24px; margin: 32px 0;
+  }
+  .dialogue-title {
+    font-size: 11px; letter-spacing: 2px; color: var(--ink-mute);
+    text-transform: uppercase; margin-bottom: 20px; text-align: center;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .citizen {
+    display: flex; align-items: flex-start; gap: 14px;
+    margin-bottom: 6px; margin-top: 28px;
+  }
+  .citizen-label {
+    font-size: 11px; font-weight: 600; color: var(--dark);
+    background: var(--azure-dim); padding: 3px 10px;
+    border-radius: 12px; white-space: nowrap; margin-top: 3px;
+    letter-spacing: 1px; flex-shrink: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .citizen-text {
+    font-size: 14.5px; color: var(--ink-dim); line-height: 1.9;
+    background: rgba(74,133,212,.1); border-radius: 0 12px 12px 12px;
+    padding: 14px 18px; flex: 1;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .philosopher {
+    display: flex; align-items: flex-start; gap: 14px;
+    margin-bottom: 6px; margin-top: 6px; padding-left: 20px;
+  }
+  .philosopher-label {
+    font-size: 11px; font-weight: 600; color: var(--dark);
+    background: var(--accent); padding: 3px 10px;
+    border-radius: 12px; white-space: nowrap; margin-top: 3px;
+    letter-spacing: 1px; flex-shrink: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .philosopher-text {
+    font-size: 14.5px; color: var(--ink); line-height: 1.9;
+    background: rgba(126,184,247,.07); border-radius: 0 12px 12px 12px;
+    padding: 14px 18px; flex: 1;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  /* ── 인사이트 박스 ── */
+  .insight-box {
+    background: rgba(126,184,247,.06);
+    border-left: 3px solid var(--accent);
+    padding: 24px 28px; margin: 40px 0;
+    border-radius: 0 8px 8px 0;
+  }
+  .insight-box p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15.5px; color: var(--azure-l);
+    font-weight: 600; line-height: 1.9; font-style: italic;
+  }
+
+  /* ── 콘텐츠 박스 ── */
+  .content-box {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 28px 32px; margin: 32px 0;
+  }
+  .content-box-title {
+    font-size: 11px; font-weight: 600; color: var(--accent);
+    letter-spacing: 2px; margin-bottom: 16px; text-transform: uppercase;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .content-box p {
+    font-size: 14.5px; color: var(--ink-dim); line-height: 2; margin-bottom: 12px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .content-box p:last-child { margin-bottom: 0; }
+  .content-box strong { color: var(--accent-l); }
+
+  /* ── 구조 박스 (structure-box) ── */
+  .structure-box {
+    background: var(--dark3); border: 1px solid var(--border);
+    border-radius: 10px; padding: 28px 32px; margin: 20px 0;
+  }
+  .structure-box .s-title {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 19px; color: var(--accent-l); font-weight: 700; margin-bottom: 4px;
+  }
+  .structure-box .s-sub { font-size: 12px; color: var(--ink-mute); margin-bottom: 12px; font-family: 'Noto Sans KR', sans-serif; }
+  .structure-box .s-body { font-size: 14px; color: var(--ink-dim); line-height: 1.9; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+  .structure-box .s-q { font-size: 13px; color: var(--accent); margin-top: 10px; font-style: italic; font-family: 'Noto Serif KR', serif; }
+
+  /* ── 한자 테이블 ── */
+  .hanja-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; font-size: 14px; }
+  .hanja-table th {
+    background: rgba(126,184,247,.12); color: var(--accent-l);
+    padding: 10px 16px; text-align: left; font-weight: 500;
+    font-size: 12px; letter-spacing: 1px;
+    font-family: 'Noto Sans KR', sans-serif;
+    border-bottom: 1px solid var(--border);
+  }
+  .hanja-table th:first-child { text-align: center; width: 80px; }
+  .hanja-table th:nth-child(2) { width: 140px; }
+  .hanja-table td {
+    padding: 14px 16px; border-bottom: 1px solid var(--border-dim);
+    vertical-align: middle; color: var(--ink-dim); line-height: 1.7;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .hanja-table td:first-child {
+    text-align: center; font-size: 28px;
+    font-family: 'Noto Serif KR', serif; color: var(--accent); font-weight: 700;
+  }
+  .hanja-table td:nth-child(2) { font-size: 13px; color: var(--ink-mute); }
+  .hanja-table tr:nth-child(odd) td { background: rgba(255,255,255,.02); }
+  .hanja-table tr:nth-child(even) td { background: transparent; }
+
+  /* ── 타임라인 ── */
+  .timeline { margin: 32px 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .timeline-item {
+    display: flex; align-items: center; padding: 16px 24px;
+    border-bottom: 1px solid var(--border-dim); gap: 20px;
+  }
+  .timeline-item:last-child { border-bottom: none; }
+  .timeline-item:nth-child(odd) { background: rgba(126,184,247,.04); }
+  .timeline-item:nth-child(even) { background: transparent; }
+  .timeline-year { font-family: 'Noto Serif KR', serif; font-size: 14px; font-weight: 700; color: var(--accent); min-width: 130px; }
+  .timeline-desc { font-size: 13.5px; color: var(--ink-dim); line-height: 1.7; font-family: 'Noto Sans KR', sans-serif; }
+
+  /* ── 포인트 박스 ── */
+  .point-box { background: var(--dark3); border: 1px solid var(--border); border-radius: 10px; padding: 28px 32px; margin: 32px 0; }
+  .point-box .p-title { font-size: 11px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 16px; font-weight: 600; font-family: 'Noto Sans KR', sans-serif; }
+  .point-box .p-item { font-size: 14.5px; color: var(--ink-dim); line-height: 1.9; padding: 10px 0; border-bottom: 1px solid var(--border-dim); display: flex; gap: 12px; font-family: 'Noto Sans KR', sans-serif; }
+  .point-box .p-item:last-child { border-bottom: none; }
+  .point-box .p-num { color: var(--accent); font-weight: 700; flex-shrink: 0; }
+
+  /* ── 원문 박스 ── */
+  .original-box {
+    background: var(--dark2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 32px; margin: 32px 0; text-align: center;
+  }
+  .original-text {
+    font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
+    font-size: 22px; color: var(--accent-l); letter-spacing: 6px;
+    line-height: 2; font-weight: 700;
+  }
+  .original-reading { font-size: 13px; color: var(--ink-mute); letter-spacing: 4px; margin-top: 12px; font-family: 'Noto Sans KR', sans-serif; }
+
+  /* ── 한자 크게 ── */
+  .hanja-big { text-align: center; padding: 40px 0 20px; }
+  .hanja-big .main-hanja {
+    font-family: 'Nanum Myeongjo', serif; font-size: 64px; color: var(--accent);
+    font-weight: 800; letter-spacing: 16px; display: block; margin-bottom: 12px;
+  }
+  .hanja-big .reading { font-size: 13px; color: var(--ink-mute); letter-spacing: 6px; font-family: 'Noto Sans KR', sans-serif; }
+
+  /* ── 이전/다음 회차 ── */
+  .prev-episode {
+    background: rgba(126,184,247,.06); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 20px; margin-bottom: 32px;
+    font-size: 13.5px; color: var(--ink-dim); font-family: 'Noto Sans KR', sans-serif;
+  }
+  .prev-episode a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .next-episode {
+    background: var(--dark3); border: 1px solid var(--border);
+    border-radius: 10px; padding: 24px 28px; margin-top: 40px;
+    display: flex; align-items: center; gap: 20px;
+  }
+  .next-label { font-size: 10px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; font-weight: 600; white-space: nowrap; font-family: 'Noto Sans KR', sans-serif; }
+  .next-content { font-size: 14px; color: var(--ink-dim); line-height: 1.7; font-family: 'Noto Sans KR', sans-serif; }
+  .next-content strong { color: var(--ink); font-weight: 600; }
+
+  /* ── 열린 질문 ── */
+  .open-question { text-align: center; padding: 40px 20px; margin: 48px 0 0; border-top: 1px solid var(--border); }
+  .open-question p { font-family: 'Noto Serif KR', serif; font-size: 16px; color: var(--azure-l); font-style: italic; line-height: 1.9; }
+  .open-question .q-sub { font-size: 13px; color: var(--ink-mute); margin-top: 8px; font-family: 'Noto Sans KR', sans-serif; }
+
+  /* ── 태그 ── */
+  .tags { margin-top: 48px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag { font-size: 11.5px; color: var(--azure-dim); background: rgba(126,184,247,.06); border: 1px solid var(--border); padding: 4px 12px; border-radius: 20px; font-family: 'Noto Sans KR', sans-serif; }
+
+
+  /* ══ 파일 고유 스타일 ══ */
+  /* 번외 배지 */
+  .extra-badge {
+    display: inline-block;
+    background: #5B3A8A;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+
+  /* 81자 그리드 */
+  .chars-grid {
+    background: var(--dark);
+    border-radius: 12px;
+    padding: 28px;
+    margin: 32px 0;
+    text-align: center;
+  }
+
+  .chars-grid-title {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .chars-display {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 18px;
+    color: var(--accent);
+    line-height: 2.2;
+    letter-spacing: 6px;
+    font-weight: 600;
+  }
+
+  .chars-count {
+    margin-top: 16px;
+    font-size: 13px;
+    color: #888;
+    letter-spacing: 1px;
+  }
+
+  .chars-count strong { color: var(--accent); }
+
+  /* 9x9 시각화 */
+  .nine-box {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 24px;
+    margin: 32px 0;
+    text-align: center;
+  }
+
+  .nine-box-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--azure-dim);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .nine-grid {
+    display: inline-grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: 4px;
+    margin-bottom: 20px;
+  }
+
+  .nine-cell {
+    width: 36px;
+    height: 36px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .nine-cell.filled {
+    background: var(--dark);
+    color: var(--accent);
+  }
+
+  .nine-cell.empty {
+    background: var(--dark3);
+    color: #ccc;
+  }
+
+  .nine-formula {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-top: 16px;
+  }
+
+  .nine-formula span { color: var(--azure-dim); }
+
+  .nine-desc {
+    font-size: 14px;
+    color: #666;
+    margin-top: 8px;
+    line-height: 1.7;
+  }
+
+  /* 완전수 설명 */
+  .perfect-numbers {
+    margin: 32px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .perfect-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+  }
+
+  .perfect-item.highlight {
+    background: var(--dark2);
+    border-color: var(--accent);
+  }
+
+  .perfect-num {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--azure-dim);
+    min-width: 48px;
+    text-align: center;
+  }
+
+  .perfect-item.highlight .perfect-num {
+    font-size: 36px;
+    color: var(--accent);
+  }
+
+  .perfect-desc {
+    flex: 1;
+  }
+
+  .perfect-desc strong {
+    display: block;
+    font-size: 14px;
+    color: var(--dark);
+    margin-bottom: 4px;
+  }
+
+  .perfect-desc p {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
+  }
+
+  /* 갈릴레오 비교 */
+  .galileo-box {
+    background: linear-gradient(135deg, var(--dark), var(--dark3));
+    border-radius: 12px;
+    padding: 32px;
+    margin: 32px 0;
+  }
+
+  .galileo-box .gb-label {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .galileo-compare {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .galileo-item {
+    flex: 1;
+    min-width: 200px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(126,184,247,0.3);
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  .galileo-item .gi-who {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .galileo-item .gi-quote {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    color: var(--ink-dim);
+    line-height: 1.8;
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+
+  .galileo-item .gi-when {
+    font-size: 12px;
+    color: #888;
+  }
+
+  .galileo-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-size: 24px;
+    padding: 0 4px;
+  }
+
+  /* 형식=철학 박스 */
+  .form-box {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin: 32px 0;
+  }
+
+  .form-box-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--azure-dim);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .form-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0e8d4;
+  }
+
+  .form-row:last-child { border-bottom: none; }
+
+  .form-row .fr-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .form-row .fr-text {
+    flex: 1;
+    font-size: 14px;
+    color: var(--ink-dim);
+    line-height: 1.8;
+  }
+
+  .form-row .fr-text strong { color: var(--dark); }
+
+  /* 2부 예고 배지 */
+  .part2-preview {
+    background: #e8f4e8;
+    border: 1px solid #b8d8b8;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 32px 0;
+    text-align: center;
+  }
+
+  .part2-preview .p2-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #2A5A2A;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .part2-preview .p2-text {
+    font-size: 14px;
+    color: var(--ink-dim);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 640px) {
+    nav { padding: .9rem 1.4rem; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .post-wrap { padding: 80px 18px 60px; }
+  }
+</style>
+</head>
+<body>
+<nav id="nav">
+  <a href="index.html" class="nav-logo">天符經</a>
+  <ul class="nav-links">
+    <li><a href="index.html#episodes">전체 회차</a></li>
+    <li><a href="index.html#full-text">전문</a></li>
+    <li><a href="index.html#verses">핵심 구절</a></li>
+    <li><a href="index.html#philosophy">철학</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="메뉴">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html#episodes" onclick="closeMenu()">전체 회차</a>
+  <a href="index.html#full-text" onclick="closeMenu()">천부경 전문</a>
+  <a href="index.html#verses" onclick="closeMenu()">핵심 구절</a>
+  <a href="index.html#philosophy" onclick="closeMenu()">철학</a>
+</div>
+<div class="post-wrap">
+
+  <!-- 이전 회차 -->
+  <div class="prev-episode">
+    📖 이전 글 → <a href="#">[7회] 우주는 하나의 법칙으로 움직인다(天二三 地二三 人二三) — 아인슈타인도 못 푼 것</a>
+  </div>
+
+  <!-- 시리즈 배지 -->
+  <div class="series-badge">시민과 철학자의 천부경 · 8회</div>
+
+  <!-- 번외 배지 -->
+  <div class="extra-badge">번외 · 1부와 2부 사이</div>
+
+  <!-- 제목 -->
+  <h1 class="post-title">천부경은 왜 81자인가(9×9=81)</h1>
+  <p class="post-subtitle">수학은 신의 언어</p>
+  <div class="divider"></div>
+
+  <!-- 도입부 -->
+  <div class="hook-text">
+    <p>천부경은 81자다. 그런데 이 숫자가 과연 우연일까.</p>
+    <br>
+    <p>9×9=81. 동양 수 사상에서 9는 완전수다. 완전수가 스스로를 곱해 만들어진 81 — 우주의 이치를 담기 위해 가장 완전한 수의 그릇을 선택한 것으로 보인다. 내용만이 아니라 형식 자체가 이미 철학이다.</p>
+  </div>
+
+  <!-- 81자 전체 -->
+  <div class="section-title">▶ 천부경 81자 전체</div>
+  <div class="chars-grid">
+    <div class="chars-grid-title">천부경 원문 — 81자</div>
+    <div class="chars-display">
+      一始無始一&nbsp;&nbsp;析三極無盡本<br>
+      天一一&nbsp;&nbsp;地一二&nbsp;&nbsp;人一三<br>
+      一積十鉅&nbsp;&nbsp;無匱化三<br>
+      天二三&nbsp;&nbsp;地二三&nbsp;&nbsp;人二三<br>
+      大三合六&nbsp;&nbsp;生七八九<br>
+      運三四成環五七<br>
+      一妙衍&nbsp;&nbsp;萬往萬來&nbsp;&nbsp;用變不動本<br>
+      本心本太陽&nbsp;&nbsp;昻明&nbsp;&nbsp;人中天地一<br>
+      一終無終一
+    </div>
+    <div class="chars-count">총 <strong>81자</strong> = <strong>9 × 9</strong></div>
+  </div>
+
+  <!-- 9x9 그리드 시각화 -->
+  <div class="section-title">▶ 9×9 = 81 시각화</div>
+  <div class="nine-box">
+    <div class="nine-box-title">완전수 9가 스스로를 곱하면</div>
+    <div class="nine-grid">
+      <!-- 81개 셀 — 실제 천부경 글자 -->
+      <div class="nine-cell filled">一</div><div class="nine-cell filled">始</div><div class="nine-cell filled">無</div><div class="nine-cell filled">始</div><div class="nine-cell filled">一</div><div class="nine-cell filled">析</div><div class="nine-cell filled">三</div><div class="nine-cell filled">極</div><div class="nine-cell filled">無</div>
+      <div class="nine-cell filled">盡</div><div class="nine-cell filled">本</div><div class="nine-cell filled">天</div><div class="nine-cell filled">一</div><div class="nine-cell filled">一</div><div class="nine-cell filled">地</div><div class="nine-cell filled">一</div><div class="nine-cell filled">二</div><div class="nine-cell filled">人</div>
+      <div class="nine-cell filled">一</div><div class="nine-cell filled">三</div><div class="nine-cell filled">一</div><div class="nine-cell filled">積</div><div class="nine-cell filled">十</div><div class="nine-cell filled">鉅</div><div class="nine-cell filled">無</div><div class="nine-cell filled">匱</div><div class="nine-cell filled">化</div>
+      <div class="nine-cell filled">三</div><div class="nine-cell filled">天</div><div class="nine-cell filled">二</div><div class="nine-cell filled">三</div><div class="nine-cell filled">地</div><div class="nine-cell filled">二</div><div class="nine-cell filled">三</div><div class="nine-cell filled">人</div><div class="nine-cell filled">二</div>
+      <div class="nine-cell filled">三</div><div class="nine-cell filled">大</div><div class="nine-cell filled">三</div><div class="nine-cell filled">合</div><div class="nine-cell filled">六</div><div class="nine-cell filled">生</div><div class="nine-cell filled">七</div><div class="nine-cell filled">八</div><div class="nine-cell filled">九</div>
+      <div class="nine-cell filled">運</div><div class="nine-cell filled">三</div><div class="nine-cell filled">四</div><div class="nine-cell filled">成</div><div class="nine-cell filled">環</div><div class="nine-cell filled">五</div><div class="nine-cell filled">七</div><div class="nine-cell filled">一</div><div class="nine-cell filled">妙</div>
+      <div class="nine-cell filled">衍</div><div class="nine-cell filled">萬</div><div class="nine-cell filled">往</div><div class="nine-cell filled">萬</div><div class="nine-cell filled">來</div><div class="nine-cell filled">用</div><div class="nine-cell filled">變</div><div class="nine-cell filled">不</div><div class="nine-cell filled">動</div>
+      <div class="nine-cell filled">本</div><div class="nine-cell filled">本</div><div class="nine-cell filled">心</div><div class="nine-cell filled">本</div><div class="nine-cell filled">太</div><div class="nine-cell filled">陽</div><div class="nine-cell filled">昻</div><div class="nine-cell filled">明</div><div class="nine-cell filled">人</div>
+      <div class="nine-cell filled">中</div><div class="nine-cell filled">天</div><div class="nine-cell filled">地</div><div class="nine-cell filled">一</div><div class="nine-cell filled">一</div><div class="nine-cell filled">終</div><div class="nine-cell filled">無</div><div class="nine-cell filled">終</div><div class="nine-cell filled">一</div>
+    </div>
+    <div class="nine-formula">9 <span>×</span> 9 <span>=</span> 81</div>
+    <div class="nine-desc">가로 9칸 × 세로 9줄 = 81자<br>완전수가 스스로를 곱한 완전한 그릇</div>
+  </div>
+
+  <!-- 완전수 1~9 -->
+  <div class="section-title">▶ 왜 9가 완전수인가</div>
+  <p class="body-text">동양 수 사상에서 1부터 9까지는 각각 고유한 의미를 가진다. 9는 그 마지막 자리 — 한 자릿수 중 가장 큰 수이자 완성과 극치를 상징한다.</p>
+
+  <div class="perfect-numbers">
+    <div class="perfect-item">
+      <div class="perfect-num">1</div>
+      <div class="perfect-desc">
+        <strong>시작과 근원</strong>
+        <p>모든 것의 출발점. 천부경의 첫 글자이자 마지막 글자가 一인 이유.</p>
+      </div>
+    </div>
+    <div class="perfect-item">
+      <div class="perfect-num">3</div>
+      <div class="perfect-desc">
+        <strong>완성과 조화</strong>
+        <p>천·지·인 삼재. 동서양 공통으로 신성하고 안정적인 수.</p>
+      </div>
+    </div>
+    <div class="perfect-item">
+      <div class="perfect-num">7</div>
+      <div class="perfect-desc">
+        <strong>행운과 신성</strong>
+        <p>동서양을 막론하고 행운과 신성함을 상징. 일주일 7일의 주기.</p>
+      </div>
+    </div>
+    <div class="perfect-item highlight">
+      <div class="perfect-num">9</div>
+      <div class="perfect-desc">
+        <strong>완전수 — 한 자릿수의 끝</strong>
+        <p>1부터 9까지 한 자릿수의 마지막. 최상급, 극치, 완성을 의미한다. 9가 스스로를 곱하면 81 — 완전한 수의 완전한 그릇이 만들어진다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 대화 -->
+  <div class="section-title">▶ 시민과 철학자의 대화</div>
+
+  <div class="dialogue-section">
+    <div class="dialogue-title">천부경은 왜 81자인가 — 9×9, 완전한 수의 그릇</div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">천부경이 81자라는 건 알고 있었는데... 왜 하필 81자인지 생각해본 적이 없었어요.</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">9×9=81이에요. 우연일까요?</div>
+    </div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">9×9... 동양 수 사상에서 9가 완전수라고 하잖아요.</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">맞아요. 1부터 9까지 — 천부경이 다루는 수의 마지막 자리가 9예요. 그 완전수가 스스로를 곱해 만들어진 81. 우주의 이치를 담기 위해 가장 완전한 수의 그릇을 선택한 것으로 보여요.</div>
+    </div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">따지고 보면 천부경 자체가 수의 문장이잖아요. 9×9=81자. 수로 우주를 설명하는 글을, 수로 만들어진 그릇에 담은 거네요.</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">날카로운 발견이에요. 내용만이 아니라 형식 자체가 이미 철학인 거죠. 갈릴레오는 17세기에 말했어요 — '우주는 수학이라는 언어로 쓰여 있다.' 그런데 우리 조상은 그보다 훨씬 앞서, 수로 우주를 썼어요.</div>
+    </div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">예전에 '수학은 신의 언어'라는 말을 들었어요. 그 말이 천부경을 만나는 지점이 바로 여기군요.</div>
+    </div>
+  </div>
+
+  <!-- 인사이트 -->
+  <div class="insight-box">
+    <p>수학은 신의 언어라 했던가 —<br>
+    천부경은 그 언어로 쓰인 우리 조상의 책이다.<br>
+    내용도, 형식도, 그 자체가 이미 철학이다.</p>
+  </div>
+
+  <!-- 갈릴레오 비교 -->
+  <div class="section-title">▶ 갈릴레오보다 먼저</div>
+  <div class="galileo-box">
+    <div class="gb-label">수와 우주에 대한 두 가지 선언</div>
+    <div class="galileo-compare">
+      <div class="galileo-item">
+        <div class="gi-who">갈릴레오 갈릴레이</div>
+        <div class="gi-quote">"우주는 수학이라는 언어로 쓰여 있다."</div>
+        <div class="gi-when">17세기 서양 과학혁명 시대</div>
+      </div>
+      <div class="galileo-arrow">←</div>
+      <div class="galileo-item">
+        <div class="gi-who">천부경</div>
+        <div class="gi-quote">9×9=81자로 우주의 이치를 담았다. 수로 우주를 설명하는 글을, 수로 만들어진 그릇에 담았다.</div>
+        <div class="gi-when">수천 년 전 한국의 고대 경전</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 형식=철학 -->
+  <div class="section-title">▶ 형식 자체가 철학인 이유</div>
+  <div class="form-box">
+    <div class="form-box-title">천부경에서 형식과 내용이 하나인 것들</div>
+    <div class="form-row">
+      <span class="fr-icon">🔢</span>
+      <div class="fr-text"><strong>81자 = 9×9</strong> — 완전수가 스스로를 곱한 완전한 그릇. 우주의 이치를 담기 위해 완전한 형식을 선택했다.</div>
+    </div>
+    <div class="form-row">
+      <span class="fr-icon">🔄</span>
+      <div class="fr-text"><strong>첫 글자와 마지막 글자가 모두 一</strong> — 一始無始一로 시작해 一終無終一로 끝난다. 형식 자체가 순환이다.</div>
+    </div>
+    <div class="form-row">
+      <span class="fr-icon">🔢</span>
+      <div class="fr-text"><strong>1부터 9까지의 숫자만 사용</strong> — 10은 1+0으로 다시 1로 돌아간다. 숫자의 선택 자체가 철학적 선언이다.</div>
+    </div>
+    <div class="form-row">
+      <span class="fr-icon">⚖️</span>
+      <div class="fr-text"><strong>천·지·인의 균등한 반복</strong> — 天, 地, 人이 각각 여러 번 반복되며 셋이 동등한 존재임을 형식으로 보여준다.</div>
+    </div>
+  </div>
+
+  <!-- 마무리 인사이트 -->
+  <div class="insight-box">
+    <p>우리 조상은 갈릴레오보다 훨씬 앞서 수로 우주를 썼다.<br>
+    그것도 9×9=81이라는 완전한 형식 안에.</p>
+  </div>
+
+  <!-- 2부 예고 -->
+  <div class="part2-preview">
+    <div class="p2-label">다음 회부터 2부 · 地의 논리 시작</div>
+    <div class="p2-text">1부에서 우주가 어떻게 시작됐는지 배웠다면 — 2부에서는 그 우주가 어떻게 작동하는지를 본다. 천·지·인이 만나면 무슨 일이 일어나는가.</div>
+  </div>
+
+  <!-- 열린 질문 -->
+  <div class="open-question">
+    <p>형식과 내용이 하나인 것 —<br>당신 삶에서 찾아볼 수 있는가.</p>
+    <p class="q-sub">다음 회부터 2부 · 地의 논리. 만남이 세상을 낳는다(大三合六 生七八九).</p>
+  </div>
+
+  <!-- 다음 회차 -->
+  <div class="next-episode">
+    <div class="next-label">다음 회</div>
+    <div class="next-content">
+      <strong>[9회] 만남이 세상을 낳는다(大三合六 生七八九) — 육각수의 비밀</strong><br>
+      하늘·땅·사람이 따로 있을 때는 아무 일도 일어나지 않는다. 셋이 만나는 순간 — 비로소 세상이 시작된다.
+    </div>
+  </div>
+
+  <!-- 태그 -->
+  <div class="tags">
+    <span class="tag">#천부경</span>
+    <span class="tag">#천부경81자</span>
+    <span class="tag">#9x9=81</span>
+    <span class="tag">#완전수</span>
+    <span class="tag">#수학은신의언어</span>
+    <span class="tag">#갈릴레오</span>
+    <span class="tag">#천부경해설</span>
+    <span class="tag">#한국철학</span>
+    <span class="tag">#동양철학</span>
+    <span class="tag">#인문학</span>
+  </div>
+
+</div>
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+  function toggleMenu() {
+    document.getElementById('mobileNav').classList.toggle('open');
+  }
+  function closeMenu() {
+    document.getElementById('mobileNav').classList.remove('open');
+  }
+</script>
+</body>
+</html>

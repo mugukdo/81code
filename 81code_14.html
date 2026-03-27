@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap');
+
+  :root {
+    --azure:      #7EB8F7;
+    --azure-l:    #B8D9FF;
+    --azure-dim:  #4A85D4;
+    --dark:       #07091A;
+    --dark2:      #0B0E24;
+    --dark3:      #0F1330;
+    --card-bg:    #111428;
+    --ink:        #EEF2FF;
+    --ink-dim:    rgba(238,242,255,.65);
+    --ink-mute:   rgba(238,242,255,.38);
+    --accent:     #7EB8F7;
+    --accent-l:   #B8D9FF;
+    --accent-pale:#0F1330;
+    --border:     rgba(126,184,247,.15);
+    --border-dim: rgba(126,184,247,.08);
+    --gold:       #7EB8F7;  /* 기존 금색 → 청람으로 매핑 */
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
+    background: var(--dark);
+    color: var(--ink);
+    line-height: 1.9;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 40%, rgba(107,163,232,.07) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 70%, rgba(107,163,232,.04) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 2.5rem;
+    background: rgba(8,14,28,.92);
+    border-bottom: 1px solid rgba(107,163,232,.12);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    transition: box-shadow .3s;
+  }
+  nav.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,.5); }
+  .nav-logo { font-size: .9rem; font-weight: 700; letter-spacing: .15em; color: var(--accent); text-decoration: none; font-family: 'Nanum Myeongjo', serif; }
+  .nav-links { display: flex; gap: 0; list-style: none; }
+  .nav-links a {
+    display: block; padding: .4rem .75rem;
+    font-size: .72rem; letter-spacing: .08em;
+    color: var(--ink); text-decoration: none;
+    opacity: .4; transition: opacity .2s, color .2s;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .nav-links a:hover { opacity: 1; color: var(--accent); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+  .hamburger span { display: block; width: 22px; height: 1px; background: var(--accent); transition: all .3s; }
+  .mobile-nav {
+    display: none; position: fixed; top: 57px; left: 0; right: 0;
+    background: rgba(8,14,28,.97); backdrop-filter: blur(16px);
+    z-index: 199; padding: .8rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .mobile-nav.open { display: block; }
+  .mobile-nav a {
+    display: block; padding: .7rem 2rem;
+    font-size: .85rem; color: var(--ink); text-decoration: none; opacity: .65;
+    border-bottom: 1px solid var(--border-dim);
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .mobile-nav a:hover { opacity: 1; color: var(--accent); }
+
+  /* ── 포스트 래퍼 ── */
+  .post-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 100px 28px 80px;
+    position: relative; z-index: 1;
+  }
+
+  /* ── 공통 요소 ── */
+  .series-badge {
+    display: inline-block;
+    font-size: 11px; font-weight: 500; letter-spacing: 2px;
+    color: var(--accent); border: 1px solid var(--border);
+    padding: 4px 14px; border-radius: 2px; margin-bottom: 28px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .post-title {
+    font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
+    font-size: 30px; font-weight: 800; color: var(--ink);
+    line-height: 1.4; margin-bottom: 12px; letter-spacing: -.5px;
+  }
+  .post-subtitle {
+    font-size: 15px; color: var(--azure-dim); font-style: italic;
+    margin-bottom: 40px; font-family: 'Noto Serif KR', serif;
+  }
+  .divider {
+    width: 48px; height: 1px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    margin-bottom: 40px;
+  }
+  .hook-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16.5px; color: var(--ink-dim);
+    line-height: 2; margin-bottom: 48px;
+    padding-left: 20px;
+    border-left: 2px solid rgba(126,184,247,.25);
+  }
+  .section-title {
+    font-size: 11px; font-weight: 500; letter-spacing: 3px;
+    color: var(--accent); text-transform: uppercase;
+    margin-bottom: 20px; margin-top: 48px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .body-text {
+    font-size: 15px; color: var(--ink-dim);
+    line-height: 2; margin-bottom: 20px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  /* ── 대화 ── */
+  .dialogue-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 28px 24px; margin: 32px 0;
+  }
+  .dialogue-title {
+    font-size: 11px; letter-spacing: 2px; color: var(--ink-mute);
+    text-transform: uppercase; margin-bottom: 20px; text-align: center;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .citizen {
+    display: flex; align-items: flex-start; gap: 14px;
+    margin-bottom: 6px; margin-top: 28px;
+  }
+  .citizen-label {
+    font-size: 11px; font-weight: 600; color: var(--dark);
+    background: var(--azure-dim); padding: 3px 10px;
+    border-radius: 12px; white-space: nowrap; margin-top: 3px;
+    letter-spacing: 1px; flex-shrink: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .citizen-text {
+    font-size: 14.5px; color: var(--ink-dim); line-height: 1.9;
+    background: rgba(74,133,212,.1); border-radius: 0 12px 12px 12px;
+    padding: 14px 18px; flex: 1;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .philosopher {
+    display: flex; align-items: flex-start; gap: 14px;
+    margin-bottom: 6px; margin-top: 6px; padding-left: 20px;
+  }
+  .philosopher-label {
+    font-size: 11px; font-weight: 600; color: var(--dark);
+    background: var(--accent); padding: 3px 10px;
+    border-radius: 12px; white-space: nowrap; margin-top: 3px;
+    letter-spacing: 1px; flex-shrink: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .philosopher-text {
+    font-size: 14.5px; color: var(--ink); line-height: 1.9;
+    background: rgba(126,184,247,.07); border-radius: 0 12px 12px 12px;
+    padding: 14px 18px; flex: 1;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  /* ── 인사이트 박스 ── */
+  .insight-box {
+    background: rgba(126,184,247,.06);
+    border-left: 3px solid var(--accent);
+    padding: 24px 28px; margin: 40px 0;
+    border-radius: 0 8px 8px 0;
+  }
+  .insight-box p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15.5px; color: var(--azure-l);
+    font-weight: 600; line-height: 1.9; font-style: italic;
+  }
+
+  /* ── 콘텐츠 박스 ── */
+  .content-box {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 28px 32px; margin: 32px 0;
+  }
+  .content-box-title {
+    font-size: 11px; font-weight: 600; color: var(--accent);
+    letter-spacing: 2px; margin-bottom: 16px; text-transform: uppercase;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .content-box p {
+    font-size: 14.5px; color: var(--ink-dim); line-height: 2; margin-bottom: 12px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .content-box p:last-child { margin-bottom: 0; }
+  .content-box strong { color: var(--accent-l); }
+
+  /* ── 구조 박스 (structure-box) ── */
+  .structure-box {
+    background: var(--dark3); border: 1px solid var(--border);
+    border-radius: 10px; padding: 28px 32px; margin: 20px 0;
+  }
+  .structure-box .s-title {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 19px; color: var(--accent-l); font-weight: 700; margin-bottom: 4px;
+  }
+  .structure-box .s-sub { font-size: 12px; color: var(--ink-mute); margin-bottom: 12px; font-family: 'Noto Sans KR', sans-serif; }
+  .structure-box .s-body { font-size: 14px; color: var(--ink-dim); line-height: 1.9; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+  .structure-box .s-q { font-size: 13px; color: var(--accent); margin-top: 10px; font-style: italic; font-family: 'Noto Serif KR', serif; }
+
+  /* ── 한자 테이블 ── */
+  .hanja-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; font-size: 14px; }
+  .hanja-table th {
+    background: rgba(126,184,247,.12); color: var(--accent-l);
+    padding: 10px 16px; text-align: left; font-weight: 500;
+    font-size: 12px; letter-spacing: 1px;
+    font-family: 'Noto Sans KR', sans-serif;
+    border-bottom: 1px solid var(--border);
+  }
+  .hanja-table th:first-child { text-align: center; width: 80px; }
+  .hanja-table th:nth-child(2) { width: 140px; }
+  .hanja-table td {
+    padding: 14px 16px; border-bottom: 1px solid var(--border-dim);
+    vertical-align: middle; color: var(--ink-dim); line-height: 1.7;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .hanja-table td:first-child {
+    text-align: center; font-size: 28px;
+    font-family: 'Noto Serif KR', serif; color: var(--accent); font-weight: 700;
+  }
+  .hanja-table td:nth-child(2) { font-size: 13px; color: var(--ink-mute); }
+  .hanja-table tr:nth-child(odd) td { background: rgba(255,255,255,.02); }
+  .hanja-table tr:nth-child(even) td { background: transparent; }
+
+  /* ── 타임라인 ── */
+  .timeline { margin: 32px 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .timeline-item {
+    display: flex; align-items: center; padding: 16px 24px;
+    border-bottom: 1px solid var(--border-dim); gap: 20px;
+  }
+  .timeline-item:last-child { border-bottom: none; }
+  .timeline-item:nth-child(odd) { background: rgba(126,184,247,.04); }
+  .timeline-item:nth-child(even) { background: transparent; }
+  .timeline-year { font-family: 'Noto Serif KR', serif; font-size: 14px; font-weight: 700; color: var(--accent); min-width: 130px; }
+  .timeline-desc { font-size: 13.5px; color: var(--ink-dim); line-height: 1.7; font-family: 'Noto Sans KR', sans-serif; }
+
+  /* ── 포인트 박스 ── */
+  .point-box { background: var(--dark3); border: 1px solid var(--border); border-radius: 10px; padding: 28px 32px; margin: 32px 0; }
+  .point-box .p-title { font-size: 11px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 16px; font-weight: 600; font-family: 'Noto Sans KR', sans-serif; }
+  .point-box .p-item { font-size: 14.5px; color: var(--ink-dim); line-height: 1.9; padding: 10px 0; border-bottom: 1px solid var(--border-dim); display: flex; gap: 12px; font-family: 'Noto Sans KR', sans-serif; }
+  .point-box .p-item:last-child { border-bottom: none; }
+  .point-box .p-num { color: var(--accent); font-weight: 700; flex-shrink: 0; }
+
+  /* ── 원문 박스 ── */
+  .original-box {
+    background: var(--dark2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 32px; margin: 32px 0; text-align: center;
+  }
+  .original-text {
+    font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
+    font-size: 22px; color: var(--accent-l); letter-spacing: 6px;
+    line-height: 2; font-weight: 700;
+  }
+  .original-reading { font-size: 13px; color: var(--ink-mute); letter-spacing: 4px; margin-top: 12px; font-family: 'Noto Sans KR', sans-serif; }
+
+  /* ── 한자 크게 ── */
+  .hanja-big { text-align: center; padding: 40px 0 20px; }
+  .hanja-big .main-hanja {
+    font-family: 'Nanum Myeongjo', serif; font-size: 64px; color: var(--accent);
+    font-weight: 800; letter-spacing: 16px; display: block; margin-bottom: 12px;
+  }
+  .hanja-big .reading { font-size: 13px; color: var(--ink-mute); letter-spacing: 6px; font-family: 'Noto Sans KR', sans-serif; }
+
+  /* ── 이전/다음 회차 ── */
+  .prev-episode {
+    background: rgba(126,184,247,.06); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 20px; margin-bottom: 32px;
+    font-size: 13.5px; color: var(--ink-dim); font-family: 'Noto Sans KR', sans-serif;
+  }
+  .prev-episode a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .next-episode {
+    background: var(--dark3); border: 1px solid var(--border);
+    border-radius: 10px; padding: 24px 28px; margin-top: 40px;
+    display: flex; align-items: center; gap: 20px;
+  }
+  .next-label { font-size: 10px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; font-weight: 600; white-space: nowrap; font-family: 'Noto Sans KR', sans-serif; }
+  .next-content { font-size: 14px; color: var(--ink-dim); line-height: 1.7; font-family: 'Noto Sans KR', sans-serif; }
+  .next-content strong { color: var(--ink); font-weight: 600; }
+
+  /* ── 열린 질문 ── */
+  .open-question { text-align: center; padding: 40px 20px; margin: 48px 0 0; border-top: 1px solid var(--border); }
+  .open-question p { font-family: 'Noto Serif KR', serif; font-size: 16px; color: var(--azure-l); font-style: italic; line-height: 1.9; }
+  .open-question .q-sub { font-size: 13px; color: var(--ink-mute); margin-top: 8px; font-family: 'Noto Sans KR', sans-serif; }
+
+  /* ── 태그 ── */
+  .tags { margin-top: 48px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag { font-size: 11.5px; color: var(--azure-dim); background: rgba(126,184,247,.06); border: 1px solid var(--border); padding: 4px 12px; border-radius: 20px; font-family: 'Noto Sans KR', sans-serif; }
+
+
+  /* ══ 파일 고유 스타일 ══ */
+  .epilogue-badge {
+    display: inline-block;
+    background: linear-gradient(90deg, #1A3A6A, #2A5A2A);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+
+  /* 여정 요약 */
+  .journey-box {
+    background: var(--dark);
+    border-radius: 12px;
+    padding: 32px 28px;
+    margin: 32px 0;
+  }
+
+  .journey-box .jb-label {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
+  .journey-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .journey-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    padding: 12px 16px;
+  }
+
+  .journey-item .ji-num {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 32px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .journey-item .ji-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-mute);
+    min-width: 140px;
+    flex-shrink: 0;
+  }
+
+  .journey-item .ji-desc {
+    font-size: 13px;
+    color: var(--ink-dim);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  /* 발견 카드 */
+  .discovery-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 32px 0;
+  }
+
+  .discovery-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .discovery-card .dc-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .discovery-card .dc-content { flex: 1; }
+
+  .discovery-card .dc-content strong {
+    display: block;
+    font-size: 15px;
+    color: var(--dark);
+    margin-bottom: 6px;
+    font-family: 'Noto Serif KR', serif;
+  }
+
+  .discovery-card .dc-content p {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.8;
+  }
+
+  .discovery-card .dc-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 14px;
+    color: var(--accent);
+    font-weight: 700;
+    margin-top: 6px;
+    display: block;
+  }
+
+  /* 철학자의 마지막 말 */
+  .last-words {
+    background: linear-gradient(135deg, var(--dark), #2a1a0e);
+    border-radius: 12px;
+    padding: 40px 32px;
+    margin: 32px 0;
+  }
+
+  .last-words .lw-label {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
+  .last-words .lw-content {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    color: var(--ink-dim);
+    line-height: 2.1;
+    margin-bottom: 16px;
+  }
+
+  .last-words .lw-key {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16px;
+    color: var(--accent);
+    font-weight: 700;
+    line-height: 2;
+    border-top: 1px solid rgba(126,184,247,0.3);
+    padding-top: 20px;
+    font-style: italic;
+  }
+
+  /* 원문 마지막 */
+  .final-text-box {
+    text-align: center;
+    padding: 48px 24px;
+    margin: 40px 0;
+    background: var(--dark);
+    border-radius: 12px;
+  }
+
+  .final-text-box .ft-top {
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .final-text-box .ft-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 6px;
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .final-text-box .ft-korean {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16px;
+    color: var(--ink-dim);
+    font-style: italic;
+    line-height: 1.9;
+  }
+
+  /* 시리즈 전체 링크 */
+  .series-list {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 32px 0;
+  }
+
+  .series-list-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--azure-dim);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .series-link-item {
+    font-size: 13px;
+    color: #555;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--dark3);
+    line-height: 1.6;
+  }
+
+  .series-link-item:last-child { border-bottom: none; }
+
+  .series-link-item span { color: var(--azure-dim); font-weight: 600; margin-right: 6px; }
+
+  @media (max-width: 640px) {
+    nav { padding: .9rem 1.4rem; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .post-wrap { padding: 80px 18px 60px; }
+  }
+</style>
+</head>
+<body>
+<nav id="nav">
+  <a href="index.html" class="nav-logo">天符經</a>
+  <ul class="nav-links">
+    <li><a href="index.html#episodes">전체 회차</a></li>
+    <li><a href="index.html#full-text">전문</a></li>
+    <li><a href="index.html#verses">핵심 구절</a></li>
+    <li><a href="index.html#philosophy">철학</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="메뉴">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html#episodes" onclick="closeMenu()">전체 회차</a>
+  <a href="index.html#full-text" onclick="closeMenu()">천부경 전문</a>
+  <a href="index.html#verses" onclick="closeMenu()">핵심 구절</a>
+  <a href="index.html#philosophy" onclick="closeMenu()">철학</a>
+</div>
+<div class="post-wrap">
+
+  <!-- 이전 회차 -->
+  <div class="prev-episode">
+    📖 이전 글 → <a href="#">[13회] 끝은 다시 시작이다(一終無終一) — 천부경은 고리다</a>
+  </div>
+
+  <!-- 시리즈 배지 -->
+  <div class="series-badge">시민과 철학자의 천부경 · 14회</div>
+
+  <!-- 에필로그 배지 -->
+  <div class="epilogue-badge">에필로그 · 81자의 여정을 마치며</div>
+
+  <!-- 제목 -->
+  <h1 class="post-title">나는 천부경을 읽다가 철학자가 되었다</h1>
+  <p class="post-subtitle">에필로그</p>
+  <div class="divider"></div>
+
+  <!-- 도입부 -->
+  <div class="hook-text">
+    <p>81자를 다 읽고 나니 — 이상하게 끝난 것 같지가 않다.</p>
+    <br>
+    <p>一終無終一이니까. 끝이 없는 끝이니까. 우리가 함께 걸어온 이 여정도, 천부경처럼 고리를 이루어 다시 처음으로 돌아가는 것이 아닐까.</p>
+  </div>
+
+  <!-- 대화 -->
+  <div class="section-title">▶ 시민과 철학자의 마지막 대화</div>
+
+  <div class="dialogue-section">
+    <div class="dialogue-title">81자를 다 걸어온 후</div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">81자를 다 읽고 나니... 이상하게 끝난 것 같지가 않아요.</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">一終無終一이니까요. 끝이 없는 끝이에요.</div>
+    </div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">천부경이 어렵고 고귀하게 느껴졌는데... 씨앗과 열매로, 석유와 플라스틱으로 읽으니까 이해가 됐어요. 이해가 잘 되니 기억에도 남고. 왠지 제가 철학자가 되어가는 것 같아요. 자연의 깨달음이랄까...</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">그게 진짜 철학이에요. 책에서 읽은 게 아니라 스스로 발견하는 것. 그게 천부경을 쓴 그 시대 사람들이 했던 것과 똑같은 방식이에요. 소크라테스도, 플라톤도, 그리고 우리 조상들도 — 모두 같은 방식으로 철학을 했어요.</div>
+    </div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">훌륭한 우리 조상들이 자랑스럽고 뿌듯해요. 아인슈타인도 못 푼 대통일이론을 관찰만으로 꿰뚫었다니.</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">그리고 그 자랑스러움을 혼자 갖고 있지 마세요. 더 많은 사람이 천부경을 통해 스스로 사유하고, 스스로 발견하고, 스스로 철학자가 될 수 있도록 — 이 이야기를 나눠주세요.</div>
+    </div>
+  </div>
+
+  <!-- 우리가 함께 발견한 것들 -->
+  <div class="section-title">▶ 우리가 함께 발견한 것들</div>
+  <p class="body-text">씨앗과 열매로, 석유와 플라스틱으로, 팽이와 지구로, 엄마 눈에 비친 아이로 — 천부경이 우리 삶 속에서 이미 살아 숨 쉬고 있었다는 것을 발견했다.</p>
+
+  <div class="discovery-section">
+    <div class="discovery-card">
+      <span class="dc-icon">🛢️</span>
+      <div class="dc-content">
+        <strong>석유가 플라스틱이 되어도 석유의 본질은 사라지지 않는다</strong>
+        <p>하늘·땅·사람은 형태는 달라도 같은 근본에서 나온 하나다.</p>
+        <span class="dc-hanja">析三極無盡本</span>
+      </div>
+    </div>
+    <div class="discovery-card">
+      <span class="dc-icon">🌌</span>
+      <div class="dc-content">
+        <strong>138억 년 전 우주, 46억 년 전 지구, 30만 년 전 인간</strong>
+        <p>현대 과학의 순서와 천부경의 아홉 글자가 정확히 일치한다.</p>
+        <span class="dc-hanja">天一一 地一二 人一三</span>
+      </div>
+    </div>
+    <div class="discovery-card">
+      <span class="dc-icon">☀️</span>
+      <div class="dc-content">
+        <strong>낮과 밤이 둘, 아침·낮·저녁이 셋 — 하늘도 땅도 사람도 같은 구조</strong>
+        <p>아인슈타인도 못 푼 대통일이론을 천부경은 아홉 글자로 담았다.</p>
+        <span class="dc-hanja">天二三 地二三 人二三</span>
+      </div>
+    </div>
+    <div class="discovery-card">
+      <span class="dc-icon">❄️</span>
+      <div class="dc-content">
+        <strong>눈송이가 항상 육각형인 이유 — 자연과 천부경이 6에서 만난다</strong>
+        <p>물 분자 6개가 육각형을 이루듯, 천지인 셋이 만나 6이 된다.</p>
+        <span class="dc-hanja">大三合六</span>
+      </div>
+    </div>
+    <div class="discovery-card">
+      <span class="dc-icon">🌀</span>
+      <div class="dc-content">
+        <strong>팽이가 자전하며 공전할 때 — 평면의 원과 입체의 구가 생긴다</strong>
+        <p>시간(三)과 공간(四)이 맞물려 계절 고리(五)와 우주 궤도(七)를 만든다.</p>
+        <span class="dc-hanja">運三四成環五七</span>
+      </div>
+    </div>
+    <div class="discovery-card">
+      <span class="dc-icon">👶</span>
+      <div class="dc-content">
+        <strong>엄마 눈에 비친 아기의 기질 — 중년이 되어도 사라지지 않는다</strong>
+        <p>쓰임은 변해도 근본은 움직이지 않는다. 그것이 당신의 본질이다.</p>
+        <span class="dc-hanja">用變不動本</span>
+      </div>
+    </div>
+    <div class="discovery-card">
+      <span class="dc-icon">🔢</span>
+      <div class="dc-content">
+        <strong>천부경은 9×9=81자 — 수로 우주를 설명하는 글을 수의 그릇에 담았다</strong>
+        <p>갈릴레오보다 수천 년 앞서, 우리 조상은 수학으로 우주를 썼다.</p>
+        <span class="dc-hanja">9×9=81</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 철학자의 마지막 말 -->
+  <div class="section-title">▶ 철학자의 마지막 말</div>
+  <div class="last-words">
+    <div class="lw-label">천부경을 이해하는 가장 쉬운 방법</div>
+    <div class="lw-content">
+      천부경을 이해하는 가장 쉬운 방법이 있다.<br><br>
+      지금의 잣대로 해석하려 하지 마라. 지금 우리의 눈으로 읽으면 천부경은 영원히 어렵고 난해한 경전으로 남는다.<br><br>
+      대신 이렇게 해보라. 그 시대로 돌아가라. 기원전 1만 년, 빙하기가 끝나고 인류가 처음으로 씨앗을 심기 시작하던 그 시절로. 망원경도 없고, 방정식도 없고, 문명의 소음도 없던 그 시대로. 그리고 그 시대의 눈으로 하늘을 보고, 땅을 보고, 사람을 보라.<br><br>
+      그 환경을 이해하고 질문을 던지면 — 천부경은 산수 문제처럼 풀린다. 어렵게 모실 필요가 없다. 그 시대 사람들이 자연을 보며 스스로 발견했듯이, 당신도 발견할 수 있다.
+    </div>
+    <div class="lw-key">
+      그것이 이 시리즈가 바라는 단 하나의 것이다.<br>
+      당신이 스스로 발견하는 것.<br>
+      그 순간 — 당신도 이미 철학자다.
+    </div>
+  </div>
+
+  <!-- 인사이트 -->
+  <div class="insight-box">
+    <p>수천 년 전, 위대한 관찰자들이 남긴 81자.<br>
+    그 안에 우주가 있고, 자연이 있고, 당신이 있다.</p>
+  </div>
+
+  <!-- 마무리 원문 -->
+  <div class="final-text-box">
+    <div class="ft-top">천부경 — 시작도 없고 끝도 없는</div>
+    <span class="ft-hanja">一始無始一 … 一終無終一</span>
+    <div class="ft-korean">
+      시작이 없는 하나에서 열려,<br>
+      끝이 없는 하나로 닫힌다.<br><br>
+      그리고 다시 — 一.
+    </div>
+  </div>
+
+  <!-- 시리즈 전체 목록 -->
+  <div class="section-title">▶ 시민과 철학자의 천부경 — 전체 시리즈</div>
+  <div class="series-list">
+    <div class="series-list-title">1회부터 14회까지 — 함께 걸어온 길</div>
+    <div class="series-link-item"><span>1회</span> 천부경(天符經)이란 무엇인가 — 이름 안에 이미 답이 있다</div>
+    <div class="series-link-item"><span>2회</span> 천부경, 경전이 아닌 관찰의 기록 — 그 시대로 돌아가라</div>
+    <div class="series-link-item"><span>3회</span> 시작이 없는 시작(一始無始一) — 우주는 언제 시작됐는가</div>
+    <div class="series-link-item"><span>4회</span> 나뉘어도 근본은 사라지지 않는다(析三極無盡本) — 석유와 플라스틱의 비밀</div>
+    <div class="series-link-item"><span>5회</span> 우주가 순서를 알고 있었다(天一一 地一二 人一三) — 138억 년의 이치</div>
+    <div class="series-link-item"><span>6회</span> 하나의 씨앗이 세상을 만든다(一積十鉅 無匱化三) — 봄날의 발견</div>
+    <div class="series-link-item"><span>7회</span> 우주는 하나의 법칙으로 움직인다(天二三 地二三 人二三) — 아인슈타인도 못 푼 것</div>
+    <div class="series-link-item"><span>8회</span> 천부경은 왜 81자인가(9×9=81) — 수학은 신의 언어</div>
+    <div class="series-link-item"><span>9회</span> 만남이 세상을 낳는다(大三合六 生七八九) — 육각수의 비밀</div>
+    <div class="series-link-item"><span>10회</span> 시간과 공간이 고리를 이룬다(運三四成環五七) — 끊어지지 않는 순환</div>
+    <div class="series-link-item"><span>11회</span> 변해도 변하지 않는 것(一妙衍 萬往萬來 用變不動本) — 엄마 눈에 비친 아이</div>
+    <div class="series-link-item"><span>12회</span> 사람 안에 이미 천지가 있다(本心本太陽 昻明 人中天地一) — 당신 안의 태양</div>
+    <div class="series-link-item"><span>13회</span> 끝은 다시 시작이다(一終無終一) — 천부경은 고리다</div>
+    <div class="series-link-item"><span>14회</span> 나는 천부경을 읽다가 철학자가 되었다 — 에필로그</div>
+    <div class="series-link-item"><span>15회</span> 천부경의 숫자 1~10 — 우주를 담은 열 개의 글자 (부록)</div>
+  </div>
+
+  <!-- 다음 회차 -->
+  <div class="next-episode">
+    <div class="next-label">마지막 회</div>
+    <div class="next-content">
+      <strong>[15회] 천부경의 숫자 1~10 — 우주를 담은 열 개의 글자</strong><br>
+      1부터 9까지, 그리고 10. 천부경이 담은 각 숫자의 의미를 한눈에 정리한다.
+    </div>
+  </div>
+
+  <!-- 태그 -->
+  <div class="tags">
+    <span class="tag">#천부경</span>
+    <span class="tag">#천부경에필로그</span>
+    <span class="tag">#천부경해설</span>
+    <span class="tag">#한국철학</span>
+    <span class="tag">#동양철학</span>
+    <span class="tag">#철학자</span>
+    <span class="tag">#자기계발</span>
+    <span class="tag">#인문학</span>
+    <span class="tag">#철학에세이</span>
+    <span class="tag">#一終無終一</span>
+  </div>
+
+</div>
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+  function toggleMenu() {
+    document.getElementById('mobileNav').classList.toggle('open');
+  }
+  function closeMenu() {
+    document.getElementById('mobileNav').classList.remove('open');
+  }
+</script>
+</body>
+</html>

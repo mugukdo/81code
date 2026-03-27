@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap');
+
+  :root {
+    --azure:      #7EB8F7;
+    --azure-l:    #B8D9FF;
+    --azure-dim:  #4A85D4;
+    --dark:       #07091A;
+    --dark2:      #0B0E24;
+    --dark3:      #0F1330;
+    --card-bg:    #111428;
+    --ink:        #EEF2FF;
+    --ink-dim:    rgba(238,242,255,.65);
+    --ink-mute:   rgba(238,242,255,.38);
+    --accent:     #7EB8F7;
+    --accent-l:   #B8D9FF;
+    --accent-pale:#0F1330;
+    --border:     rgba(126,184,247,.15);
+    --border-dim: rgba(126,184,247,.08);
+    --gold:       #7EB8F7;  /* 기존 금색 → 청람으로 매핑 */
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
+    background: var(--dark);
+    color: var(--ink);
+    line-height: 1.9;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 40%, rgba(107,163,232,.07) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 70%, rgba(107,163,232,.04) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 2.5rem;
+    background: rgba(8,14,28,.92);
+    border-bottom: 1px solid rgba(107,163,232,.12);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    transition: box-shadow .3s;
+  }
+  nav.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,.5); }
+  .nav-logo { font-size: .9rem; font-weight: 700; letter-spacing: .15em; color: var(--accent); text-decoration: none; font-family: 'Nanum Myeongjo', serif; }
+  .nav-links { display: flex; gap: 0; list-style: none; }
+  .nav-links a {
+    display: block; padding: .4rem .75rem;
+    font-size: .72rem; letter-spacing: .08em;
+    color: var(--ink); text-decoration: none;
+    opacity: .4; transition: opacity .2s, color .2s;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .nav-links a:hover { opacity: 1; color: var(--accent); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+  .hamburger span { display: block; width: 22px; height: 1px; background: var(--accent); transition: all .3s; }
+  .mobile-nav {
+    display: none; position: fixed; top: 57px; left: 0; right: 0;
+    background: rgba(8,14,28,.97); backdrop-filter: blur(16px);
+    z-index: 199; padding: .8rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .mobile-nav.open { display: block; }
+  .mobile-nav a {
+    display: block; padding: .7rem 2rem;
+    font-size: .85rem; color: var(--ink); text-decoration: none; opacity: .65;
+    border-bottom: 1px solid var(--border-dim);
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .mobile-nav a:hover { opacity: 1; color: var(--accent); }
+
+  /* ── 포스트 래퍼 ── */
+  .post-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 100px 28px 80px;
+    position: relative; z-index: 1;
+  }
+
+  /* ── 공통 요소 ── */
+  .series-badge {
+    display: inline-block;
+    font-size: 11px; font-weight: 500; letter-spacing: 2px;
+    color: var(--accent); border: 1px solid var(--border);
+    padding: 4px 14px; border-radius: 2px; margin-bottom: 28px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .post-title {
+    font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
+    font-size: 30px; font-weight: 800; color: var(--ink);
+    line-height: 1.4; margin-bottom: 12px; letter-spacing: -.5px;
+  }
+  .post-subtitle {
+    font-size: 15px; color: var(--azure-dim); font-style: italic;
+    margin-bottom: 40px; font-family: 'Noto Serif KR', serif;
+  }
+  .divider {
+    width: 48px; height: 1px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    margin-bottom: 40px;
+  }
+  .hook-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16.5px; color: var(--ink-dim);
+    line-height: 2; margin-bottom: 48px;
+    padding-left: 20px;
+    border-left: 2px solid rgba(126,184,247,.25);
+  }
+  .section-title {
+    font-size: 11px; font-weight: 500; letter-spacing: 3px;
+    color: var(--accent); text-transform: uppercase;
+    margin-bottom: 20px; margin-top: 48px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .body-text {
+    font-size: 15px; color: var(--ink-dim);
+    line-height: 2; margin-bottom: 20px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  /* ── 대화 ── */
+  .dialogue-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 28px 24px; margin: 32px 0;
+  }
+  .dialogue-title {
+    font-size: 11px; letter-spacing: 2px; color: var(--ink-mute);
+    text-transform: uppercase; margin-bottom: 20px; text-align: center;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .citizen {
+    display: flex; align-items: flex-start; gap: 14px;
+    margin-bottom: 6px; margin-top: 28px;
+  }
+  .citizen-label {
+    font-size: 11px; font-weight: 600; color: var(--dark);
+    background: var(--azure-dim); padding: 3px 10px;
+    border-radius: 12px; white-space: nowrap; margin-top: 3px;
+    letter-spacing: 1px; flex-shrink: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .citizen-text {
+    font-size: 14.5px; color: var(--ink-dim); line-height: 1.9;
+    background: rgba(74,133,212,.1); border-radius: 0 12px 12px 12px;
+    padding: 14px 18px; flex: 1;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .philosopher {
+    display: flex; align-items: flex-start; gap: 14px;
+    margin-bottom: 6px; margin-top: 6px; padding-left: 20px;
+  }
+  .philosopher-label {
+    font-size: 11px; font-weight: 600; color: var(--dark);
+    background: var(--accent); padding: 3px 10px;
+    border-radius: 12px; white-space: nowrap; margin-top: 3px;
+    letter-spacing: 1px; flex-shrink: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .philosopher-text {
+    font-size: 14.5px; color: var(--ink); line-height: 1.9;
+    background: rgba(126,184,247,.07); border-radius: 0 12px 12px 12px;
+    padding: 14px 18px; flex: 1;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  /* ── 인사이트 박스 ── */
+  .insight-box {
+    background: rgba(126,184,247,.06);
+    border-left: 3px solid var(--accent);
+    padding: 24px 28px; margin: 40px 0;
+    border-radius: 0 8px 8px 0;
+  }
+  .insight-box p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15.5px; color: var(--azure-l);
+    font-weight: 600; line-height: 1.9; font-style: italic;
+  }
+
+  /* ── 콘텐츠 박스 ── */
+  .content-box {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 28px 32px; margin: 32px 0;
+  }
+  .content-box-title {
+    font-size: 11px; font-weight: 600; color: var(--accent);
+    letter-spacing: 2px; margin-bottom: 16px; text-transform: uppercase;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .content-box p {
+    font-size: 14.5px; color: var(--ink-dim); line-height: 2; margin-bottom: 12px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .content-box p:last-child { margin-bottom: 0; }
+  .content-box strong { color: var(--accent-l); }
+
+  /* ── 구조 박스 (structure-box) ── */
+  .structure-box {
+    background: var(--dark3); border: 1px solid var(--border);
+    border-radius: 10px; padding: 28px 32px; margin: 20px 0;
+  }
+  .structure-box .s-title {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 19px; color: var(--accent-l); font-weight: 700; margin-bottom: 4px;
+  }
+  .structure-box .s-sub { font-size: 12px; color: var(--ink-mute); margin-bottom: 12px; font-family: 'Noto Sans KR', sans-serif; }
+  .structure-box .s-body { font-size: 14px; color: var(--ink-dim); line-height: 1.9; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+  .structure-box .s-q { font-size: 13px; color: var(--accent); margin-top: 10px; font-style: italic; font-family: 'Noto Serif KR', serif; }
+
+  /* ── 한자 테이블 ── */
+  .hanja-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; font-size: 14px; }
+  .hanja-table th {
+    background: rgba(126,184,247,.12); color: var(--accent-l);
+    padding: 10px 16px; text-align: left; font-weight: 500;
+    font-size: 12px; letter-spacing: 1px;
+    font-family: 'Noto Sans KR', sans-serif;
+    border-bottom: 1px solid var(--border);
+  }
+  .hanja-table th:first-child { text-align: center; width: 80px; }
+  .hanja-table th:nth-child(2) { width: 140px; }
+  .hanja-table td {
+    padding: 14px 16px; border-bottom: 1px solid var(--border-dim);
+    vertical-align: middle; color: var(--ink-dim); line-height: 1.7;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .hanja-table td:first-child {
+    text-align: center; font-size: 28px;
+    font-family: 'Noto Serif KR', serif; color: var(--accent); font-weight: 700;
+  }
+  .hanja-table td:nth-child(2) { font-size: 13px; color: var(--ink-mute); }
+  .hanja-table tr:nth-child(odd) td { background: rgba(255,255,255,.02); }
+  .hanja-table tr:nth-child(even) td { background: transparent; }
+
+  /* ── 타임라인 ── */
+  .timeline { margin: 32px 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .timeline-item {
+    display: flex; align-items: center; padding: 16px 24px;
+    border-bottom: 1px solid var(--border-dim); gap: 20px;
+  }
+  .timeline-item:last-child { border-bottom: none; }
+  .timeline-item:nth-child(odd) { background: rgba(126,184,247,.04); }
+  .timeline-item:nth-child(even) { background: transparent; }
+  .timeline-year { font-family: 'Noto Serif KR', serif; font-size: 14px; font-weight: 700; color: var(--accent); min-width: 130px; }
+  .timeline-desc { font-size: 13.5px; color: var(--ink-dim); line-height: 1.7; font-family: 'Noto Sans KR', sans-serif; }
+
+  /* ── 포인트 박스 ── */
+  .point-box { background: var(--dark3); border: 1px solid var(--border); border-radius: 10px; padding: 28px 32px; margin: 32px 0; }
+  .point-box .p-title { font-size: 11px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 16px; font-weight: 600; font-family: 'Noto Sans KR', sans-serif; }
+  .point-box .p-item { font-size: 14.5px; color: var(--ink-dim); line-height: 1.9; padding: 10px 0; border-bottom: 1px solid var(--border-dim); display: flex; gap: 12px; font-family: 'Noto Sans KR', sans-serif; }
+  .point-box .p-item:last-child { border-bottom: none; }
+  .point-box .p-num { color: var(--accent); font-weight: 700; flex-shrink: 0; }
+
+  /* ── 원문 박스 ── */
+  .original-box {
+    background: var(--dark2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 32px; margin: 32px 0; text-align: center;
+  }
+  .original-text {
+    font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
+    font-size: 22px; color: var(--accent-l); letter-spacing: 6px;
+    line-height: 2; font-weight: 700;
+  }
+  .original-reading { font-size: 13px; color: var(--ink-mute); letter-spacing: 4px; margin-top: 12px; font-family: 'Noto Sans KR', sans-serif; }
+
+  /* ── 한자 크게 ── */
+  .hanja-big { text-align: center; padding: 40px 0 20px; }
+  .hanja-big .main-hanja {
+    font-family: 'Nanum Myeongjo', serif; font-size: 64px; color: var(--accent);
+    font-weight: 800; letter-spacing: 16px; display: block; margin-bottom: 12px;
+  }
+  .hanja-big .reading { font-size: 13px; color: var(--ink-mute); letter-spacing: 6px; font-family: 'Noto Sans KR', sans-serif; }
+
+  /* ── 이전/다음 회차 ── */
+  .prev-episode {
+    background: rgba(126,184,247,.06); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 20px; margin-bottom: 32px;
+    font-size: 13.5px; color: var(--ink-dim); font-family: 'Noto Sans KR', sans-serif;
+  }
+  .prev-episode a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .next-episode {
+    background: var(--dark3); border: 1px solid var(--border);
+    border-radius: 10px; padding: 24px 28px; margin-top: 40px;
+    display: flex; align-items: center; gap: 20px;
+  }
+  .next-label { font-size: 10px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; font-weight: 600; white-space: nowrap; font-family: 'Noto Sans KR', sans-serif; }
+  .next-content { font-size: 14px; color: var(--ink-dim); line-height: 1.7; font-family: 'Noto Sans KR', sans-serif; }
+  .next-content strong { color: var(--ink); font-weight: 600; }
+
+  /* ── 열린 질문 ── */
+  .open-question { text-align: center; padding: 40px 20px; margin: 48px 0 0; border-top: 1px solid var(--border); }
+  .open-question p { font-family: 'Noto Serif KR', serif; font-size: 16px; color: var(--azure-l); font-style: italic; line-height: 1.9; }
+  .open-question .q-sub { font-size: 13px; color: var(--ink-mute); margin-top: 8px; font-family: 'Noto Sans KR', sans-serif; }
+
+  /* ── 태그 ── */
+  .tags { margin-top: 48px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag { font-size: 11.5px; color: var(--azure-dim); background: rgba(126,184,247,.06); border: 1px solid var(--border); padding: 4px 12px; border-radius: 20px; font-family: 'Noto Sans KR', sans-serif; }
+
+
+  /* ══ 파일 고유 스타일 ══ */
+  .part-badge {
+    display: inline-block;
+    background: #2A5A2A;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+
+  .original-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 4px;
+    display: block;
+    margin-bottom: 14px;
+    line-height: 1.9;
+  }
+
+  .original-translation {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    color: var(--ink-dim);
+    font-style: italic;
+    line-height: 1.9;
+  }
+
+  /* 세 토막 분석 */
+  .three-phrase {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 32px 0;
+  }
+
+  .phrase-row {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+  }
+
+  .phrase-row .pr-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--azure-dim);
+    min-width: 150px;
+    flex-shrink: 0;
+  }
+
+  .phrase-row .pr-arrow {
+    font-size: 18px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .phrase-row .pr-meaning {
+    font-size: 14px;
+    color: var(--ink-dim);
+    line-height: 1.7;
+    flex: 1;
+  }
+
+  .phrase-row.highlight {
+    background: var(--dark2);
+    border-color: var(--accent);
+  }
+
+  /* 태양 시각화 */
+  .sun-box {
+    background: linear-gradient(135deg, var(--dark), #2a1a0e);
+    border-radius: 12px;
+    padding: 40px 32px;
+    margin: 32px 0;
+    text-align: center;
+  }
+
+  .sun-box .sb-label {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .sun-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  .sun-state {
+    text-align: center;
+    flex: 1;
+    min-width: 140px;
+  }
+
+  .sun-state .ss-icon {
+    font-size: 40px;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .sun-state .ss-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+
+  .sun-state .ss-desc {
+    font-size: 12px;
+    color: var(--ink-mute);
+    line-height: 1.6;
+  }
+
+  .sun-divider {
+    font-size: 28px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .sun-conclusion {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16px;
+    color: var(--ink-dim);
+    line-height: 1.9;
+    font-style: italic;
+    border-top: 1px solid rgba(126,184,247,0.3);
+    padding-top: 20px;
+  }
+
+  .sun-conclusion strong { color: var(--accent); }
+
+  /* 本心本太陽 설명 */
+  .bonshim-box {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin: 32px 0;
+  }
+
+  .bonshim-box-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--azure-dim);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .bonshim-items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .bonshim-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid #f0e8d4;
+  }
+
+  .bonshim-item:last-child { border-bottom: none; }
+
+  .bonshim-item .bi-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+
+  .bonshim-item .bi-content { flex: 1; }
+
+  .bonshim-item .bi-content strong {
+    display: block;
+    font-size: 14px;
+    color: var(--dark);
+    margin-bottom: 4px;
+  }
+
+  .bonshim-item .bi-content p {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.7;
+  }
+
+  /* 人中天地一 시각화 */
+  .injung-box {
+    background: var(--dark);
+    border-radius: 12px;
+    padding: 32px 28px;
+    margin: 32px 0;
+    text-align: center;
+  }
+
+  .injung-box .ib-label {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .injung-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 8px;
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  .injung-items {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .injung-item {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(126,184,247,0.3);
+    border-radius: 8px;
+    padding: 16px 20px;
+    text-align: center;
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .injung-item .ii-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 24px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .injung-item.cheon .ii-hanja { color: #6A9ACA; }
+
+  .injung-item.ji .ii-hanja { color: var(--accent); }
+
+  .injung-item.in .ii-hanja { color: #6ACA6A; }
+
+  .injung-item .ii-desc {
+    font-size: 12px;
+    color: var(--ink-mute);
+    line-height: 1.6;
+  }
+
+  .injung-conclusion {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    color: var(--ink-dim);
+    line-height: 1.9;
+    border-top: 1px solid rgba(126,184,247,0.3);
+    padding-top: 16px;
+    font-style: italic;
+  }
+
+  /* 악과 선 아이러니 */
+  .irony-box {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin: 32px 0;
+  }
+
+  .irony-box-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--azure-dim);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .irony-content {
+    font-size: 15px;
+    color: var(--ink-dim);
+    line-height: 2;
+    margin-bottom: 16px;
+  }
+
+  .irony-examples {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+
+  .irony-ex {
+    flex: 1;
+    min-width: 140px;
+    background: rgba(126,184,247,.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+
+  .irony-ex .ie-icon { font-size: 24px; display: block; margin-bottom: 6px; }
+
+  .irony-ex .ie-text { font-size: 13px; color: #555; line-height: 1.6; }
+
+  @media (max-width: 640px) {
+    nav { padding: .9rem 1.4rem; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .post-wrap { padding: 80px 18px 60px; }
+  }
+</style>
+</head>
+<body>
+<nav id="nav">
+  <a href="index.html" class="nav-logo">天符經</a>
+  <ul class="nav-links">
+    <li><a href="index.html#episodes">전체 회차</a></li>
+    <li><a href="index.html#full-text">전문</a></li>
+    <li><a href="index.html#verses">핵심 구절</a></li>
+    <li><a href="index.html#philosophy">철학</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="메뉴">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html#episodes" onclick="closeMenu()">전체 회차</a>
+  <a href="index.html#full-text" onclick="closeMenu()">천부경 전문</a>
+  <a href="index.html#verses" onclick="closeMenu()">핵심 구절</a>
+  <a href="index.html#philosophy" onclick="closeMenu()">철학</a>
+</div>
+<div class="post-wrap">
+
+  <!-- 이전 회차 -->
+  <div class="prev-episode">
+    📖 이전 글 → <a href="#">[11회] 변해도 변하지 않는 것(一妙衍 萬往萬來 用變不動本) — 엄마 눈에 비친 아이</a>
+  </div>
+
+  <!-- 시리즈 배지 -->
+  <div class="series-badge">시민과 철학자의 천부경 · 12회</div>
+
+  <!-- 3부 배지 -->
+  <div class="part-badge">3부 · 人의 논리 — 인간 존재의 의미</div>
+
+  <!-- 제목 -->
+  <h1 class="post-title">사람 안에 이미 천지가 있다(本心本太陽 昻明 人中天地一)</h1>
+  <p class="post-subtitle">당신 안의 태양</p>
+  <div class="divider"></div>
+
+  <!-- 도입부 -->
+  <div class="hook-text">
+    <p>태양은 구름에 가려질 수는 있어도 꺼지지 않는다.</p>
+    <br>
+    <p>아무리 짙은 먹구름이 끼어도 태양은 여전히 거기 있다. 本心本太陽 — 본래의 마음도 그렇다. 세상의 부조리에 지치고, 배신에 상처 입고, 욕망에 휩쓸려도 — 사람 안에 있는 그 본래의 빛은 사라지지 않는다. 그리고 그 빛을 품은 사람 안에 — 하늘과 땅이 하나로 담겨 있다.</p>
+  </div>
+
+  <!-- 원문 -->
+  <div class="section-title">▶ 원문</div>
+  <div class="original-box">
+    <span class="original-hanja">本心本太陽  昻明  人中天地一</span>
+    <span class="original-reading">본심본태양  ·  앙명  ·  인중천지일</span>
+    <span class="original-translation">"본래 마음은 본래 태양이라,<br>밝게 빛나니<br>사람 안에 천지가 하나로 있다"</span>
+  </div>
+
+  <!-- 한자 풀이 -->
+  <div class="section-title">▶ 한자 풀이</div>
+  <table class="hanja-table">
+    <tr>
+      <th>한자</th>
+      <th>음(音)</th>
+      <th>뜻</th>
+    </tr>
+    <tr>
+      <td>本心</td>
+      <td>본심</td>
+      <td>본래의 마음. 꾸밈없는 원래의 내면. 세상에 물들기 전의 순수한 마음.</td>
+    </tr>
+    <tr>
+      <td>本太陽</td>
+      <td>본태양</td>
+      <td>본래 태양이다. 마음의 본질이 태양처럼 빛난다는 선언. 태양은 꺼지지 않는다.</td>
+    </tr>
+    <tr>
+      <td>昻</td>
+      <td>앙</td>
+      <td>높다, 드높다. 위로 솟아오르는 기상. 빛이 위를 향해 뻗어나가는 모습.</td>
+    </tr>
+    <tr>
+      <td>明</td>
+      <td>명</td>
+      <td>밝다. 어둠을 밝히는 빛. 昻明 — 높이 밝게 빛난다.</td>
+    </tr>
+    <tr>
+      <td>人中</td>
+      <td>인중</td>
+      <td>사람 안에. 외부가 아닌 인간의 내면에 이미 담겨 있음을 뜻한다.</td>
+    </tr>
+    <tr>
+      <td>天地</td>
+      <td>천지</td>
+      <td>하늘과 땅. 우주 전체를 상징한다. 그 광대한 우주가 사람 안에 있다.</td>
+    </tr>
+    <tr>
+      <td>一</td>
+      <td>일</td>
+      <td>하나. 천지가 인간 안에서 하나로 합쳐짐. 천부경의 처음과 끝을 관통하는 그 하나.</td>
+    </tr>
+  </table>
+
+  <!-- 세 토막 분석 -->
+  <div class="section-title">▶ 세 토막으로 읽기</div>
+  <div class="three-phrase">
+    <div class="phrase-row">
+      <div class="pr-hanja">本心本太陽</div>
+      <div class="pr-arrow">→</div>
+      <div class="pr-meaning">본래 마음은 본래 태양이다. 태양처럼 꺼지지 않는다. 구름에 가려질 뿐 사라지지 않는다.</div>
+    </div>
+    <div class="phrase-row">
+      <div class="pr-hanja">昻明</div>
+      <div class="pr-arrow">→</div>
+      <div class="pr-meaning">높이 밝게 빛난다. 태양이 위를 향해 빛을 뻗듯, 본래 마음도 그렇게 빛난다.</div>
+    </div>
+    <div class="phrase-row highlight">
+      <div class="pr-hanja">人中天地一</div>
+      <div class="pr-arrow">→</div>
+      <div class="pr-meaning"><strong>사람 안에 천지가 하나로 있다.</strong> 하늘과 땅이 저 멀리 있는 게 아니라 — 이미 당신 안에 담겨 있다.</div>
+    </div>
+  </div>
+
+  <!-- 태양 시각화 -->
+  <div class="section-title">▶ 본래 마음은 태양과 같다</div>
+  <div class="sun-box">
+    <div class="sb-label">本心本太陽 — 꺼지지 않는 빛</div>
+    <div class="sun-visual">
+      <div class="sun-state">
+        <span class="ss-icon">⛅</span>
+        <div class="ss-title">구름이 낀 날</div>
+        <div class="ss-desc">세상의 부조리에 지치고<br>배신에 상처 입고<br>욕망에 휩쓸려도</div>
+      </div>
+      <div class="sun-divider">≠</div>
+      <div class="sun-state">
+        <span class="ss-icon">🌑</span>
+        <div class="ss-title">태양이 꺼진 것</div>
+        <div class="ss-desc">구름이 태양을 가릴 수는 있다.<br>그러나 태양은<br>여전히 거기 있다.</div>
+      </div>
+    </div>
+    <div class="sun-conclusion">
+      本心本太陽 — 본래 마음은 태양과 같다.<br>
+      <strong>가려질 수는 있어도, 꺼지지 않는다.</strong>
+    </div>
+  </div>
+
+  <!-- 本心本太陽 설명 -->
+  <div class="section-title">▶ 구름에 가려지는 것들</div>
+  <div class="bonshim-box">
+    <div class="bonshim-box-title">태양(본래 마음)을 가리는 구름들 — 그러나 태양은 사라지지 않는다</div>
+    <div class="bonshim-items">
+      <div class="bonshim-item">
+        <span class="bi-icon">😔</span>
+        <div class="bi-content">
+          <strong>세상의 부조리와 배신</strong>
+          <p>사기꾼은 끊임없이 나오고 배신은 인간의 본성이기에 없어지지 않는다. 그래도 본래 마음의 빛은 사라지지 않는다.</p>
+        </div>
+      </div>
+      <div class="bonshim-item">
+        <span class="bi-icon">😤</span>
+        <div class="bi-content">
+          <strong>욕망과 분노</strong>
+          <p>욕망과 분노는 인간이 가진 본성이다. 그것에 휩쓸려도 — 본래의 밝은 마음이 완전히 꺼지지는 않는다.</p>
+        </div>
+      </div>
+      <div class="bonshim-item">
+        <span class="bi-icon">🌫️</span>
+        <div class="bi-content">
+          <strong>지치고 막막한 순간</strong>
+          <p>살다 보면 정답이 없어 막막한 순간이 온다. 그때도 태양은 구름 뒤에 있다. 本心本太陽.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 人中天地一 시각화 -->
+  <div class="section-title">▶ 人中天地一 — 사람 안에 이미 천지가 있다</div>
+  <div class="injung-box">
+    <div class="ib-label">人中天地一 — 우주가 사람 안에</div>
+    <span class="injung-hanja">人中天地一</span>
+    <div class="injung-items">
+      <div class="injung-item cheon">
+        <span class="ii-hanja">天</span>
+        <div class="ii-desc">하늘의 밝음<br>이성과 통찰<br>높은 곳을 향하는 마음</div>
+      </div>
+      <div class="injung-item" style="background:rgba(201,168,76,0.15); border:2px solid #C9A84C;">
+        <span style="font-family:'Noto Serif KR',serif; font-size:24px; font-weight:700; color:#C9A84C; display:block; margin-bottom:6px;">人</span>
+        <div style="font-size:12px; color:#e0d8c8; line-height:1.6;">사람 안에<br>天과 地가<br>하나로 담겨 있다</div>
+      </div>
+      <div class="injung-item ji">
+        <span class="ii-hanja">地</span>
+        <div class="ii-desc">땅의 어둠<br>욕망과 본능<br>현실에 발 딛는 힘</div>
+      </div>
+    </div>
+    <div class="injung-conclusion">
+      하늘의 밝음과 땅의 어둠이 모두 사람 안에 있다.<br>
+      선과 악, 사랑과 욕망, 용기와 두려움 — 그 모든 것이 한 사람 안에 공존한다.<br>
+      그것이 인간이다.
+    </div>
+  </div>
+
+  <!-- 악과 선의 아이러니 -->
+  <div class="section-title">▶ 악이 없으면 선도 의미를 잃는다</div>
+  <div class="irony-box">
+    <div class="irony-box-title">人中天地一이 말하는 세상의 균형</div>
+    <div class="irony-content">세상의 부조리를 깨고 모두가 계몽되었으면 하지만 — 악이 없으면 선도 그 의미를 잃는다. 천부경이 처음부터 음과 양의 균형으로 설명한 것도 이 때문이 아닐까. 세상은 완전한 선으로 이루어지는 게 아니라 빛과 어둠이 맞물려 돌아가며 앞으로 나아간다.</div>
+    <div class="irony-examples">
+      <div class="irony-ex">
+        <span class="ie-icon">⚖️</span>
+        <div class="ie-text">범죄가 있어야<br>경찰·판사가 있다</div>
+      </div>
+      <div class="irony-ex">
+        <span class="ie-icon">🌗</span>
+        <div class="ie-text">어둠이 있어야<br>빛이 보인다</div>
+      </div>
+      <div class="irony-ex">
+        <span class="ie-icon">🌱</span>
+        <div class="ie-text">시련이 있어야<br>성장이 있다</div>
+      </div>
+      <div class="irony-ex">
+        <span class="ie-icon">🔥</span>
+        <div class="ie-text">마찰이 있어야<br>세상이 발전한다</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 대화 -->
+  <div class="section-title">▶ 시민과 철학자의 대화</div>
+
+  <div class="dialogue-section">
+    <div class="dialogue-title">本心本太陽 昻明 人中天地一 — 사람 안에 이미 천지가 있다</div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">本心本太陽 昻明... 본래 마음은 태양과 같다. 이 구절에서 뭔가 뭉클한 게 있어요.</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">태양은 구름에 가려질 수는 있어도 꺼지지 않아요. 아무리 짙은 먹구름이 끼어도 태양은 여전히 거기 있죠. 세상의 부조리에 지치고, 배신에 상처 입고, 욕망에 휩쓸려도 — 사람 안에 있는 그 본래의 빛은 사라지지 않는다는 거예요.</div>
+    </div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">그런데 저는 이런 생각도 해요. 세상의 부조리를 깨고 모두가 계몽되었으면 하지만... 사기꾼은 끊임없이 나오고 배신과 욕망은 없어지지 않을 것 같고. 그런데 아이러니하게도 악이 없으면 선도 의미를 잃지 않을까요?</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">그게 바로 人中天地一이에요. 하늘의 밝음과 땅의 어둠이 모두 사람 안에 있다는 거예요. 선과 악, 사랑과 욕망, 용기와 두려움 — 그 모든 것이 한 사람 안에 공존해요. 세상은 완전한 선으로 이루어지는 게 아니라 빛과 어둠이 맞물려 돌아가며 앞으로 나아가는 것으로 보여요.</div>
+    </div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">살다 보니 정답은 없지만 정답을 찾아가는 여정이랄까... 그래도 사유할 수 있고 그 여유가 있다는 것 자체가 행복한 삶이 아닌가 싶어요.</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">그게 바로 人中天地一의 실천이에요. 사람 안에 천지가 있다는 말은, 우주의 모든 이치를 이미 품고 태어났다는 뜻이기도 해요. 사유할 수 있다는 것 — 그것만으로도 이미 충분히 빛나는 삶이에요.</div>
+    </div>
+  </div>
+
+  <!-- 인사이트 -->
+  <div class="insight-box">
+    <p>人中天地一.<br>
+    사람 안에 하늘의 밝음과 땅의 어둠이 모두 있다.<br>
+    정답을 찾아가는 여정 그 자체가, 이미 빛나는 삶이다.</p>
+  </div>
+
+  <!-- 열린 질문 -->
+  <div class="open-question">
+    <p>당신 안의 태양은 지금 어디 있는가.</p>
+    <p class="q-sub">구름에 가려져 있다면 — 그것은 꺼진 것인가, 아니면 여전히 거기 있는 것인가.</p>
+  </div>
+
+  <!-- 다음 회차 -->
+  <div class="next-episode">
+    <div class="next-label">다음 회</div>
+    <div class="next-content">
+      <strong>[13회] 끝은 다시 시작이다(一終無終一) — 천부경은 고리다</strong><br>
+      첫 글자도 一, 마지막 글자도 一. 천부경 자체가 끝이 없는 고리다.
+    </div>
+  </div>
+
+  <!-- 태그 -->
+  <div class="tags">
+    <span class="tag">#천부경</span>
+    <span class="tag">#본심본태양</span>
+    <span class="tag">#本心本太陽</span>
+    <span class="tag">#인중천지일</span>
+    <span class="tag">#人中天地一</span>
+    <span class="tag">#천부경해설</span>
+    <span class="tag">#한국철학</span>
+    <span class="tag">#동양철학</span>
+    <span class="tag">#인문학</span>
+    <span class="tag">#철학에세이</span>
+  </div>
+
+</div>
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+  function toggleMenu() {
+    document.getElementById('mobileNav').classList.toggle('open');
+  }
+  function closeMenu() {
+    document.getElementById('mobileNav').classList.remove('open');
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap');
+
+  :root {
+    --azure:      #7EB8F7;
+    --azure-l:    #B8D9FF;
+    --azure-dim:  #4A85D4;
+    --dark:       #07091A;
+    --dark2:      #0B0E24;
+    --dark3:      #0F1330;
+    --card-bg:    #111428;
+    --ink:        #EEF2FF;
+    --ink-dim:    rgba(238,242,255,.65);
+    --ink-mute:   rgba(238,242,255,.38);
+    --accent:     #7EB8F7;
+    --accent-l:   #B8D9FF;
+    --accent-pale:#0F1330;
+    --border:     rgba(126,184,247,.15);
+    --border-dim: rgba(126,184,247,.08);
+    --gold:       #7EB8F7;  /* 기존 금색 → 청람으로 매핑 */
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
+    background: var(--dark);
+    color: var(--ink);
+    line-height: 1.9;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 40%, rgba(107,163,232,.07) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 70%, rgba(107,163,232,.04) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 2.5rem;
+    background: rgba(8,14,28,.92);
+    border-bottom: 1px solid rgba(107,163,232,.12);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    transition: box-shadow .3s;
+  }
+  nav.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,.5); }
+  .nav-logo { font-size: .9rem; font-weight: 700; letter-spacing: .15em; color: var(--accent); text-decoration: none; font-family: 'Nanum Myeongjo', serif; }
+  .nav-links { display: flex; gap: 0; list-style: none; }
+  .nav-links a {
+    display: block; padding: .4rem .75rem;
+    font-size: .72rem; letter-spacing: .08em;
+    color: var(--ink); text-decoration: none;
+    opacity: .4; transition: opacity .2s, color .2s;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .nav-links a:hover { opacity: 1; color: var(--accent); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+  .hamburger span { display: block; width: 22px; height: 1px; background: var(--accent); transition: all .3s; }
+  .mobile-nav {
+    display: none; position: fixed; top: 57px; left: 0; right: 0;
+    background: rgba(8,14,28,.97); backdrop-filter: blur(16px);
+    z-index: 199; padding: .8rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .mobile-nav.open { display: block; }
+  .mobile-nav a {
+    display: block; padding: .7rem 2rem;
+    font-size: .85rem; color: var(--ink); text-decoration: none; opacity: .65;
+    border-bottom: 1px solid var(--border-dim);
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .mobile-nav a:hover { opacity: 1; color: var(--accent); }
+
+  /* ── 포스트 래퍼 ── */
+  .post-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 100px 28px 80px;
+    position: relative; z-index: 1;
+  }
+
+  /* ── 공통 요소 ── */
+  .series-badge {
+    display: inline-block;
+    font-size: 11px; font-weight: 500; letter-spacing: 2px;
+    color: var(--accent); border: 1px solid var(--border);
+    padding: 4px 14px; border-radius: 2px; margin-bottom: 28px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .post-title {
+    font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
+    font-size: 30px; font-weight: 800; color: var(--ink);
+    line-height: 1.4; margin-bottom: 12px; letter-spacing: -.5px;
+  }
+  .post-subtitle {
+    font-size: 15px; color: var(--azure-dim); font-style: italic;
+    margin-bottom: 40px; font-family: 'Noto Serif KR', serif;
+  }
+  .divider {
+    width: 48px; height: 1px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    margin-bottom: 40px;
+  }
+  .hook-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16.5px; color: var(--ink-dim);
+    line-height: 2; margin-bottom: 48px;
+    padding-left: 20px;
+    border-left: 2px solid rgba(126,184,247,.25);
+  }
+  .section-title {
+    font-size: 11px; font-weight: 500; letter-spacing: 3px;
+    color: var(--accent); text-transform: uppercase;
+    margin-bottom: 20px; margin-top: 48px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .body-text {
+    font-size: 15px; color: var(--ink-dim);
+    line-height: 2; margin-bottom: 20px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  /* ── 대화 ── */
+  .dialogue-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 28px 24px; margin: 32px 0;
+  }
+  .dialogue-title {
+    font-size: 11px; letter-spacing: 2px; color: var(--ink-mute);
+    text-transform: uppercase; margin-bottom: 20px; text-align: center;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .citizen {
+    display: flex; align-items: flex-start; gap: 14px;
+    margin-bottom: 6px; margin-top: 28px;
+  }
+  .citizen-label {
+    font-size: 11px; font-weight: 600; color: var(--dark);
+    background: var(--azure-dim); padding: 3px 10px;
+    border-radius: 12px; white-space: nowrap; margin-top: 3px;
+    letter-spacing: 1px; flex-shrink: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .citizen-text {
+    font-size: 14.5px; color: var(--ink-dim); line-height: 1.9;
+    background: rgba(74,133,212,.1); border-radius: 0 12px 12px 12px;
+    padding: 14px 18px; flex: 1;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .philosopher {
+    display: flex; align-items: flex-start; gap: 14px;
+    margin-bottom: 6px; margin-top: 6px; padding-left: 20px;
+  }
+  .philosopher-label {
+    font-size: 11px; font-weight: 600; color: var(--dark);
+    background: var(--accent); padding: 3px 10px;
+    border-radius: 12px; white-space: nowrap; margin-top: 3px;
+    letter-spacing: 1px; flex-shrink: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .philosopher-text {
+    font-size: 14.5px; color: var(--ink); line-height: 1.9;
+    background: rgba(126,184,247,.07); border-radius: 0 12px 12px 12px;
+    padding: 14px 18px; flex: 1;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  /* ── 인사이트 박스 ── */
+  .insight-box {
+    background: rgba(126,184,247,.06);
+    border-left: 3px solid var(--accent);
+    padding: 24px 28px; margin: 40px 0;
+    border-radius: 0 8px 8px 0;
+  }
+  .insight-box p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15.5px; color: var(--azure-l);
+    font-weight: 600; line-height: 1.9; font-style: italic;
+  }
+
+  /* ── 콘텐츠 박스 ── */
+  .content-box {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 28px 32px; margin: 32px 0;
+  }
+  .content-box-title {
+    font-size: 11px; font-weight: 600; color: var(--accent);
+    letter-spacing: 2px; margin-bottom: 16px; text-transform: uppercase;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .content-box p {
+    font-size: 14.5px; color: var(--ink-dim); line-height: 2; margin-bottom: 12px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .content-box p:last-child { margin-bottom: 0; }
+  .content-box strong { color: var(--accent-l); }
+
+  /* ── 구조 박스 (structure-box) ── */
+  .structure-box {
+    background: var(--dark3); border: 1px solid var(--border);
+    border-radius: 10px; padding: 28px 32px; margin: 20px 0;
+  }
+  .structure-box .s-title {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 19px; color: var(--accent-l); font-weight: 700; margin-bottom: 4px;
+  }
+  .structure-box .s-sub { font-size: 12px; color: var(--ink-mute); margin-bottom: 12px; font-family: 'Noto Sans KR', sans-serif; }
+  .structure-box .s-body { font-size: 14px; color: var(--ink-dim); line-height: 1.9; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+  .structure-box .s-q { font-size: 13px; color: var(--accent); margin-top: 10px; font-style: italic; font-family: 'Noto Serif KR', serif; }
+
+  /* ── 한자 테이블 ── */
+  .hanja-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; font-size: 14px; }
+  .hanja-table th {
+    background: rgba(126,184,247,.12); color: var(--accent-l);
+    padding: 10px 16px; text-align: left; font-weight: 500;
+    font-size: 12px; letter-spacing: 1px;
+    font-family: 'Noto Sans KR', sans-serif;
+    border-bottom: 1px solid var(--border);
+  }
+  .hanja-table th:first-child { text-align: center; width: 80px; }
+  .hanja-table th:nth-child(2) { width: 140px; }
+  .hanja-table td {
+    padding: 14px 16px; border-bottom: 1px solid var(--border-dim);
+    vertical-align: middle; color: var(--ink-dim); line-height: 1.7;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .hanja-table td:first-child {
+    text-align: center; font-size: 28px;
+    font-family: 'Noto Serif KR', serif; color: var(--accent); font-weight: 700;
+  }
+  .hanja-table td:nth-child(2) { font-size: 13px; color: var(--ink-mute); }
+  .hanja-table tr:nth-child(odd) td { background: rgba(255,255,255,.02); }
+  .hanja-table tr:nth-child(even) td { background: transparent; }
+
+  /* ── 타임라인 ── */
+  .timeline { margin: 32px 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .timeline-item {
+    display: flex; align-items: center; padding: 16px 24px;
+    border-bottom: 1px solid var(--border-dim); gap: 20px;
+  }
+  .timeline-item:last-child { border-bottom: none; }
+  .timeline-item:nth-child(odd) { background: rgba(126,184,247,.04); }
+  .timeline-item:nth-child(even) { background: transparent; }
+  .timeline-year { font-family: 'Noto Serif KR', serif; font-size: 14px; font-weight: 700; color: var(--accent); min-width: 130px; }
+  .timeline-desc { font-size: 13.5px; color: var(--ink-dim); line-height: 1.7; font-family: 'Noto Sans KR', sans-serif; }
+
+  /* ── 포인트 박스 ── */
+  .point-box { background: var(--dark3); border: 1px solid var(--border); border-radius: 10px; padding: 28px 32px; margin: 32px 0; }
+  .point-box .p-title { font-size: 11px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 16px; font-weight: 600; font-family: 'Noto Sans KR', sans-serif; }
+  .point-box .p-item { font-size: 14.5px; color: var(--ink-dim); line-height: 1.9; padding: 10px 0; border-bottom: 1px solid var(--border-dim); display: flex; gap: 12px; font-family: 'Noto Sans KR', sans-serif; }
+  .point-box .p-item:last-child { border-bottom: none; }
+  .point-box .p-num { color: var(--accent); font-weight: 700; flex-shrink: 0; }
+
+  /* ── 원문 박스 ── */
+  .original-box {
+    background: var(--dark2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 32px; margin: 32px 0; text-align: center;
+  }
+  .original-text {
+    font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
+    font-size: 22px; color: var(--accent-l); letter-spacing: 6px;
+    line-height: 2; font-weight: 700;
+  }
+  .original-reading { font-size: 13px; color: var(--ink-mute); letter-spacing: 4px; margin-top: 12px; font-family: 'Noto Sans KR', sans-serif; }
+
+  /* ── 한자 크게 ── */
+  .hanja-big { text-align: center; padding: 40px 0 20px; }
+  .hanja-big .main-hanja {
+    font-family: 'Nanum Myeongjo', serif; font-size: 64px; color: var(--accent);
+    font-weight: 800; letter-spacing: 16px; display: block; margin-bottom: 12px;
+  }
+  .hanja-big .reading { font-size: 13px; color: var(--ink-mute); letter-spacing: 6px; font-family: 'Noto Sans KR', sans-serif; }
+
+  /* ── 이전/다음 회차 ── */
+  .prev-episode {
+    background: rgba(126,184,247,.06); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 20px; margin-bottom: 32px;
+    font-size: 13.5px; color: var(--ink-dim); font-family: 'Noto Sans KR', sans-serif;
+  }
+  .prev-episode a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .next-episode {
+    background: var(--dark3); border: 1px solid var(--border);
+    border-radius: 10px; padding: 24px 28px; margin-top: 40px;
+    display: flex; align-items: center; gap: 20px;
+  }
+  .next-label { font-size: 10px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; font-weight: 600; white-space: nowrap; font-family: 'Noto Sans KR', sans-serif; }
+  .next-content { font-size: 14px; color: var(--ink-dim); line-height: 1.7; font-family: 'Noto Sans KR', sans-serif; }
+  .next-content strong { color: var(--ink); font-weight: 600; }
+
+  /* ── 열린 질문 ── */
+  .open-question { text-align: center; padding: 40px 20px; margin: 48px 0 0; border-top: 1px solid var(--border); }
+  .open-question p { font-family: 'Noto Serif KR', serif; font-size: 16px; color: var(--azure-l); font-style: italic; line-height: 1.9; }
+  .open-question .q-sub { font-size: 13px; color: var(--ink-mute); margin-top: 8px; font-family: 'Noto Sans KR', sans-serif; }
+
+  /* ── 태그 ── */
+  .tags { margin-top: 48px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag { font-size: 11.5px; color: var(--azure-dim); background: rgba(126,184,247,.06); border: 1px solid var(--border); padding: 4px 12px; border-radius: 20px; font-family: 'Noto Sans KR', sans-serif; }
+
+
+  /* ══ 파일 고유 스타일 ══ */
+  .part-badge {
+    display: inline-block;
+    background: #1A3A6A;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+
+  .original-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 8px;
+    display: block;
+    margin-bottom: 14px;
+  }
+
+  .original-translation {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    color: var(--ink-dim);
+    font-style: italic;
+    line-height: 1.9;
+  }
+
+  /* 씨앗 성장 시각화 */
+  .seed-journey {
+    margin: 32px 0;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 24px;
+  }
+
+  .seed-journey-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--azure-dim);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .seed-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+    row-gap: 16px;
+  }
+
+  .seed-step {
+    text-align: center;
+    padding: 0 12px;
+  }
+
+  .seed-step .ss-icon {
+    font-size: 32px;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .seed-step .ss-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--azure-dim);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .seed-step .ss-label {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.5;
+  }
+
+  .seed-arrow {
+    font-size: 20px;
+    color: var(--accent);
+    font-weight: 700;
+    padding: 0 4px;
+    margin-bottom: 28px;
+  }
+
+  .seed-note {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #f0e8d4;
+    font-size: 14px;
+    color: #888;
+    font-style: italic;
+    line-height: 1.7;
+  }
+
+  .seed-note strong { color: var(--azure-dim); }
+
+  /* 구절 분석 박스 */
+  .phrase-box {
+    display: flex;
+    gap: 16px;
+    margin: 32px 0;
+    flex-wrap: wrap;
+  }
+
+  .phrase-item {
+    flex: 1;
+    min-width: 200px;
+    border-radius: 10px;
+    padding: 24px 20px;
+    text-align: center;
+  }
+
+  .phrase-item.first { background: #e8f0fa; border: 1px solid #b8cce8; }
+
+  .phrase-item.second { background: #e8f4e8; border: 1px solid #b8d8b8; }
+
+  .phrase-item .pi-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 20px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .phrase-item.first .pi-hanja { color: #1A3A6A; }
+
+  .phrase-item.second .pi-hanja { color: #2A5A2A; }
+
+  .phrase-item .pi-reading {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+
+  .phrase-item .pi-meaning {
+    font-size: 14px;
+    color: var(--ink-dim);
+    line-height: 1.7;
+    font-weight: 600;
+  }
+
+  .phrase-item .pi-desc {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
+    margin-top: 8px;
+  }
+
+  /* 천지인으로 돌아가는 열매 */
+  .fruit-box {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin: 32px 0;
+  }
+
+  .fruit-box-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--azure-dim);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .fruit-items {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .fruit-item {
+    flex: 1;
+    min-width: 160px;
+    text-align: center;
+    padding: 20px 16px;
+    border-radius: 8px;
+  }
+
+  .fruit-item.cheon { background: #e8f0fa; border: 1px solid #b8cce8; }
+
+  .fruit-item.ji { background: var(--dark2); border: 1px solid var(--border); }
+
+  .fruit-item.in { background: #e8f4e8; border: 1px solid #b8d8b8; }
+
+  .fruit-item .fi-icon { font-size: 28px; display: block; margin-bottom: 8px; }
+
+  .fruit-item .fi-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 24px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .fruit-item.cheon .fi-hanja { color: #1A3A6A; }
+
+  .fruit-item.ji .fi-hanja { color: var(--azure-dim); }
+
+  .fruit-item.in .fi-hanja { color: #2A5A2A; }
+
+  .fruit-item .fi-desc {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.6;
+  }
+
+  /* 복리 박스 */
+  .compounding-box {
+    background: var(--dark);
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin: 32px 0;
+  }
+
+  .compounding-box .cb-title {
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+
+  .compounding-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #2e2e48;
+  }
+
+  .compounding-row:last-child { border-bottom: none; }
+
+  .compounding-row .cr-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .compounding-row .cr-text {
+    font-size: 14px;
+    color: var(--ink-dim);
+    line-height: 1.7;
+    flex: 1;
+  }
+
+  .compounding-row .cr-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 14px;
+    color: var(--accent);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    nav { padding: .9rem 1.4rem; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .post-wrap { padding: 80px 18px 60px; }
+  }
+</style>
+</head>
+<body>
+<nav id="nav">
+  <a href="index.html" class="nav-logo">天符經</a>
+  <ul class="nav-links">
+    <li><a href="index.html#episodes">전체 회차</a></li>
+    <li><a href="index.html#full-text">전문</a></li>
+    <li><a href="index.html#verses">핵심 구절</a></li>
+    <li><a href="index.html#philosophy">철학</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="메뉴">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html#episodes" onclick="closeMenu()">전체 회차</a>
+  <a href="index.html#full-text" onclick="closeMenu()">천부경 전문</a>
+  <a href="index.html#verses" onclick="closeMenu()">핵심 구절</a>
+  <a href="index.html#philosophy" onclick="closeMenu()">철학</a>
+</div>
+<div class="post-wrap">
+
+  <!-- 이전 회차 -->
+  <div class="prev-episode">
+    📖 이전 글 → <a href="#">[5회] 우주가 순서를 알고 있었다(天一一 地一二 人一三) — 138억 년의 이치</a>
+  </div>
+
+  <!-- 시리즈 배지 -->
+  <div class="series-badge">시민과 철학자의 천부경 · 6회</div>
+
+  <!-- 1부 배지 -->
+  <div class="part-badge">1부 · 天의 논리 — 우주의 시작과 생성 원리</div>
+
+  <!-- 제목 -->
+  <h1 class="post-title">하나의 씨앗이 세상을 만든다(一積十鉅 無匱化三)</h1>
+  <p class="post-subtitle">봄날의 발견</p>
+  <div class="divider"></div>
+
+  <!-- 도입부 -->
+  <div class="hook-text">
+    <p>봄에 씨앗 하나를 땅에 묻는다. 여름이 지나면 줄기가 오르고 가지가 뻗는다. 가을이 되면 열매가 열린다. 하나였던 것이 열이 되고 백이 된다.</p>
+    <br>
+    <p>천부경은 이 단순한 장면을 여덟 글자로 담았다. 一積十鉅 無匱化三. 거대한 진리는 먼 곳에 있지 않았다. 손에 쥔 씨앗 하나 안에 이미 있었다.</p>
+  </div>
+
+  <!-- 원문 -->
+  <div class="section-title">▶ 원문</div>
+  <div class="original-box">
+    <span class="original-hanja">一積十鉅  無匱化三</span>
+    <span class="original-reading">일적십거  ·  무궤화삼</span>
+    <span class="original-translation">"하나가 쌓여 열로 커지고,<br>다함 없이 셋으로 변화한다"</span>
+  </div>
+
+  <!-- 한자 풀이 -->
+  <div class="section-title">▶ 한자 풀이</div>
+  <table class="hanja-table">
+    <tr>
+      <th>한자</th>
+      <th>음(音)</th>
+      <th>뜻</th>
+    </tr>
+    <tr>
+      <td>一</td>
+      <td>일</td>
+      <td>하나. 씨앗 하나, 세포 하나, 시작 하나. 모든 것의 출발점.</td>
+    </tr>
+    <tr>
+      <td>積</td>
+      <td>적</td>
+      <td>쌓이다, 누적되다. 하나하나가 모여 점점 커짐을 뜻한다.</td>
+    </tr>
+    <tr>
+      <td>十</td>
+      <td>십</td>
+      <td>열. 완성과 충만을 상징하는 수. 1에서 10까지가 한 순환이다.</td>
+    </tr>
+    <tr>
+      <td>鉅</td>
+      <td>거</td>
+      <td>크다, 거대하다. 쌓이고 쌓여 거대해진 상태.</td>
+    </tr>
+    <tr>
+      <td>無</td>
+      <td>무</td>
+      <td>없다. 다함이 없음, 끊임없음을 강조한다.</td>
+    </tr>
+    <tr>
+      <td>匱</td>
+      <td>궤</td>
+      <td>다하다, 부족하다. 無匱 — 절대 부족함이 없다. 끊이지 않는다.</td>
+    </tr>
+    <tr>
+      <td>化</td>
+      <td>화</td>
+      <td>변화하다, 되다. 전혀 다른 형태로 바뀜. 질적 변환을 의미한다.</td>
+    </tr>
+    <tr>
+      <td>三</td>
+      <td>삼</td>
+      <td>셋. 천·지·인 세 방향으로 끊임없이 변화한다. 변화가 순환한다는 뜻.</td>
+    </tr>
+  </table>
+
+  <!-- 구절 두 토막 분석 -->
+  <div class="section-title">▶ 두 토막으로 읽기</div>
+  <div class="phrase-box">
+    <div class="phrase-item first">
+      <span class="pi-hanja">一積十鉅</span>
+      <div class="pi-reading">일 적 십 거</div>
+      <div class="pi-meaning">하나가 쌓여 열로 커진다</div>
+      <div class="pi-desc">씨앗 하나 → 수백 개의 열매<br>세포 하나 → 수십조 개의 세포<br>1원 → 복리로 불어나는 자산</div>
+    </div>
+    <div class="phrase-item second">
+      <span class="pi-hanja">無匱化三</span>
+      <div class="pi-reading">무 궤 화 삼</div>
+      <div class="pi-meaning">다함 없이 셋으로 변화한다</div>
+      <div class="pi-desc">그 열매가 다시<br>하늘(天)·땅(地)·사람(人)으로<br>끊임없이 순환한다</div>
+    </div>
+  </div>
+
+  <!-- 씨앗 여정 시각화 -->
+  <div class="section-title">▶ 씨앗 하나의 여정</div>
+  <div class="seed-journey">
+    <div class="seed-journey-title">一積十鉅 — 하나가 쌓여 열로 커지는 과정</div>
+    <div class="seed-steps">
+      <div class="seed-step">
+        <span class="ss-icon">🌱</span>
+        <span class="ss-hanja">一</span>
+        <div class="ss-label">씨앗 하나<br>봄</div>
+      </div>
+      <div class="seed-arrow">→</div>
+      <div class="seed-step">
+        <span class="ss-icon">🌿</span>
+        <span class="ss-hanja">積</span>
+        <div class="ss-label">줄기가 오르고<br>여름</div>
+      </div>
+      <div class="seed-arrow">→</div>
+      <div class="seed-step">
+        <span class="ss-icon">🍎</span>
+        <span class="ss-hanja">十鉅</span>
+        <div class="ss-label">열매가 열린다<br>가을</div>
+      </div>
+      <div class="seed-arrow">→</div>
+      <div class="seed-step">
+        <span class="ss-icon">🔄</span>
+        <span class="ss-hanja">無匱化三</span>
+        <div class="ss-label">다시 순환<br>천·지·인으로</div>
+      </div>
+    </div>
+    <div class="seed-note">
+      하나였던 것이 열이 되고 백이 된다.<br>
+      그리고 그 열매는 다시 <strong>하늘·땅·사람</strong>으로 돌아간다.
+    </div>
+  </div>
+
+  <!-- 열매가 천지인으로 돌아가는 것 -->
+  <div class="section-title">▶ 열매는 왜 셋(三)으로 돌아가는가</div>
+  <p class="body-text">無匱化三 — 다함 없이 셋으로 변화한다. 그 '셋'이 바로 천·지·인이다. 열매 하나가 어떻게 하늘·땅·사람으로 돌아가는지 생각해보라.</p>
+
+  <div class="fruit-box">
+    <div class="fruit-box-title">열매가 천·지·인으로 순환하는 이치</div>
+    <div class="fruit-items">
+      <div class="fruit-item cheon">
+        <span class="fi-icon">☀️</span>
+        <span class="fi-hanja">天</span>
+        <div class="fi-desc">하늘이 내린 햇빛과 비가 열매를 키웠다. 열매는 하늘의 선물이다.</div>
+      </div>
+      <div class="fruit-item ji">
+        <span class="fi-icon">🌍</span>
+        <span class="fi-hanja">地</span>
+        <div class="fi-desc">땅의 양분을 먹고 자랐다. 씨앗이 다시 땅으로 돌아가 새 생명이 된다.</div>
+      </div>
+      <div class="fruit-item in">
+        <span class="fi-icon">🙏</span>
+        <span class="fi-hanja">人</span>
+        <div class="fi-desc">사람의 양식이 된다. 사람의 손으로 심고 거두어 다시 삶이 이어진다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 대화 -->
+  <div class="section-title">▶ 시민과 철학자의 대화</div>
+
+  <div class="dialogue-section">
+    <div class="dialogue-title">一積十鉅 無匱化三 — 하나의 씨앗이 세상을 만든다</div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">一積十鉅 無匱化三... 하나가 쌓여 열이 되고, 다함 없이 셋으로 변화한다. 이건 어떻게 이해하면 될까요?</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">봄에 씨앗 하나를 땅에 묻어요. 여름이 지나면 줄기가 오르고 가지가 뻗죠. 가을이 되면 열매가 열려요. 하나였던 것이 열이 되고 백이 돼요. 그게 一積十鉅예요.</div>
+    </div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">그런데 無匱化三 — 다함 없이 셋으로 변화한다는 건요?</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">그 열매가 다시 셋으로 나뉘는 거예요. 하늘이 내린 햇빛과 비가 키운 것이니 하늘이요, 땅의 양분을 먹고 자란 것이니 땅이요, 사람의 양식이 되는 것이니 사람이죠. 천·지·인 셋으로 끊임없이 변화하는 거예요.</div>
+    </div>
+
+    <div class="citizen">
+      <span class="citizen-label">시민</span>
+      <div class="citizen-text">그러네요... 열매는 하늘이 주는 자연의 선물이고, 씨앗이 땅에서 자라 열매를 맺으니 사람의 양식이 된다는. 一積十鉅無匱化三... 외우지 않아도 외워지네요.</div>
+    </div>
+
+    <div class="philosopher">
+      <span class="philosopher-label">철학자</span>
+      <div class="philosopher-text">몸이 이미 알고 있는 이치니까요. 이 구절을 처음 적은 사람은 거창한 우주론을 쓰려 했던 게 아닐지 몰라요. 매 계절 씨앗을 심고 열매를 거두며, 그 안에서 하늘과 땅과 사람이 하나로 이어지는 이치를 몸으로 알았던 사람이 아닐까요.</div>
+    </div>
+  </div>
+
+  <!-- 인사이트 -->
+  <div class="insight-box">
+    <p>외우지 않아도 외워지는 구절이 있다.<br>
+    몸이 이미 알고 있는 이치이기 때문이다.<br>
+    一積十鉅 無匱化三.</p>
+  </div>
+
+  <!-- 복리와 세포 분열 -->
+  <div class="section-title">▶ 현대의 언어로 읽으면</div>
+  <div class="compounding-box">
+    <div class="cb-title">一積十鉅 — 하나가 쌓여 열로 커지는 것들</div>
+    <div class="compounding-row">
+      <span class="cr-icon">💰</span>
+      <span class="cr-text">1원이 쌓이고 쌓여 거대한 자산이 되는 복리(複利)의 원리</span>
+      <span class="cr-hanja">一積十鉅</span>
+    </div>
+    <div class="compounding-row">
+      <span class="cr-icon">🧬</span>
+      <span class="cr-text">세포 하나가 분열을 거듭해 수십조 개의 세포로 이루어진 인간이 되는 것</span>
+      <span class="cr-hanja">一積十鉅</span>
+    </div>
+    <div class="compounding-row">
+      <span class="cr-icon">🌱</span>
+      <span class="cr-text">씨앗 하나가 나무가 되고 수백 개의 열매를 맺는 것</span>
+      <span class="cr-hanja">一積十鉅</span>
+    </div>
+    <div class="compounding-row">
+      <span class="cr-icon">💧</span>
+      <span class="cr-text">작은 물방울 하나가 모여 강이 되고 바다가 되는 것</span>
+      <span class="cr-hanja">一積十鉅</span>
+    </div>
+  </div>
+
+  <!-- 마무리 인사이트 -->
+  <div class="insight-box">
+    <p>거대한 진리는 먼 곳에 있지 않았다.<br>
+    손에 쥔 씨앗 하나 안에 이미 있었다.</p>
+  </div>
+
+  <!-- 열린 질문 -->
+  <div class="open-question">
+    <p>당신 삶에서 하나가 쌓여<br>열이 된 것이 있는가.</p>
+    <p class="q-sub">다음 회에서는 天二三 地二三 人二三 — 우주가 하나의 법칙으로 움직인다는 이야기. 아인슈타인도 못 푼 것을 천부경은 알고 있었다.</p>
+  </div>
+
+  <!-- 다음 회차 -->
+  <div class="next-episode">
+    <div class="next-label">다음 회</div>
+    <div class="next-content">
+      <strong>[7회] 우주는 하나의 법칙으로 움직인다(天二三 地二三 人二三) — 아인슈타인도 못 푼 것</strong><br>
+      하늘도 둘과 셋, 땅도 둘과 셋, 사람도 둘과 셋. 이 놀라운 발견이 의미하는 것은 무엇인가.
+    </div>
+  </div>
+
+  <!-- 태그 -->
+  <div class="tags">
+    <span class="tag">#천부경</span>
+    <span class="tag">#일적십거무궤화삼</span>
+    <span class="tag">#一積十鉅無匱化三</span>
+    <span class="tag">#천부경해설</span>
+    <span class="tag">#한국철학</span>
+    <span class="tag">#동양철학</span>
+    <span class="tag">#천지인</span>
+    <span class="tag">#씨앗철학</span>
+    <span class="tag">#인문학</span>
+    <span class="tag">#철학에세이</span>
+  </div>
+
+</div>
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+  function toggleMenu() {
+    document.getElementById('mobileNav').classList.toggle('open');
+  }
+  function closeMenu() {
+    document.getElementById('mobileNav').classList.remove('open');
+  }
+</script>
+</body>
+</html>
