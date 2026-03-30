@@ -2,316 +2,376 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>에필로그 · 81자의 여정을 마치며 :: 나는 천부경을 읽다가 철학자가 되었다</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>천부경 · 14회 — 나는 천부경을 읽다가 철학자가 되었다 — 에필로그</title>
+<meta name="description" content="시민과 철학자의 천부경 14회 — 나는 천부경을 읽다가 철학자가 되었다 — 에필로그">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap');
 
-  :root {
-    --azure:      #7EB8F7;
-    --azure-l:    #B8D9FF;
-    --azure-dim:  #4A85D4;
-    --dark:       #07091A;
-    --dark2:      #0B0E24;
-    --dark3:      #0F1330;
-    --card-bg:    #111428;
-    --ink:        #EEF2FF;
-    --ink-dim:    rgba(238,242,255,.65);
-    --ink-mute:   rgba(238,242,255,.38);
-    --accent:     #7EB8F7;
-    --accent-l:   #B8D9FF;
-    --accent-pale:#0F1330;
-    --border:     rgba(126,184,247,.15);
-    --border-dim: rgba(126,184,247,.08);
-    --gold:       #7EB8F7;  /* 기존 금색 → 청람으로 매핑 */
-  }
+:root {
+  --azure:      #7EB8F7;
+  --azure-l:    #B8D9FF;
+  --azure-dim:  #4A85D4;
+  --dark:       #07091A;
+  --dark2:      #0B0E24;
+  --dark3:      #0F1330;
+  --card-bg:    #111428;
+  --ink:        #EEF2FF;
+  --ink-dim:    rgba(238,242,255,.65);
+  --ink-mute:   rgba(238,242,255,.38);
+  --accent:     #7EB8F7;
+  --accent-l:   #B8D9FF;
+  --accent-pale:#0F1330;
+  --border:     rgba(126,184,247,.15);
+  --border-dim: rgba(126,184,247,.08);
+  --gold:       #7EB8F7;
+}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 
-  body {
-    font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
-    background: var(--dark);
-    color: var(--ink);
-    line-height: 1.9;
-    overflow-x: hidden;
-  }
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse at 20% 40%, rgba(107,163,232,.07) 0%, transparent 55%),
-      radial-gradient(ellipse at 80% 70%, rgba(107,163,232,.04) 0%, transparent 50%);
-    pointer-events: none;
-    z-index: 0;
-  }
+body {
+  font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
+  background: var(--dark);
+  color: var(--ink);
+  line-height: 1.9;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 40%, rgba(107,163,232,.07) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 70%, rgba(107,163,232,.04) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
 
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 1rem 2.5rem;
-    background: rgba(8,14,28,.92);
-    border-bottom: 1px solid rgba(107,163,232,.12);
-    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-    transition: box-shadow .3s;
-  }
-  nav.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,.5); }
-  .nav-logo { font-size: .9rem; font-weight: 700; letter-spacing: .15em; color: var(--accent); text-decoration: none; font-family: 'Nanum Myeongjo', serif; }
-  .nav-links { display: flex; gap: 0; list-style: none; }
-  .nav-links a {
-    display: block; padding: .4rem .75rem;
-    font-size: .72rem; letter-spacing: .08em;
-    color: var(--ink); text-decoration: none;
-    opacity: .4; transition: opacity .2s, color .2s;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
-  .nav-links a:hover { opacity: 1; color: var(--accent); }
-  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
-  .hamburger span { display: block; width: 22px; height: 1px; background: var(--accent); transition: all .3s; }
-  .mobile-nav {
-    display: none; position: fixed; top: 57px; left: 0; right: 0;
-    background: rgba(8,14,28,.97); backdrop-filter: blur(16px);
-    z-index: 199; padding: .8rem 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .mobile-nav.open { display: block; }
-  .mobile-nav a {
-    display: block; padding: .7rem 2rem;
-    font-size: .85rem; color: var(--ink); text-decoration: none; opacity: .65;
-    border-bottom: 1px solid var(--border-dim);
-    font-family: 'Noto Sans KR', sans-serif;
-  }
-  .mobile-nav a:hover { opacity: 1; color: var(--accent); }
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1rem 2.5rem;
+  background: rgba(8,14,28,.92);
+  border-bottom: 1px solid rgba(107,163,232,.12);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  transition: box-shadow .3s;
+}
+nav.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,.5); }
+.nav-logo { font-size: .9rem; font-weight: 700; letter-spacing: .15em; color: var(--accent); text-decoration: none; font-family: 'Nanum Myeongjo', serif; }
+.nav-links { display: flex; gap: 0; list-style: none; }
+.nav-links a {
+  display: block; padding: .4rem .75rem;
+  font-size: .72rem; letter-spacing: .08em;
+  color: var(--ink); text-decoration: none;
+  opacity: .4; transition: opacity .2s, color .2s;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.nav-links a:hover { opacity: 1; color: var(--accent); }
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+.hamburger span { display: block; width: 22px; height: 1px; background: var(--accent); transition: all .3s; }
+.mobile-nav {
+  display: none; position: fixed; top: 57px; left: 0; right: 0;
+  background: rgba(8,14,28,.97); backdrop-filter: blur(16px);
+  z-index: 199; padding: .8rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.mobile-nav.open { display: block; }
+.mobile-nav a {
+  display: block; padding: .7rem 2rem;
+  font-size: .85rem; color: var(--ink); text-decoration: none; opacity: .65;
+  border-bottom: 1px solid var(--border-dim);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.mobile-nav a:hover { opacity: 1; color: var(--accent); }
 
-  /* ── 포스트 래퍼 ── */
-  .post-wrap {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 100px 28px 80px;
-    position: relative; z-index: 1;
-  }
+/* ── 포스트 래퍼 ── */
+.post-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 100px 28px 80px;
+  position: relative; z-index: 1;
+}
 
-  /* ── 공통 요소 ── */
-  .series-badge {
-    display: inline-block;
-    font-size: 11px; font-weight: 500; letter-spacing: 2px;
-    color: var(--accent); border: 1px solid var(--border);
-    padding: 4px 14px; border-radius: 2px; margin-bottom: 28px;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
-  .post-title {
-    font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
-    font-size: 30px; font-weight: 800; color: var(--ink);
-    line-height: 1.4; margin-bottom: 12px; letter-spacing: -.5px;
-  }
-  .post-subtitle {
-    font-size: 15px; color: var(--azure-dim); font-style: italic;
-    margin-bottom: 40px; font-family: 'Noto Serif KR', serif;
-  }
-  .divider {
-    width: 48px; height: 1px;
-    background: linear-gradient(90deg, var(--accent), transparent);
-    margin-bottom: 40px;
-  }
-  .hook-text {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 16.5px; color: var(--ink-dim);
-    line-height: 2; margin-bottom: 48px;
-    padding-left: 20px;
-    border-left: 2px solid rgba(126,184,247,.25);
-  }
-  .section-title {
-    font-size: 11px; font-weight: 500; letter-spacing: 3px;
-    color: var(--accent); text-transform: uppercase;
-    margin-bottom: 20px; margin-top: 48px;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
-  .body-text {
-    font-size: 15px; color: var(--ink-dim);
-    line-height: 2; margin-bottom: 20px;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
+/* ── 공통 요소 ── */
+.series-badge {
+  display: inline-block;
+  font-size: 11px; font-weight: 500; letter-spacing: 2px;
+  color: var(--accent); border: 1px solid var(--border);
+  padding: 4px 14px; border-radius: 2px; margin-bottom: 28px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.post-title {
+  font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
+  font-size: clamp(22px, 5vw, 30px); font-weight: 800; color: var(--ink);
+  line-height: 1.4; margin-bottom: 12px; letter-spacing: -.5px;
+}
+.post-subtitle {
+  font-size: clamp(13px, 2.5vw, 15px); color: var(--azure-dim); font-style: italic;
+  margin-bottom: 40px; font-family: 'Noto Serif KR', serif;
+}
+.divider {
+  width: 48px; height: 1px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  margin-bottom: 40px;
+}
+.hook-text {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(14px, 2.5vw, 16.5px); color: var(--ink-dim);
+  line-height: 2; margin-bottom: 48px;
+  padding-left: 20px;
+  border-left: 2px solid rgba(126,184,247,.25);
+}
+.section-title {
+  font-size: 11px; font-weight: 500; letter-spacing: 3px;
+  color: var(--accent); text-transform: uppercase;
+  margin-bottom: 20px; margin-top: 48px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.body-text {
+  font-size: clamp(13px, 2.5vw, 15px); color: var(--ink-dim);
+  line-height: 2; margin-bottom: 20px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
 
-  /* ── 대화 ── */
-  .dialogue-section {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 12px; padding: 28px 24px; margin: 32px 0;
-  }
-  .dialogue-title {
-    font-size: 11px; letter-spacing: 2px; color: var(--ink-mute);
-    text-transform: uppercase; margin-bottom: 20px; text-align: center;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
-  .citizen {
-    display: flex; align-items: flex-start; gap: 14px;
-    margin-bottom: 6px; margin-top: 28px;
-  }
-  .citizen-label {
-    font-size: 11px; font-weight: 600; color: var(--dark);
-    background: var(--azure-dim); padding: 3px 10px;
-    border-radius: 12px; white-space: nowrap; margin-top: 3px;
-    letter-spacing: 1px; flex-shrink: 0;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
-  .citizen-text {
-    font-size: 14.5px; color: var(--ink-dim); line-height: 1.9;
-    background: rgba(74,133,212,.1); border-radius: 0 12px 12px 12px;
-    padding: 14px 18px; flex: 1;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
-  .philosopher {
-    display: flex; align-items: flex-start; gap: 14px;
-    margin-bottom: 6px; margin-top: 6px; padding-left: 20px;
-  }
-  .philosopher-label {
-    font-size: 11px; font-weight: 600; color: var(--dark);
-    background: var(--accent); padding: 3px 10px;
-    border-radius: 12px; white-space: nowrap; margin-top: 3px;
-    letter-spacing: 1px; flex-shrink: 0;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
-  .philosopher-text {
-    font-size: 14.5px; color: var(--ink); line-height: 1.9;
-    background: rgba(126,184,247,.07); border-radius: 0 12px 12px 12px;
-    padding: 14px 18px; flex: 1;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
+/* ── 대화 ── */
+.dialogue-section {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px; padding: 28px 20px; margin: 32px 0;
+}
+.dialogue-title {
+  font-size: 11px; letter-spacing: 2px; color: var(--ink-mute);
+  text-transform: uppercase; margin-bottom: 20px; text-align: center;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.citizen {
+  display: flex; align-items: flex-start; gap: 10px;
+  margin-bottom: 6px; margin-top: 28px;
+}
+.citizen-label {
+  font-size: 11px; font-weight: 600; color: var(--dark);
+  background: var(--azure-dim); padding: 3px 10px;
+  border-radius: 12px; white-space: nowrap; margin-top: 3px;
+  letter-spacing: 1px; flex-shrink: 0;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.citizen-text {
+  font-size: clamp(13px, 2.5vw, 14.5px); color: var(--ink-dim); line-height: 1.9;
+  background: rgba(74,133,212,.1); border-radius: 0 12px 12px 12px;
+  padding: 12px 16px; flex: 1;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.philosopher {
+  display: flex; align-items: flex-start; gap: 10px;
+  margin-bottom: 6px; margin-top: 6px; padding-left: 16px;
+}
+.philosopher-label {
+  font-size: 11px; font-weight: 600; color: var(--dark);
+  background: var(--accent); padding: 3px 10px;
+  border-radius: 12px; white-space: nowrap; margin-top: 3px;
+  letter-spacing: 1px; flex-shrink: 0;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.philosopher-text {
+  font-size: clamp(13px, 2.5vw, 14.5px); color: var(--ink); line-height: 1.9;
+  background: rgba(126,184,247,.07); border-radius: 0 12px 12px 12px;
+  padding: 12px 16px; flex: 1;
+  font-family: 'Noto Sans KR', sans-serif;
+}
 
-  /* ── 인사이트 박스 ── */
-  .insight-box {
-    background: rgba(126,184,247,.06);
-    border-left: 3px solid var(--accent);
-    padding: 24px 28px; margin: 40px 0;
-    border-radius: 0 8px 8px 0;
-  }
-  .insight-box p {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 15.5px; color: var(--azure-l);
-    font-weight: 600; line-height: 1.9; font-style: italic;
-  }
+/* ── 인사이트 박스 ── */
+.insight-box {
+  background: rgba(126,184,247,.06);
+  border-left: 3px solid var(--accent);
+  padding: 20px 24px; margin: 40px 0;
+  border-radius: 0 8px 8px 0;
+}
+.insight-box p {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(14px, 2.5vw, 15.5px); color: var(--azure-l);
+  font-weight: 600; line-height: 1.9; font-style: italic;
+}
 
-  /* ── 콘텐츠 박스 ── */
-  .content-box {
-    background: var(--card-bg); border: 1px solid var(--border);
-    border-radius: 8px; padding: 28px 32px; margin: 32px 0;
-  }
-  .content-box-title {
-    font-size: 11px; font-weight: 600; color: var(--accent);
-    letter-spacing: 2px; margin-bottom: 16px; text-transform: uppercase;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
-  .content-box p {
-    font-size: 14.5px; color: var(--ink-dim); line-height: 2; margin-bottom: 12px;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
-  .content-box p:last-child { margin-bottom: 0; }
-  .content-box strong { color: var(--accent-l); }
+/* ── 콘텐츠 박스 ── */
+.content-box {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 24px 24px; margin: 32px 0;
+}
+.content-box-title {
+  font-size: 11px; font-weight: 600; color: var(--accent);
+  letter-spacing: 2px; margin-bottom: 16px; text-transform: uppercase;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.content-box p {
+  font-size: clamp(13px, 2.5vw, 14.5px); color: var(--ink-dim); line-height: 2; margin-bottom: 12px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.content-box p:last-child { margin-bottom: 0; }
+.content-box strong { color: var(--accent-l); }
 
-  /* ── 구조 박스 (structure-box) ── */
-  .structure-box {
-    background: var(--dark3); border: 1px solid var(--border);
-    border-radius: 10px; padding: 28px 32px; margin: 20px 0;
-  }
-  .structure-box .s-title {
-    font-family: 'Nanum Myeongjo', serif;
-    font-size: 19px; color: var(--accent-l); font-weight: 700; margin-bottom: 4px;
-  }
-  .structure-box .s-sub { font-size: 12px; color: var(--ink-mute); margin-bottom: 12px; font-family: 'Noto Sans KR', sans-serif; }
-  .structure-box .s-body { font-size: 14px; color: var(--ink-dim); line-height: 1.9; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
-  .structure-box .s-q { font-size: 13px; color: var(--accent); margin-top: 10px; font-style: italic; font-family: 'Noto Serif KR', serif; }
+/* ── 구조 박스 ── */
+.structure-box {
+  background: var(--dark3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 24px 24px; margin: 20px 0;
+}
+.structure-box .s-title {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: clamp(16px, 3vw, 19px); color: var(--accent-l); font-weight: 700; margin-bottom: 4px;
+}
+.structure-box .s-sub { font-size: 12px; color: var(--ink-mute); margin-bottom: 12px; font-family: 'Noto Sans KR', sans-serif; }
+.structure-box .s-body { font-size: clamp(12px, 2.5vw, 14px); color: var(--ink-dim); line-height: 1.9; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.structure-box .s-q { font-size: clamp(12px, 2vw, 13px); color: var(--accent); margin-top: 10px; font-style: italic; font-family: 'Noto Serif KR', serif; }
 
-  /* ── 한자 테이블 ── */
-  .hanja-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; font-size: 14px; }
-  .hanja-table th {
-    background: rgba(126,184,247,.12); color: var(--accent-l);
-    padding: 10px 16px; text-align: left; font-weight: 500;
-    font-size: 12px; letter-spacing: 1px;
-    font-family: 'Noto Sans KR', sans-serif;
-    border-bottom: 1px solid var(--border);
-  }
-  .hanja-table th:first-child { text-align: center; width: 80px; }
-  .hanja-table th:nth-child(2) { width: 140px; }
-  .hanja-table td {
-    padding: 14px 16px; border-bottom: 1px solid var(--border-dim);
-    vertical-align: middle; color: var(--ink-dim); line-height: 1.7;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
-  .hanja-table td:first-child {
-    text-align: center; font-size: 28px;
-    font-family: 'Noto Serif KR', serif; color: var(--accent); font-weight: 700;
-  }
-  .hanja-table td:nth-child(2) { font-size: 13px; color: var(--ink-mute); }
-  .hanja-table tr:nth-child(odd) td { background: rgba(255,255,255,.02); }
-  .hanja-table tr:nth-child(even) td { background: transparent; }
+/* ── 한자 테이블 ── */
+.hanja-table {
+  width: 100%; border-collapse: collapse; margin: 20px 0;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.hanja-table th {
+  background: var(--dark3); color: var(--accent);
+  font-size: 11px; letter-spacing: 1.5px; padding: 12px 16px;
+  text-align: left; border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+.hanja-table td {
+  padding: 14px 16px; border-bottom: 1px solid var(--border-dim);
+  font-size: clamp(12px, 2.5vw, 14px); color: var(--ink-dim); line-height: 1.8;
+  vertical-align: top;
+}
+.hanja-table td:first-child {
+  font-family: 'Nanum Myeongjo', serif; font-size: clamp(18px, 4vw, 24px);
+  color: var(--accent-l); font-weight: 700; white-space: nowrap;
+}
+.hanja-table tr:last-child td { border-bottom: none; }
 
-  /* ── 타임라인 ── */
+/* ── 원문 박스 ── */
+.original-box {
+  background: var(--dark3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 28px 20px; margin: 32px 0; text-align: center;
+}
+.original-text {
+  font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
+  font-size: clamp(16px, 4vw, 22px); color: var(--accent-l); letter-spacing: 4px;
+  line-height: 2; font-weight: 700;
+}
+.original-reading { font-size: 13px; color: var(--ink-mute); letter-spacing: 4px; margin-top: 12px; font-family: 'Noto Sans KR', sans-serif; }
+
+/* ── 한자 크게 ── */
+.hanja-big { text-align: center; padding: 40px 0 20px; }
+.hanja-big .main-hanja {
+  font-family: 'Nanum Myeongjo', serif; font-size: clamp(44px, 12vw, 64px); color: var(--accent);
+  font-weight: 800; letter-spacing: 12px; display: block; margin-bottom: 12px;
+}
+.hanja-big .reading { font-size: 13px; color: var(--ink-mute); letter-spacing: 6px; font-family: 'Noto Sans KR', sans-serif; }
+
+/* ── 이전/다음 회차 ── */
+.prev-episode {
+  background: rgba(126,184,247,.06); border: 1px solid var(--border);
+  border-radius: 8px; padding: 14px 20px; margin-bottom: 32px;
+  font-size: clamp(12px, 2.5vw, 13.5px); color: var(--ink-dim); font-family: 'Noto Sans KR', sans-serif;
+}
+.prev-episode a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.next-episode {
+  background: var(--dark3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 20px 24px; margin-top: 40px;
+  display: flex; align-items: flex-start; gap: 16px; flex-wrap: wrap;
+}
+.next-label { font-size: 10px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; font-weight: 600; white-space: nowrap; font-family: 'Noto Sans KR', sans-serif; padding-top: 4px; }
+.next-content { font-size: clamp(12px, 2.5vw, 14px); color: var(--ink-dim); line-height: 1.7; font-family: 'Noto Sans KR', sans-serif; flex: 1; }
+.next-content strong { color: var(--ink); font-weight: 600; }
+.next-content a { color: var(--ink); text-decoration: none; }
+.next-content a:hover { color: var(--accent); }
+
+/* ── 열린 질문 ── */
+.open-question { text-align: center; padding: 40px 20px; margin: 48px 0 0; border-top: 1px solid var(--border); }
+.open-question p { font-family: 'Noto Serif KR', serif; font-size: clamp(14px, 2.5vw, 16px); color: var(--azure-l); font-style: italic; line-height: 1.9; }
+.open-question .q-sub { font-size: 13px; color: var(--ink-mute); margin-top: 8px; font-family: 'Noto Sans KR', sans-serif; }
+
+/* ── 태그 ── */
+.tags { margin-top: 48px; display: flex; flex-wrap: wrap; gap: 8px; }
+.tag { font-size: 11.5px; color: var(--azure-dim); background: rgba(126,184,247,.06); border: 1px solid var(--border); padding: 4px 12px; border-radius: 20px; font-family: 'Noto Sans KR', sans-serif; }
+
+/* ── 숫자 그리드 (81code_15용) ── */
+.num-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px; margin: 24px 0; }
+.num-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 20px 16px; text-align: center; }
+.num-card .n { font-family: 'Nanum Myeongjo', serif; font-size: 32px; color: var(--accent); font-weight: 800; display: block; margin-bottom: 6px; }
+.num-card .n-label { font-size: 12px; color: var(--accent-l); font-weight: 600; margin-bottom: 8px; display: block; font-family: 'Noto Sans KR', sans-serif; }
+.num-card .n-body { font-size: 12px; color: var(--ink-mute); line-height: 1.7; font-family: 'Noto Sans KR', sans-serif; }
+
+/* ── 진행도 바 ── */
+.progress-bar-wrap { margin: 0 0 32px; }
+.progress-bar-label { font-size: 11px; color: var(--ink-mute); letter-spacing: 1px; margin-bottom: 8px; font-family: 'Noto Sans KR', sans-serif; }
+.progress-bar { height: 2px; background: var(--border-dim); border-radius: 1px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--azure-dim), var(--azure-l)); border-radius: 1px; transition: width .6s ease; }
+
+/* ── FOOTER ── */
+footer {
+  position: relative; z-index: 1;
+  text-align: center; padding: 2rem;
+  border-top: 1px solid var(--border-dim);
+  color: var(--ink-mute); font-size: .75rem;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+footer a { color: var(--accent); text-decoration: none; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  nav { padding: .9rem 1.2rem; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .post-wrap { padding: 76px 16px 60px; }
+  .dialogue-section { padding: 20px 14px; }
+  .philosopher { padding-left: 0; }
+  .content-box { padding: 20px 18px; }
+  .structure-box { padding: 20px 18px; }
+  .hanja-table th, .hanja-table td { padding: 10px 12px; }
+  .hanja-table td:first-child { font-size: 20px; }
+  .next-episode { flex-direction: column; gap: 8px; }
+}
+
+@media (max-width: 380px) {
+  .post-wrap { padding: 72px 14px 48px; }
+  .hanja-big .main-hanja { letter-spacing: 8px; }
+}
+
+
+/* ══ 파일 고유 스타일 ══ */
+700;800&family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap');
+
+  
+
+/* ── 타임라인 ── */
   .timeline { margin: 32px 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-  .timeline-item {
+
+.timeline-item {
     display: flex; align-items: center; padding: 16px 24px;
     border-bottom: 1px solid var(--border-dim); gap: 20px;
   }
-  .timeline-item:last-child { border-bottom: none; }
-  .timeline-item:nth-child(odd) { background: rgba(126,184,247,.04); }
-  .timeline-item:nth-child(even) { background: transparent; }
-  .timeline-year { font-family: 'Noto Serif KR', serif; font-size: 14px; font-weight: 700; color: var(--accent); min-width: 130px; }
-  .timeline-desc { font-size: 13.5px; color: var(--ink-dim); line-height: 1.7; font-family: 'Noto Sans KR', sans-serif; }
 
-  /* ── 포인트 박스 ── */
+.timeline-item:last-child { border-bottom: none; }
+
+.timeline-item:nth-child(odd) { background: rgba(126,184,247,.04); }
+
+.timeline-item:nth-child(even) { background: transparent; }
+
+.timeline-year { font-family: 'Noto Serif KR', serif; font-size: 14px; font-weight: 700; color: var(--accent); min-width: 130px; }
+
+.timeline-desc { font-size: 13.5px; color: var(--ink-dim); line-height: 1.7; font-family: 'Noto Sans KR', sans-serif; }
+
+/* ── 포인트 박스 ── */
   .point-box { background: var(--dark3); border: 1px solid var(--border); border-radius: 10px; padding: 28px 32px; margin: 32px 0; }
-  .point-box .p-title { font-size: 11px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 16px; font-weight: 600; font-family: 'Noto Sans KR', sans-serif; }
-  .point-box .p-item { font-size: 14.5px; color: var(--ink-dim); line-height: 1.9; padding: 10px 0; border-bottom: 1px solid var(--border-dim); display: flex; gap: 12px; font-family: 'Noto Sans KR', sans-serif; }
-  .point-box .p-item:last-child { border-bottom: none; }
-  .point-box .p-num { color: var(--accent); font-weight: 700; flex-shrink: 0; }
 
-  /* ── 원문 박스 ── */
-  .original-box {
-    background: var(--dark2); border: 1px solid var(--border);
-    border-radius: 10px; padding: 32px; margin: 32px 0; text-align: center;
-  }
-  .original-text {
-    font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
-    font-size: 22px; color: var(--accent-l); letter-spacing: 6px;
-    line-height: 2; font-weight: 700;
-  }
-  .original-reading { font-size: 13px; color: var(--ink-mute); letter-spacing: 4px; margin-top: 12px; font-family: 'Noto Sans KR', sans-serif; }
+.point-box .p-title { font-size: 11px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 16px; font-weight: 600; font-family: 'Noto Sans KR', sans-serif; }
 
-  /* ── 한자 크게 ── */
-  .hanja-big { text-align: center; padding: 40px 0 20px; }
-  .hanja-big .main-hanja {
-    font-family: 'Nanum Myeongjo', serif; font-size: 64px; color: var(--accent);
-    font-weight: 800; letter-spacing: 16px; display: block; margin-bottom: 12px;
-  }
-  .hanja-big .reading { font-size: 13px; color: var(--ink-mute); letter-spacing: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.point-box .p-item { font-size: 14.5px; color: var(--ink-dim); line-height: 1.9; padding: 10px 0; border-bottom: 1px solid var(--border-dim); display: flex; gap: 12px; font-family: 'Noto Sans KR', sans-serif; }
 
-  /* ── 이전/다음 회차 ── */
-  .prev-episode {
-    background: rgba(126,184,247,.06); border: 1px solid var(--border);
-    border-radius: 8px; padding: 14px 20px; margin-bottom: 32px;
-    font-size: 13.5px; color: var(--ink-dim); font-family: 'Noto Sans KR', sans-serif;
-  }
-  .prev-episode a { color: var(--accent); text-decoration: none; font-weight: 600; }
-  .next-episode {
-    background: var(--dark3); border: 1px solid var(--border);
-    border-radius: 10px; padding: 24px 28px; margin-top: 40px;
-    display: flex; align-items: center; gap: 20px;
-  }
-  .next-label { font-size: 10px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; font-weight: 600; white-space: nowrap; font-family: 'Noto Sans KR', sans-serif; }
-  .next-content { font-size: 14px; color: var(--ink-dim); line-height: 1.7; font-family: 'Noto Sans KR', sans-serif; }
-  .next-content strong { color: var(--ink); font-weight: 600; }
+.point-box .p-item:last-child { border-bottom: none; }
 
-  /* ── 열린 질문 ── */
-  .open-question { text-align: center; padding: 40px 20px; margin: 48px 0 0; border-top: 1px solid var(--border); }
-  .open-question p { font-family: 'Noto Serif KR', serif; font-size: 16px; color: var(--azure-l); font-style: italic; line-height: 1.9; }
-  .open-question .q-sub { font-size: 13px; color: var(--ink-mute); margin-top: 8px; font-family: 'Noto Sans KR', sans-serif; }
+.point-box .p-num { color: var(--accent); font-weight: 700; flex-shrink: 0; }
 
-  /* ── 태그 ── */
-  .tags { margin-top: 48px; display: flex; flex-wrap: wrap; gap: 8px; }
-  .tag { font-size: 11.5px; color: var(--azure-dim); background: rgba(126,184,247,.06); border: 1px solid var(--border); padding: 4px 12px; border-radius: 20px; font-family: 'Noto Sans KR', sans-serif; }
-
-
-  /* ══ 파일 고유 스타일 ══ */
+/* ══ 파일 고유 스타일 ══ */
   .epilogue-badge {
     display: inline-block;
     background: linear-gradient(90deg, #1A3A6A, #2A5A2A);
@@ -324,7 +384,7 @@
     margin-bottom: 16px;
   }
 
-  /* 여정 요약 */
+/* 여정 요약 */
   .journey-box {
     background: var(--dark);
     border-radius: 12px;
@@ -332,7 +392,7 @@
     margin: 32px 0;
   }
 
-  .journey-box .jb-label {
+.journey-box .jb-label {
     font-size: 12px;
     letter-spacing: 2px;
     color: var(--accent);
@@ -341,13 +401,13 @@
     text-align: center;
   }
 
-  .journey-items {
+.journey-items {
     display: flex;
     flex-direction: column;
     gap: 10px;
   }
 
-  .journey-item {
+.journey-item {
     display: flex;
     gap: 12px;
     align-items: flex-start;
@@ -356,7 +416,7 @@
     padding: 12px 16px;
   }
 
-  .journey-item .ji-num {
+.journey-item .ji-num {
     font-family: 'Noto Serif KR', serif;
     font-size: 13px;
     font-weight: 700;
@@ -366,7 +426,7 @@
     margin-top: 1px;
   }
 
-  .journey-item .ji-hanja {
+.journey-item .ji-hanja {
     font-family: 'Noto Serif KR', serif;
     font-size: 13px;
     font-weight: 700;
@@ -375,14 +435,14 @@
     flex-shrink: 0;
   }
 
-  .journey-item .ji-desc {
+.journey-item .ji-desc {
     font-size: 13px;
     color: var(--ink-dim);
     line-height: 1.6;
     flex: 1;
   }
 
-  /* 발견 카드 */
+/* 발견 카드 */
   .discovery-section {
     display: flex;
     flex-direction: column;
@@ -390,7 +450,7 @@
     margin: 32px 0;
   }
 
-  .discovery-card {
+.discovery-card {
     background: #0F1330;
     border: 1px solid var(--border);
     border-radius: 12px;
@@ -400,15 +460,15 @@
     align-items: flex-start;
   }
 
-  .discovery-card .dc-icon {
+.discovery-card .dc-icon {
     font-size: 28px;
     flex-shrink: 0;
     margin-top: 2px;
   }
 
-  .discovery-card .dc-content { flex: 1; }
+.discovery-card .dc-content { flex: 1; }
 
-  .discovery-card .dc-content strong {
+.discovery-card .dc-content strong {
     display: block;
     font-size: 15px;
     color: var(--ink-dim);
@@ -416,13 +476,13 @@
     font-family: 'Noto Serif KR', serif;
   }
 
-  .discovery-card .dc-content p {
+.discovery-card .dc-content p {
     font-size: 14px;
     color: #555;
     line-height: 1.8;
   }
 
-  .discovery-card .dc-hanja {
+.discovery-card .dc-hanja {
     font-family: 'Noto Serif KR', serif;
     font-size: 14px;
     color: var(--accent);
@@ -431,7 +491,7 @@
     display: block;
   }
 
-  /* 철학자의 마지막 말 */
+/* 철학자의 마지막 말 */
   .last-words {
     background: linear-gradient(135deg, var(--dark), #2a1a0e);
     border-radius: 12px;
@@ -439,7 +499,7 @@
     margin: 32px 0;
   }
 
-  .last-words .lw-label {
+.last-words .lw-label {
     font-size: 12px;
     letter-spacing: 2px;
     color: var(--accent);
@@ -448,7 +508,7 @@
     text-align: center;
   }
 
-  .last-words .lw-content {
+.last-words .lw-content {
     font-family: 'Noto Serif KR', serif;
     font-size: 15px;
     color: var(--ink-dim);
@@ -456,7 +516,7 @@
     margin-bottom: 16px;
   }
 
-  .last-words .lw-key {
+.last-words .lw-key {
     font-family: 'Noto Serif KR', serif;
     font-size: 16px;
     color: var(--accent);
@@ -467,7 +527,7 @@
     font-style: italic;
   }
 
-  /* 원문 마지막 */
+/* 원문 마지막 */
   .final-text-box {
     text-align: center;
     padding: 48px 24px;
@@ -476,7 +536,7 @@
     border-radius: 12px;
   }
 
-  .final-text-box .ft-top {
+.final-text-box .ft-top {
     font-size: 13px;
     letter-spacing: 2px;
     color: var(--ink-mute);
@@ -484,7 +544,7 @@
     margin-bottom: 20px;
   }
 
-  .final-text-box .ft-hanja {
+.final-text-box .ft-hanja {
     font-family: 'Noto Serif KR', serif;
     font-size: 24px;
     font-weight: 700;
@@ -494,7 +554,7 @@
     margin-bottom: 12px;
   }
 
-  .final-text-box .ft-korean {
+.final-text-box .ft-korean {
     font-family: 'Noto Serif KR', serif;
     font-size: 16px;
     color: var(--ink-dim);
@@ -502,7 +562,7 @@
     line-height: 1.9;
   }
 
-  /* 시리즈 전체 링크 */
+/* 시리즈 전체 링크 */
   .series-list {
     background: #0F1330;
     border: 1px solid var(--border);
@@ -511,7 +571,7 @@
     margin: 32px 0;
   }
 
-  .series-list-title {
+.series-list-title {
     font-size: 13px;
     font-weight: 600;
     color: var(--azure-dim);
@@ -520,7 +580,7 @@
     margin-bottom: 16px;
   }
 
-  .series-link-item {
+.series-link-item {
     font-size: 13px;
     color: #555;
     padding: 6px 0;
@@ -528,16 +588,23 @@
     line-height: 1.6;
   }
 
-  .series-link-item:last-child { border-bottom: none; }
+.series-link-item:last-child { border-bottom: none; }
 
-  .series-link-item span { color: var(--azure-dim); font-weight: 600; margin-right: 6px; }
+.series-link-item span { color: var(--azure-dim); font-weight: 600; margin-right: 6px; }
 
-  @media (max-width: 640px) {
-    nav { padding: .9rem 1.4rem; }
-    .nav-links { display: none; }
-    .hamburger { display: flex; }
-    .post-wrap { padding: 80px 18px 60px; }
-  }
+
+@media (max-width: 500px) {
+  .timeline-item { flex-direction: column; align-items: flex-start; gap: 6px; padding: 14px 16px; }
+  .timeline-year { min-width: unset; font-size: 13px; }
+  .timeline-desc { font-size: 13px; }
+}
+@media (max-width: 500px) {
+  .point-box { padding: 20px 18px; }
+  .point-box .p-item { font-size: 13.5px; }
+}
+@media (max-width: 500px) {
+  .series-list { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
@@ -559,9 +626,14 @@
   <a href="index.html#verses" onclick="closeMenu()">핵심 구절</a>
   <a href="index.html#philosophy" onclick="closeMenu()">철학</a>
 </div>
-<div class="post-wrap">
 
-  <!-- 이전 회차 -->
+<div class="post-wrap">
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-label">14 / 15 회차</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:93%"></div></div>
+  </div>
+
+<!-- 이전 회차 -->
   <div class="prev-episode">
     📖 이전 글 → <a href="81code_13.html">[13회] 끝은 다시 시작이다(一終無終一) — 천부경은 고리다</a>
   </div>
@@ -763,6 +835,13 @@
   </div>
 
 </div>
+
+<footer>
+  <p><span style="color:var(--accent);font-family:'Nanum Myeongjo',serif;">天符經</span> &nbsp;·&nbsp; 시민과 철학자의 81자 여행 &nbsp;·&nbsp;
+  <a href="https://mugukdo.github.io/muguk/" target="_blank" rel="noopener">무극의도(無極의 道)</a>
+  &nbsp;·&nbsp; 2026</p>
+</footer>
+
 <script>
   const nav = document.getElementById('nav');
   window.addEventListener('scroll', () => {
